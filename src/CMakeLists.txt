@@ -27,6 +27,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_executable(dmcNode ${DMCNODE_SOURCE_FILES})
-target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/code)
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/cjson/src)
 target_link_libraries(dmcNode LINK_PUBLIC cjson)
