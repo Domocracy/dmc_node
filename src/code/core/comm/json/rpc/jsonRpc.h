@@ -7,20 +7,20 @@
 #ifndef _DMCLIB_CORE_COMM_JSON_RPC_JSONRPC_H_
 #define _DMCLIB_CORE_COMM_JSON_RPC_JSONRPC_H_
 
-#include "../json.h"
+#include <cjson/json.h>
 
 namespace dmc {
 
-	class JsonRpcNotification : public Json {
+	class JsonRpcNotification : public cjson::Json {
 	public:
 		// Internal types
-		JsonRpcNotification(const std::string& _method, const Json& _params);
+		JsonRpcNotification(const std::string& _method, const cjson::Json& _params);
 	};
 
 	class JsonRpcRequest : public JsonRpcNotification {
 	public:
 		// Internal types
-		JsonRpcRequest(const std::string& _method, const Json& _params, unsigned _id); // Full request
+		JsonRpcRequest(const std::string& _method, const cjson::Json& _params, unsigned _id); // Full request
 	};
 }
 

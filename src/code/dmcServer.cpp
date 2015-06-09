@@ -8,7 +8,7 @@
 
 #include <cassert>
 #include "dmcServer.h"
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 #include <core/time/time.h>
 #include <core/comm/http/httpResponse.h>
 #include <service/user/user.h>
@@ -61,11 +61,11 @@ namespace dmc {
 
 	//------------------------------------------------------------------------------------------------------------------
 	void DmcServer::loadUsers() {
-		Json usersDatabase = Persistence::get()->getData("users");
-		if(usersDatabase.isNill())
+		cjson::Json usersDatabase = Persistence::get()->getData("users");
+		if(usersDatabase.isNull())
 			return;
-		for(auto userData : usersDatabase.asList()) {
-			mUsers.push_back(new User(*userData, mWebServer));
+		for(size_t i = 0; i < usersDatabase.size(); ++i) {
+			mUsers.push_back(new User(usersDatabase(i), mWebServer));
 		}
 	}
 
@@ -77,9 +77,9 @@ namespace dmc {
 		User* u = new User(newId, mWebServer);
 		mUsers.push_back(u);
 		// Return generated credentials
-		Json result("{}");
-		result["result"].setText("ok");
-		result["userId"].setText(u->strId());
+		cjson::Json result;
+		result["result"] = "ok";
+		result["userId"] = u->strId();
 		return http::Response::jsonResponse(result);
 	}
 

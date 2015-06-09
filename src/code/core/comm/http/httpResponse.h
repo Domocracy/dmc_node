@@ -10,7 +10,7 @@
 #include <string>
 #include <unordered_map>
 #include "httpMessage.h"
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 
 namespace dmc { namespace http {
 
@@ -26,7 +26,7 @@ namespace dmc { namespace http {
 		// Different types of response
 		static Response		response200		(const std::string& _customMessage = "");
 		static Response		response404		(const std::string& _custimMessage = "Error 404: Not found");
-		static Response		jsonResponse	(const Json& _payload, unsigned _code = 200);
+		static Response		jsonResponse	(const cjson::Json& _payload, unsigned _code = 200);
 		static Response		htmlResponse	(const std::string& _fileName, unsigned _code = 200);
 
 	private:

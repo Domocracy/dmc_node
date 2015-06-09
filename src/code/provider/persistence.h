@@ -8,7 +8,7 @@
 #ifndef _DMCSERVER_PROVIDER_PERSISTENCE_H_
 #define _DMCSERVER_PROVIDER_PERSISTENCE_H_
 
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 #include <string>
 
 namespace dmc {
@@ -19,8 +19,8 @@ namespace dmc {
 		static void			init	();
 		static void			end		() { delete sInstance; sInstance = nullptr; }
 
-		void				saveData(const std::string& _dataId, const Json& _data);
-		Json				getData	(const std::string& _dataId);
+		void				saveData(const std::string& _dataId, const cjson::Json& _data);
+		cjson::Json			getData	(const std::string& _dataId);
 
 	private:
 		Persistence() = default;

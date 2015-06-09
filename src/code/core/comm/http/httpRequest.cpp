@@ -30,7 +30,7 @@ namespace dmc { namespace http {
 	}
 
 	//----------------------------------------------------------------------------------------------------------------------
-	Request Request::jsonRequest(METHOD _method, const std::string& _url, const Json& _payload) {
+	Request Request::jsonRequest(METHOD _method, const std::string& _url, const cjson::Json& _payload) {
 		Request r(_method, _url, "");
 		r.headers()["Content-Type"] = "application/json; charset=UTF-8";
 		r.setBody(_payload.serialize());

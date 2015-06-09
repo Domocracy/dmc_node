@@ -6,7 +6,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "deviceFactory.h"
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 #include <device/hue/hueLight.h>
 #include <service/user/device/kodi/kodi.h>
 #include <service/user/device/scene.h>

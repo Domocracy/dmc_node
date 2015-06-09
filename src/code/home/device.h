@@ -9,7 +9,7 @@
 #define _DMCSERVER_HOME_DEVICE_H_
 
 #include <string>
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 
 namespace dmc {
 
@@ -17,10 +17,10 @@ namespace dmc {
 	public:
 		virtual ~Device() = default;
 
-		unsigned			id			() const { return mId; }
-		const std::string	name		() const { return mName; }
-		virtual Json		read		(const Json& _request) const { return Json(); }
-		virtual Json*		serialize	() const;
+		unsigned				id			() const { return mId; }
+		const std::string		name		() const { return mName; }
+		virtual cjson::Json		read		(const cjson::Json& _request) const { return cjson::Json(); }
+		virtual cjson::Json*	serialize	() const;
 
 	protected:
 		Device(unsigned _id, const std::string& _name) : mId(_id), mName(_name) {}
@@ -31,10 +31,10 @@ namespace dmc {
 	};
 
 	//------------------------------------------------------------------------------------------------------------------
-	inline Json* Device::serialize() const {
-		Json * devData = new Json("{}");
-		(*devData)["id"].setInt((unsigned)mId);
-		(*devData)["name"].setText(mName);
+	inline cjson::Json* Device::serialize() const {
+		cjson::Json * devData = new cjson::Json();
+		(*devData)["id"] = mId;
+		(*devData)["name"] = mName;
 		return devData;
 	}
 

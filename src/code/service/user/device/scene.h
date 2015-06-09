@@ -9,7 +9,7 @@
 #define _DMCSERVER_SERVICE_USER_DEVICE_H_
 
 #include <home/device/actuator.h>
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 #include <unordered_map>
 
 namespace dmc {

@@ -11,13 +11,15 @@
 
 using namespace std;
 
+using cjson::Json;
+
 namespace dmc { namespace kodi {
 
 	//------------------------------------------------------------------------------------------------------------------
 	Kodi::Kodi(unsigned _id, const Json& _data) 
-		:Actuator(_id, _data["name"].asText())
+		:Actuator(_id, string(_data["name"]))
 	{
-		mIp = _data["ip"].asText();
+		mIp = _data["ip"];
 		mTcpConnection = new Socket();
 	}
 
@@ -28,7 +30,7 @@ namespace dmc { namespace kodi {
 
 	//------------------------------------------------------------------------------------------------------------------
 	Json Kodi::runCommand(const Json& _cmd) {
-		string command = _cmd["cmd"].asText();
+		string command = _cmd["cmd"];
 		if(command == "lastEpisode") {
 			if(playLastEpisode(_cmd["tvshowid"])) {
 				return Json(R"({"result": "ok"})");
@@ -43,7 +45,7 @@ namespace dmc { namespace kodi {
 			else 
 				return Json(R"({"result":"fail", "error":"unable to play movie"})");
 		} else if(command == "setVolume") {
-			unsigned volume = (unsigned)_cmd["volume"].asInt();
+			unsigned volume = (unsigned)_cmd["volume"];
 			Json finalVol = setVolume(volume);
 			Json result = Json(R"({"result": "ok"})");
 			result["volume"] = finalVol;
@@ -61,11 +63,11 @@ namespace dmc { namespace kodi {
 
 	//------------------------------------------------------------------------------------------------------------------
 	Json Kodi::read(const Json& _request) const {
-		string command = _request["cmd"].asText();
+		string command = _request["cmd"];
 		if(command == "tvshows") {
 			Json response(R"({})");
 			Json shows = getTvShows();
-			if(shows.isNill())
+			if(shows.isNull())
 				return Json(R"({"result":"fail", "error":"Kodi not available"})");
 			else
 				response["tvshows"] = shows;

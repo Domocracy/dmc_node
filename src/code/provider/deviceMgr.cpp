@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "deviceMgr.h"
 #include "deviceFactory.h"
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 #include <home/device.h>
 #include "persistence.h"
 #include <cassert>
