@@ -29,3 +29,6 @@
 
 # Build
 build/
+
+# Doxygen doc
+doc/
