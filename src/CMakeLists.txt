@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.4)
+cmake_minimum_required (VERSION 2.6)
 project(dmcNode)
 
 # Collect all sources
@@ -22,11 +22,17 @@ endmacro()
 
 GroupSources(code)
 
+add_executable(dmcNode ${DMCNODE_SOURCE_FILES})
+
+# Compiler specific options
+if(MSVC)
+	add_definitions(-DNOMINMAX)
+	target_link_libraries(dmcNode LINK_PUBLIC Ws2_32 Mswsock)
+endif(MSVC)
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-std=c++11)
 endif()
 
-add_executable(dmcNode ${DMCNODE_SOURCE_FILES})
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/code)
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/cjson/src)
 target_link_libraries(dmcNode LINK_PUBLIC cjson)
