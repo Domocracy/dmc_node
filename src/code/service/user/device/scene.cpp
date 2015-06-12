@@ -11,21 +11,20 @@
 namespace dmc {
 
 	//------------------------------------------------------------------------------------------------------------------
-	Scene::Scene(unsigned _id, const Json& _data)
-		:Actuator(_id, _data["name"].asText())
+	Scene::Scene(unsigned _id, const cjson::Json& _data)
+		:Actuator(_id, std::string(_data["name"]))
 	{
-		Json childrenData = _data["children"];
-		const auto& childrenList = childrenData.asList();
-		for (size_t i = 0; i < childrenList.size(); ++i) {
-			unsigned childId = unsigned((*childrenList[i])["id"].asInt());
-			Json childCmd = (*childrenList[i])["cmd"];
+		cjson::Json childrenData = _data["children"];
+		for (size_t i = 0; i < childrenData.size(); ++i) {
+			unsigned childId = childrenData(i)["id"];
+			cjson::Json childCmd = childrenData(i)["cmd"];
 			mChildren.insert(std::make_pair(childId, childCmd));
 		}
 		mPanels = _data["panels"];
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Json Scene::runCommand(const Json&) {
+	cjson::Json Scene::runCommand(const cjson::Json&) {
 		DeviceMgr* mgr = DeviceMgr::get();
 		bool ok = true;
 		for(auto i : mChildren)
@@ -35,21 +34,21 @@ namespace dmc {
 				ok = false;
 				continue;
 			}
-			ok &= (act->runCommand(i.second)["result"].asText() == "ok");
+			ok &= (std::string(act->runCommand(i.second)["result"]) == "ok");
 		}
-		return ok?Json(R"("result":"ok")"):Json(R"("result":"fail")");
+		return ok ? cjson::Json(R"("result":"ok")") : cjson::Json(R"("result":"fail")");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Json* Scene::serialize() const {
-		Json& base = *Actuator::serialize();
-		base["type"].setText("Scene");
-		Json children("[]"); // Serialize children commands
+	cjson::Json* Scene::serialize() const {
+		cjson::Json& base = *Actuator::serialize();
+		base["type"] = "Scene";
+		cjson::Json children("[]"); // Serialize children commands
 		for (auto child : mChildren) {
-			Json& childData = *new Json("{}");
-			childData["id"].setInt(child.first);
+			cjson::Json& childData = *new cjson::Json("{}");
+			childData["id"] = child.first;
 			childData["cmd"] = child.second;
-			children.asList().push_back(&childData);
+			children.push_back(&childData);
 		}
 
 		base["children"]	= children;
