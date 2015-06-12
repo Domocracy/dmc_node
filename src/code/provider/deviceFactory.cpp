@@ -18,8 +18,8 @@ namespace dmc {
 		// A wrapper for simplicity
 		template<class JDevice_>
 		struct JsonConstrucible {
-			static std::pair<std::string, std::function<Device*(unsigned, const Json&)>> factory(const std::string& _label) {
-				return std::make_pair(_label, [](unsigned _id, const Json& _data) -> Device* {
+			static std::pair<std::string, std::function<Device*(unsigned, const cjson::Json&)>> factory(const std::string& _label) {
+				return std::make_pair(_label, [](unsigned _id, const cjson::Json& _data) -> Device* {
 					return new JDevice_(_id, _data);
 				});
 			}
@@ -29,8 +29,8 @@ namespace dmc {
 	//------------------------------------------------------------------------------------------------------------------
 	DeviceFactory::DeviceFactory() {
 		// Hue lights
-		mFactories.insert(std::make_pair("HueLight", [](unsigned _id, const Json& _data) -> Device* {
-			return new hue::Light(_id, _data["name"].asText(), _data["data"]["id"].asText());
+		mFactories.insert(std::make_pair("HueLight", [](unsigned _id, const cjson::Json& _data) -> Device* {
+			return new hue::Light(_id, std::string(_data["name"]), std::string(_data["data"]["id"]));
 		}));
 		// Json based devices
 		mFactories.insert(JsonConstrucible<Scene>::factory("Scene"));
@@ -38,7 +38,7 @@ namespace dmc {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Device* DeviceFactory::create(unsigned _id, const std::string& _devType, const Json& _data) {
+	Device* DeviceFactory::create(unsigned _id, const std::string& _devType, const cjson::Json& _data) {
 		auto factory = mFactories.find(_devType);
 		if(factory == mFactories.end()) {
 			std::cout << "Unknown device type " << _devType << ". Ignoring device.\n";

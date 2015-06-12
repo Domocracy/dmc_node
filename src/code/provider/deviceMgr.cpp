@@ -48,7 +48,7 @@ namespace dmc {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Device* DeviceMgr::newDevice(const Json& _devType, const Json& _devData) {
+	Device* DeviceMgr::newDevice(const cjson::Json& _devType, const cjson::Json& _devData) {
 		unsigned devId = IdGenerator::get()->newId();
 		Device* newDev = createDevice(devId, _devType, _devData);
 		save();
@@ -58,40 +58,40 @@ namespace dmc {
 	//------------------------------------------------------------------------------------------------------------------
 	DeviceMgr::DeviceMgr() {
 		// Load devices from local database
-		Json factoriesData = Persistence::get()->getData("devices");
-		if(factoriesData.isNill())
+		cjson::Json factoriesData = Persistence::get()->getData("devices");
+		if(factoriesData.isNull())
 			return;
-		for(size_t i = 0; i < factoriesData.asList().size(); ++i)
+		for(size_t i = 0; i < factoriesData.size(); ++i)
 		{
-			const Json& data = *factoriesData.asList()[i];
+			const cjson::Json& data = factoriesData(i);
 			loadDevice(data);
 		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Device* DeviceMgr::createDevice(unsigned _id, const Json& _devType, const Json& _devData) {
+	Device* DeviceMgr::createDevice(unsigned _id, const cjson::Json& _devType, const cjson::Json& _devData) {
 		if(mDevices.find(_id) != mDevices.end()) {
 			std::cout << "Warning: Duplicate device id (" << _id << ").\nOld device will be overwriten\n";
 		} 
 		
-		Device* newDev = mFactory.create(_id, _devType.asText(), _devData);
+		Device* newDev = mFactory.create(_id, std::string(_devType), _devData);
 		mDevices.insert(std::make_pair(_id, newDev));
 		return newDev;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	void DeviceMgr::loadDevice(const Json& _creationData){
-		unsigned devId = (unsigned)_creationData["id"].asInt();
+	void DeviceMgr::loadDevice(const cjson::Json& _creationData){
+		unsigned devId = _creationData["id"];
 		createDevice(devId, _creationData["type"], _creationData["data"]);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	void DeviceMgr::save() {
-		Json deviceList("[]");
+		cjson::Json deviceList("[]");
 		for(auto dev : mDevices) {
-			Json *devData = dev.second->serialize();
-			assert(!(*devData)["type"].isNill());
-			deviceList.asList().push_back(devData);
+			cjson::Json *devData = dev.second->serialize();
+			assert(!(*devData)["type"].isNull());
+			deviceList.push_back(devData);
 		}
 		Persistence::get()->saveData("devices", deviceList);
 	}

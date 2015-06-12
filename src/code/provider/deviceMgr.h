@@ -24,12 +24,12 @@ namespace dmc {
 		static DeviceMgr*	get	();
 
 		Device* device		(unsigned _id) const;
-		Device*	newDevice(const Json& _devType, const Json& _devData);
+		Device*	newDevice(const cjson::Json& _devType, const cjson::Json& _devData);
 
 	private:
 		DeviceMgr				();
-		Device*	createDevice	(unsigned _id, const Json& _devType, const Json& _devData);
-		void	loadDevice		(const Json& _creationData);
+		Device*	createDevice(unsigned _id, const cjson::Json& _devType, const cjson::Json& _devData);
+		void	loadDevice(const cjson::Json& _creationData);
 
 		void	save();
 

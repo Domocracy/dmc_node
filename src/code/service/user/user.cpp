@@ -186,12 +186,12 @@ namespace dmc {
 	void User::updateDevices(){
 		hue::Bridge *hueBridge = hue::Bridge::get();
 		cjson::Json hueDevices = hueBridge->getData("lights");
-		for (std::pair<std::string, Json*> hueDevice : hueDevices.asDictionary()){
+		for (std::pair<std::string, cjson::Json*> hueDevice : hueDevices){
 			bool exist = false;
 			for (unsigned id : mDevices){
 				Device *dev = DeviceMgr::get()->device(id);
-				if ((*dev->serialize())["type"].asText() == "HueLight"){
-					if ((*dev->serialize())["data"]["data"]["id"].asText() == hueDevice.first){
+				if (std::string((*dev->serialize())["type"]) == "HueLight"){
+					if (std::string((*dev->serialize())["data"]["data"]["id"]) == hueDevice.first){
 						exist = true;
 						break;
 					}
