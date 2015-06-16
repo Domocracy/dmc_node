@@ -17,16 +17,23 @@
 #include <http/httpServer.h>
 
 namespace dmc{
-	const int cHttpPort = 80;
+	const std::string cDeviceUrl = "dev/";
+	const std::string cSubscriptionUrl = "subscription/";
 
 	class DmcNode{
-	public:
+	public:	// Public interface
 		DmcNode(int _argc, char** _argv);
 		
-		bool update();
+		http::Response execCmd(http::Request);
 
-	private:
-		dmc::http::Server mServer;
+	private:	// Private methods
+		void processArguments(int _argc, char **_argv);
+		void initServer();
+
+	private:	// Members
+		int mHttpPort = 80;
+		dmc::http::Server *mServer;
+
 
 	};
 
