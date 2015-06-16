@@ -210,7 +210,7 @@ namespace dmc {
 	//------------------------------------------------------------------------------------------------------------------
 	void User::loadDevices(const cjson::Json& _deviceList) {
 		for (unsigned i = 0; i < _deviceList.size(); i++){
-			mDevices.insert(_deviceList(i));
+			mDevices.insert(int(_deviceList(i)));
 			//mDevices.insert((unsigned)entry->asInt());
 		}
 	}
