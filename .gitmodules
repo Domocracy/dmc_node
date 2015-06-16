@@ -4,3 +4,6 @@
 [submodule "lib/dmc_http"]
 	path = lib/dmc_http
 	url = https://github.com/Domocracy/dmc_http.git
+[submodule "lib/dmc_sockets"]
+	path = lib/dmc_sockets
+	url = https://github.com/Domocracy/dmc_sockets
