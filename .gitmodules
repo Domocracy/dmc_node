@@ -1,3 +1,6 @@
 [submodule "lib/cjson"]
 	path = lib/cjson
 	url = https://github.com/technik/cjson.git
+[submodule "lib/dmc_http"]
+	path = lib/dmc_http
+	url = https://github.com/Domocracy/dmc_http.git
