@@ -10,7 +10,7 @@
 #include "dmcServer.h"
 #include <cjson/json.h>
 #include <core/time/time.h>
-#include <core/comm/http/httpResponse.h>
+#include <http/httpResponse.h>
 #include <service/user/user.h>
 #include <provider/deviceMgr.h>
 #include <provider/persistence.h>

@@ -8,10 +8,10 @@
 #include "hueBridge.h"
 #include "../../provider/persistence.h"
 
-#include <core/comm/http/httpClient.h>
+#include <http/httpClient.h>
 #include <cassert>
 #include <iostream>
-#include <core/comm/http/httpRequest.h>
+#include <http/httpRequest.h>
 #include <core/time/time.h>
 
 using namespace dmc::http;

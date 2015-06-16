@@ -10,7 +10,7 @@
 
 #include <set>
 #include <cjson/json.h>
-#include <core/comm/http/httpResponse.h>
+#include <http/httpResponse.h>
 
 namespace dmc {
 

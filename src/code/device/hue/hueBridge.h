@@ -11,7 +11,7 @@
 #include <cjson/json.h>
 #include <string>
 #include <thread>
-#include <core/comm/http/httpClient.h>
+#include <http/httpClient.h>
 
 namespace dmc { namespace hue {
 

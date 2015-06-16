@@ -10,7 +10,7 @@
 
 #include <string>
 #include <cjson/json.h>
-#include <core/comm/socket/socket.h>
+#include <sockets/socket.h>
 #include <home/device/actuator.h>
 
 namespace dmc { namespace kodi {

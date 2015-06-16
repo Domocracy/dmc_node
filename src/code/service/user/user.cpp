@@ -7,8 +7,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "user.h"
 #include <cassert>
-#include <core/comm/http/httpServer.h>
-#include <core/comm/http/httpResponse.h>
+#include <http/httpServer.h>
+#include <http/httpResponse.h>
 #include <string>
 #include <provider/deviceMgr.h>
 #include <home/device/actuator.h>

@@ -8,8 +8,8 @@
 #ifndef _DMCSERVER_SERVICE_PUBLIC_HUBINFO_H_
 #define _DMCSERVER_SERVICE_PUBLIC_HUBINFO_H_
 
-#include <core/comm/http/httpServer.h>
-#include <core/comm/http/httpResponse.h>
+#include <http/httpServer.h>
+#include <http/httpResponse.h>
 
 namespace dmc {
 

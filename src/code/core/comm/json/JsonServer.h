@@ -11,7 +11,7 @@
 #ifndef _DMCLIB_CORE_COMM_JSON_JSON_SERVER_H_
 #define _DMCLIB_CORE_COMM_JSON_JSON_SERVER_H_
 
-#include "../socket/socketServer.h"
+#include <sockets/socketServer.h>
 #include <cjson/json.h>
 
 #include <unordered_map>

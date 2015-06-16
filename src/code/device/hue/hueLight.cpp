@@ -8,7 +8,7 @@
 #include "hueLight.h"
 #include <iostream>
 #include <string>
-#include <core/comm/http/httpClient.h>
+#include <http/httpClient.h>
 
 using namespace std;
 

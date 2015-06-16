@@ -8,7 +8,7 @@
 #ifndef _DMCSERVER_DMCSERVER_H_
 #define _DMCSERVER_DMCSERVER_H_
 
-#include <core/comm/http/httpServer.h>
+#include <http/httpServer.h>
 #include <string>
 #include <vector>
 #include <service/public/hubInfo.h>
