@@ -184,7 +184,8 @@ namespace dmc {
 
 	//------------------------------------------------------------------------------------------------------------------
 	void User::updateDevices(){
-		hue::Bridge *hueBridge = hue::Bridge::get();
+		// Waiting for cjson iterators
+		/*hue::Bridge *hueBridge = hue::Bridge::get();
 		cjson::Json hueDevices = hueBridge->getData("lights");
 		for (std::pair<std::string, cjson::Json*> hueDevice : hueDevices){
 			bool exist = false;
@@ -203,7 +204,7 @@ namespace dmc {
 
 			}
 			
-		}
+		}*/
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
