@@ -35,4 +35,7 @@ endif()
 
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/code)
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/cjson/src)
+target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/dmc_http/src)
+
 target_link_libraries(dmcNode LINK_PUBLIC cjson)
+target_link_libraries(dmcNode LINK_PUBLIC dmc_http)
