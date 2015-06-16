@@ -7,3 +7,5 @@ add_subdirectory(src)
 
 # Used libraries
 add_subdirectory(lib/cjson/src)
+add_subdirectory(lib/dmc_sockets/src)
+add_subdirectory(lib/dmc_http/src)
