@@ -57,7 +57,7 @@ namespace dmc {
 		if(storedIds.isNull())
 			return;
 		for (unsigned i = 0; i < storedIds.size(); i++){
-			mGeneratedIds.insert(storedIds(i));
+			mGeneratedIds.insert(int(storedIds(i)));	//777 Explicit cast
 		}
 	}
 

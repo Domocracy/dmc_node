@@ -81,7 +81,7 @@ namespace dmc {
 
 	//------------------------------------------------------------------------------------------------------------------
 	void DeviceMgr::loadDevice(const cjson::Json& _creationData){
-		unsigned devId = _creationData["id"];
+		unsigned devId = int(_creationData["id"]);	/// 777 Explicit cast
 		createDevice(devId, _creationData["type"], _creationData["data"]);
 	}
 

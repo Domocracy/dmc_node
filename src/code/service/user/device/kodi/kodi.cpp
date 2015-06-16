@@ -45,7 +45,7 @@ namespace dmc { namespace kodi {
 			else 
 				return Json(R"({"result":"fail", "error":"unable to play movie"})");
 		} else if(command == "setVolume") {
-			unsigned volume = _cmd["volume"];
+			unsigned volume = int(_cmd["volume"]);	/// 777 Explicit cast.
 			Json finalVol = setVolume(volume);
 			Json result = Json(R"({"result": "ok"})");
 			result["volume"] = finalVol;

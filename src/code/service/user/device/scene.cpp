@@ -16,7 +16,7 @@ namespace dmc {
 	{
 		cjson::Json childrenData = _data["children"];
 		for (size_t i = 0; i < childrenData.size(); ++i) {
-			unsigned childId = childrenData(i)["id"];
+			unsigned childId = int(childrenData(i)["id"]);	///	777 Explicit cast
 			cjson::Json childCmd = childrenData(i)["cmd"];
 			mChildren.insert(std::make_pair(childId, childCmd));
 		}
