@@ -15,6 +15,7 @@
 #include <core/time/time.h>
 
 using namespace dmc::http;
+using cjson::Json;
 
 namespace dmc { namespace hue {
 	//------------------------------------------------------------------------------------------------------------------
@@ -31,8 +32,8 @@ namespace dmc { namespace hue {
 	//------------------------------------------------------------------------------------------------------------------
 	void Bridge::init() {
 		Json bridgesData = Persistence::get()->getData("hue");
-		if (!bridgesData.isNill() && bridgesData.asList().size() != 0){
-			sBridge = new Bridge(*bridgesData.asList()[0]);		// 666 Check more bridges.
+		if (!bridgesData.isNull() && bridgesData.size() != 0){
+			sBridge = new Bridge(bridgesData[0]);		// 666 Check more bridges.
 		}
 		else{
 			std::string ip = queryLocalIp();
@@ -73,8 +74,8 @@ namespace dmc { namespace hue {
 	Bridge::Bridge(const Json& _info) {
 		mState = State::connecting;
 		// Extract basic data from the json object
-		mLocalIp = _info["internalipaddress"].asText();
-		mUsername = _info["username"].asText();
+		mLocalIp = _info["internalipaddress"];
+		mUsername = _info["username"];
 		// Connect to the bridge
 		mConn = new http::Client;
 		mConn->connect(mLocalIp);
@@ -94,7 +95,7 @@ namespace dmc { namespace hue {
 				return;
 			}
 			Json data(result->body());
-			if (data.isList() && data[0].contains("error") && data[0]["error"]["type"].asInt() == 1){	// Error, register new user
+			if (data.isArray() && data[0].contains("error") && data[0]["error"]["type"] == 1){	// Error, register new user
 				std::cout << "User is not registered. Registering: " << mUsername << std::endl;
 				registerUser();
 			}

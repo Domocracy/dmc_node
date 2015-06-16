@@ -41,7 +41,7 @@ namespace dmc { namespace http {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Response Response::jsonResponse(const Json& _payload, unsigned _code) {
+	Response Response::jsonResponse(const cjson::Json& _payload, unsigned _code) {
 		Response r(_code, shortDesc(_code));
 		r.setBody(_payload.serialize());
 		r.headers()["Content-type"] = "application/json";

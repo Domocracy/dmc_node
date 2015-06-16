@@ -53,11 +53,11 @@ namespace dmc {
 		// Set random seed
 		srand((uint32_t)time(0));
 		// Load previous data
-		Json storedIds = Persistence::get()->getData("randomIds");
-		if(storedIds.isNill())
+		cjson::Json storedIds = Persistence::get()->getData("randomIds");
+		if(storedIds.isNull())
 			return;
-		for(auto id : storedIds.asList()) {
-			mGeneratedIds.insert((uint32_t)id->asInt());
+		for (unsigned i = 0; i < storedIds.size(); i++){
+			mGeneratedIds.insert(storedIds(i));
 		}
 	}
 
@@ -69,11 +69,12 @@ namespace dmc {
 	//------------------------------------------------------------------------------------------------------------------
 	void IdGenerator::save() {
 		// Save generated ids
-		Json ids("[]");
+		cjson::Json ids("[]");
 		for(auto id : mGeneratedIds) {
-			Json *idJson = new Json();
-			idJson->setInt(id);
-			ids.asList().push_back(idJson);
+			cjson::Json *idJson = new cjson::Json();
+			ids.push_back(id);
+			//idJson->setInt(id);
+			//ids.asList().push_back(idJson);
 		}
 		Persistence::get()->saveData("randomIds", ids);
 	}

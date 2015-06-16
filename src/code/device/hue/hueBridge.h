@@ -8,7 +8,7 @@
 #ifndef _DMCSERVER_HOME_DEVICE_HUE_HUEBRIDGE_H_
 #define _DMCSERVER_HOME_DEVICE_HUE_HUEBRIDGE_H_
 
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 #include <string>
 #include <thread>
 #include <core/comm/http/httpClient.h>
@@ -26,14 +26,14 @@ namespace dmc { namespace hue {
 		static Bridge*	get	();
 		static	void	init();
 
-		State	state	() const { return mState; }
-		Json	getData	(const std::string& _url);
-		bool	putData(const std::string& _url, const Json& _data);
+		State		state	() const { return mState; }
+		cjson::Json	getData	(const std::string& _url);
+		bool		putData	(const std::string& _url, const cjson::Json& _data);
 
 	private:
 		static std::string queryLocalIp();
 
-		Bridge(const Json&);
+		Bridge(const cjson::Json&);
 
 		std::thread mInitThread;
 

@@ -14,9 +14,8 @@ namespace dmc {
 	JsonRpcNotification::JsonRpcNotification(const std::string& _method, const Json& _params)
 		:Json("{}") // Empty dictionary
 	{
-		Json method;
-		method.setText(_method);
-		(*this)["jsonrpc"] = Json(R"("2.0")");
+		Json method(_method);
+		(*this)["jsonrpc"] = "2.0";
 		(*this)["method"] = method;
 		(*this)["params"] = _params;
 	}
@@ -25,8 +24,6 @@ namespace dmc {
 	JsonRpcRequest::JsonRpcRequest(const std::string& _method, const Json& _params, unsigned _id)
 		:JsonRpcNotification(_method, _params)
 	{
-		// std::stringstream ss;
-		// ss << "\"" <<_id << "\"";
-		(*this)["id"].setInt((int)_id);// = Json(ss.str());
+		(*this)["id"]= _id;
 	}
 }

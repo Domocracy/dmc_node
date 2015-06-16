@@ -27,26 +27,29 @@ namespace dmc { namespace hue {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Json * Light::serialize() const {
-		Json * base = Actuator::serialize();
-		(*base)["type"].setText("HueLight");
-		Json& data = (*base)["data"];
-		data = Json("{\"data\": { \"id\":\"" + mHueId + "\" } }");
+	cjson::Json * Light::serialize() const {
+		cjson::Json * base = Actuator::serialize();
+		(*base)["type"] = "HueLight";
+		cjson::Json& data = (*base)["data"]["data"]["id"] = mHueId;
 		return base;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Json Light::runCommand(const Json& _cmd) {
-		if(!sBridge)
-			return Json(R"("result":"fail")");
+	cjson::Json Light::runCommand(const cjson::Json& _cmd) {
+		cjson::Json r;
+		if(!sBridge) {
+			r["result"] = "fail";
+			return r;
+		}
 		std::cout << "Hue light received a command\n";
 		string commandUrl = string("/lights/") + mHueId + "/state";
-		return sBridge->putData(commandUrl, _cmd)?Json(R"({"result":"ok"})"):Json(R"({"result":"fail"})");
+		r["result"] = sBridge->putData(commandUrl, _cmd)?"ok":"fail";
+		return r;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Json Light::read(const Json& _request) const {
-		return Json(); // TODO
+	cjson::Json Light::read(const cjson::Json& _request) const {
+		return cjson::Json(); // TODO
 	}
 
 }}	// namespace dmc::hue

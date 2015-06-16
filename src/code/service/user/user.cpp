@@ -28,11 +28,11 @@ namespace dmc {
 	const string User::cDeviceListLabel = "/deviceList";
 
 	//------------------------------------------------------------------------------------------------------------------
-	User::User(const Json& _userData, Server* _serviceToListen)
+	User::User(const cjson::Json& _userData, Server* _serviceToListen)
 	{
 		// Init internal data
-		mName = _userData["name"].asText();
-		mId = _userData["id"].asText();
+		mName = _userData["name"];
+		mId = _userData["id"];
 		mPrefix = string("/user/") + mId;
 		loadDevices(_userData["devices"]); // Ids of devices available to this user
 		// Register to service
@@ -83,7 +83,7 @@ namespace dmc {
 			else if(_cmd == cDeviceLabel) {
 				return deviceCommand(_cmd.substr(cDeviceLabel.size()), _request);
 			} else if(_cmd == cAddDevLabel) {
-				return addDevice(Json(_request.body()));
+				return addDevice(cjson::Json(_request.body()));
 			}
 			else if (_cmd == cDeviceListLabel) {
 				updateDevices();
@@ -94,12 +94,12 @@ namespace dmc {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Response User::addDevice(const Json& _deviceData) {
+	Response User::addDevice(const cjson::Json& _deviceData) {
 		Device* newDev = DeviceMgr::get()->newDevice(_deviceData["type"], _deviceData);
 		if(newDev) {
 			mDevices.insert(newDev->id());
-			Json result (R"({"result":"ok"})");
-			result["id"].setInt((int)newDev->id());
+			cjson::Json result(R"({"result":"ok"})");
+			result["id"] = (int)newDev->id();
 			return Response::jsonResponse(result);
 		} else
 			return Response::response200(R"({"result":"fail", "error":"unable to create device"})");
@@ -122,15 +122,15 @@ namespace dmc {
 		switch (_request.method())
 		{
 		case Request::METHOD::Get: {
-			Json request("{}");
-			request["cmd"].setText(devIdStr.substr(idLen+1));
+			cjson::Json request("{}");
+			request["cmd"] = devIdStr.substr(idLen+1);
 			return Response::jsonResponse(dev->read(request));
 		}
 		case Request::METHOD::Put: {
 			// Use device as an actuator
 			Actuator* act = dynamic_cast<Actuator*>(dev);
 			if(act) {
-				Json body(_request.body()); // Extract body from request
+				cjson::Json body(_request.body()); // Extract body from request
 				return Response::jsonResponse(act->runCommand(body));
 			} else {
 				return Response::response404(string("Error 404: Device ")+devIdStr+" is not an actuator\n");
@@ -143,9 +143,9 @@ namespace dmc {
 
 	//------------------------------------------------------------------------------------------------------------------
 	Response User::reportUserData() const {
-		Json userData("{}");
+		cjson::Json userData("{}");
 		userData["devices"] = deviceListJson();
-		userData["rooms"] = Json("[]");
+		userData["rooms"] = cjson::Json("[]");
 		return Response::jsonResponse(userData);
 	}
 
@@ -155,17 +155,17 @@ namespace dmc {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Json User::deviceListJson() const {
-		Json deviceList("[]");
+	cjson::Json User::deviceListJson() const {
+		cjson::Json deviceList("[]");
 		for(auto deviceId : mDevices) {
 			Device *dev = DeviceMgr::get()->device(deviceId);
-			Json *devJson = new Json("{}");
-			(*devJson)["id"].setInt((int)deviceId);
-			(*devJson)["name"].setText(dev->name());
-			(*devJson)["type"].setText((*dev->serialize())["type"].asText());
-			deviceList.asList().push_back(devJson);
+			cjson::Json *devJson = new cjson::Json("{}");
+			(*devJson)["id"] = (int)deviceId ;
+			(*devJson)["name"] = dev->name();
+			(*devJson)["type"] = (*dev->serialize())["type"];
+			deviceList.push_back(devJson);
 		}
-		Json devices("{}");
+		cjson::Json devices("{}");
 		devices["devices"] = deviceList;
 		return devices;
 	}
@@ -185,20 +185,20 @@ namespace dmc {
 	//------------------------------------------------------------------------------------------------------------------
 	void User::updateDevices(){
 		hue::Bridge *hueBridge = hue::Bridge::get();
-		Json hueDevices = hueBridge->getData("lights");
-		for (std::pair<std::string, Json*> hueDevice : hueDevices.asDictionary()){
+		cjson::Json hueDevices = hueBridge->getData("lights");
+		for (std::pair<std::string, cjson::Json*> hueDevice : hueDevices){
 			bool exist = false;
 			for (unsigned id : mDevices){
 				Device *dev = DeviceMgr::get()->device(id);
-				if ((*dev->serialize())["type"].asText() == "HueLight"){
-					if ((*dev->serialize())["data"]["data"]["id"].asText() == hueDevice.first){
+				if (std::string((*dev->serialize())["type"]) == "HueLight"){
+					if (std::string((*dev->serialize())["data"]["data"]["id"]) == hueDevice.first){
 						exist = true;
 						break;
 					}
 				}
 			}
 			if (!exist){
-				Json buildData("{\"type\":\"HueLight\", \"name\":\"New Hue\", \"data\":{\"id\":\"" + hueDevice.first + "\"}}");
+				cjson::Json buildData("{\"type\":\"HueLight\", \"name\":\"New Hue\", \"data\":{\"id\":\"" + hueDevice.first + "\"}}");
 				addDevice(buildData);
 
 			}
@@ -207,9 +207,10 @@ namespace dmc {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	void User::loadDevices(const Json& _deviceList) {
-		for(auto entry : _deviceList.asList()) {
-			mDevices.insert((unsigned)entry->asInt());
+	void User::loadDevices(const cjson::Json& _deviceList) {
+		for (unsigned i = 0; i < _deviceList.size(); i++){
+			mDevices.insert(_deviceList(i));
+			//mDevices.insert((unsigned)entry->asInt());
 		}
 	}
 

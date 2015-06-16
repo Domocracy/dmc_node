@@ -9,7 +9,7 @@
 #define _DMCSERVER_SERVICE_USER_DEVICE_H_
 
 #include <home/device/actuator.h>
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 #include <unordered_map>
 
 namespace dmc {
@@ -18,15 +18,15 @@ namespace dmc {
 
 	class Scene final : public Actuator {
 	public:
-		Scene(unsigned _id, const Json& _data);
-		~Scene() = default;
+		Scene	(unsigned _id, const cjson::Json& _data);
+		~Scene	() = default;
 
-		Json	runCommand	(const Json& _cmd) override;
-		Json*	serialize	() const override;
+		cjson::Json		runCommand	(const cjson::Json& _cmd) override;
+		cjson::Json*	serialize	() const override;
 
 	private:
-		std::unordered_map<unsigned,Json>	mChildren;
-		Json								mPanels;
+		std::unordered_map<unsigned, cjson::Json>	mChildren;
+		cjson::Json							mPanels;
 	};
 }
 

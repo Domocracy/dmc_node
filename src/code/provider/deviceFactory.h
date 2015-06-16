@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <functional>
 
+#include <cjson/json.h>
+
 namespace dmc {
 
 	class Factory;
@@ -22,8 +24,8 @@ namespace dmc {
 	public:
 		DeviceFactory();
 
-		Device* create(unsigned _id, const std::string& _devType, const Json& _constructionData);
-		typedef std::function<Device*(unsigned _id, const Json&)>	Creator;
+		Device* create(unsigned _id, const std::string& _devType, const cjson::Json& _constructionData);
+		typedef std::function<Device*(unsigned _id, const cjson::Json&)>	Creator;
 
 	private:
 		std::unordered_map<std::string, Creator>	mFactories;

@@ -16,7 +16,7 @@ namespace dmc {
 	class HubInfo {
 	public:
 		HubInfo(http::Server* _server) {
-			_server->setResponder("/public/hubInfo", http::Response::jsonResponse(Json(R"({"name" : "dmcHub"})")));
+			_server->setResponder("/public/hubInfo", http::Response::jsonResponse(cjson::Json(R"({"name" : "dmcHub"})")));
 		}
 		// Services
 	};

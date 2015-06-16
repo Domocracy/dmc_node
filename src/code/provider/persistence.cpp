@@ -21,23 +21,23 @@ namespace dmc {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	void Persistence::saveData(const std::string& _dataId, const Json& _data) {
+	void Persistence::saveData(const std::string& _dataId, const cjson::Json& _data) {
 		File dataFile(_dataId + ".json");
 		std::string data = _data.serialize();
 		dataFile.setContent(data.c_str(), data.size());
-
-		_data.saveToFile(_dataId + ".json");
+		
+		//666 TODO : _data.saveToFile(_dataId + ".json");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Json Persistence::getData(const std::string& _dataId) {
+	cjson::Json Persistence::getData(const std::string& _dataId) {
 		std::string fileName = _dataId + ".json";
 		File * dataFile = File::openExisting(fileName);
 		if(!dataFile) {
-			return Json();
+			return cjson::Json();
 		}
 		dataFile->readAll();
-		Json loadedData(dataFile->bufferAsText());
+		cjson::Json loadedData(dataFile->bufferAsText());
 		delete dataFile;
 		return loadedData;
 	}

@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <vector>
 #include "httpMessage.h"
-#include <core/comm/json/json.h>
+#include <cjson/json.h>
 
 namespace dmc { namespace http {
 
@@ -32,7 +32,7 @@ namespace dmc { namespace http {
 		METHOD				method		() const { return mMethod; }
 		const std::string&	url			() const { return mUrl; }
 
-		static Request		jsonRequest	(METHOD, const std::string& _url, const Json& _payload);
+		static Request		jsonRequest	(METHOD, const std::string& _url, const cjson::Json& _payload);
 
 	private:
 		int		processMessageLine		(const std::string& _raw) override;
