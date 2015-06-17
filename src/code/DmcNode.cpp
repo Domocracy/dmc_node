@@ -32,13 +32,41 @@ namespace dmc{
 	void DmcNode::initServer(){
 		mServer = new http::Server(mHttpPort);
 
-		// Parse urls
-		//mServer->setResponder(cSubscriptionUrl, http::Response::response404);
+		// New subscription url.
+		mServer->setResponder(cSubscriptionUrl, [this](http::Server* _s, unsigned _conId, const http::Request& _req) {
+			_s->respond(_conId, this->newSubscription(_req));
+		});
 
+		// Request info url.
+		mServer->setResponder(cRequestInfoUrl, [this](http::Server* _s, unsigned _conId, const http::Request& _req) {
+			_s->respond(_conId, this->infoRequest(_req));
+		});
+
+		// Device related url.
 		mServer->setResponder(cDeviceUrl, [this](http::Server* _s, unsigned _conId, const http::Request& _req) {
 			_s->respond(_conId, this->execCmd(_req));
 		});
 
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------
+	http::Response DmcNode::infoRequest(http::Request _request){
+		// 666 Currently not implemented
+		return http::Response::response404();
+		// Decode request
+		// Find information
+		// Returninformation
+
+	}
+	
+	//---------------------------------------------------------------------------------------------------------------------
+	http::Response DmcNode::newSubscription(http::Request _request){
+		// 666 Currently not implemented
+		return http::Response::response404();
+		// Decode request
+		// Create a subscriptor
+		// Save subscriptor into list
+		// Return OK
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------
@@ -50,4 +78,6 @@ namespace dmc{
 		/// Execute command and response OK.
 		
 	}
+
+
 }
