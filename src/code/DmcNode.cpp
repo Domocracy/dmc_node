@@ -33,7 +33,7 @@ namespace dmc{
 		mServer = new http::Server(mHttpPort);
 
 		// Parse urls
-		mServer->setResponder(cSubscriptionUrl, http::Response::response404);
+		//mServer->setResponder(cSubscriptionUrl, http::Response::response404);
 
 		mServer->setResponder(cDeviceUrl, [this](http::Server* _s, unsigned _conId, const http::Request& _req) {
 			_s->respond(_conId, this->execCmd(_req));
@@ -44,7 +44,10 @@ namespace dmc{
 	//---------------------------------------------------------------------------------------------------------------------
 	http::Response DmcNode::execCmd(http::Request _request){
 		// 666 Currently not implemented
-
 		return http::Response::response404();
+		/// Extract command
+		/// Check user permisions
+		/// Execute command and response OK.
+		
 	}
 }

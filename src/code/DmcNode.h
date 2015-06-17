@@ -23,18 +23,18 @@ namespace dmc{
 	class DmcNode{
 	public:	// Public interface
 		DmcNode(int _argc, char** _argv);
-		
-		http::Response execCmd(http::Request);
 
 	private:	// Private methods
 		void processArguments(int _argc, char **_argv);
 		void initServer();
 
+		http::Response execCmd(http::Request);
+
 	private:	// Members
 		int mHttpPort = 80;
 		dmc::http::Server *mServer;
 
-
+		friend http::Server::UrlHandler;
 	};
 
 
