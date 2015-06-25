@@ -11,7 +11,7 @@
 
 
 namespace dmc {
-	RequestProcessor & RequestDispatcher::dispatch(Poco::Net::HTTPRequest _request) {
+	RequestProcessor & RequestDispatcher::dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl) {
 		// Extract url from request.
 		// Choose proper Processor.
 		// Return processor.
