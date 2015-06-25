@@ -10,3 +10,6 @@ add_subdirectory(lib/cjson/src)
 add_subdirectory(lib/dmc_sockets/src)
 add_subdirectory(lib/dmc_http/src)
 add_subdirectory(lib/poco)
+
+# Add tests
+add_subdirectory(test)
