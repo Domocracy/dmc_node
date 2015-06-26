@@ -9,7 +9,10 @@
 #ifndef _DMCNODE_CODE_FRONTEND_REQUEST_DISPATCHER_H_
 #define _DMCNODE_CODE_FRONTEND_REQUEST_DISPATCHER_H_
 
-#include <Poco/Net/HTTPRequest.h>
+#include <string>
+
+// Forward declarations
+namespace Poco { namespace Net { class HTTPRequest; } }
 
 namespace dmc {
 	class RequestProcessor;
