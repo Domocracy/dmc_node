@@ -22,7 +22,8 @@ namespace dmc {
 		/// \brief Parse given request and return the proper request processor.
 		/// \param _request Recived Requesto to be parsed
 		/// \param _parsedUrl Output string that contains results of parsing the url of the request.
-		RequestProcessor& dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl);
+		/// \return The request processor associated to the Request or nullptr if no good candidate was found
+		RequestProcessor* dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl);
 
 	};	// class RequestDispatcher
 }	//	namespace dmc

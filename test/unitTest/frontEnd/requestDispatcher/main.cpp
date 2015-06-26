@@ -47,13 +47,15 @@ int main(int, const char**) {
 	RequestDispatcher dispatcher;
 
 	std::string outUrl;
-	RequestProcessor& a = dispatcher.dispatch(HTTPRequest{"/suscribe/a"}, outUrl);
-	assert(a.iAm() == RequestProcessor::Type::eEventPublisher);
-	assert(outUrl == "a");
+	// Test invalid requests
+	assert(nullptr == dispatcher.dispatch(HTTPRequest{""}, outUrl));
+	assert(nullptr == dispatcher.dispatch(HTTPRequest{"/suscribe/a"}, outUrl));
+	assert(nullptr == dispatcher.dispatch(HTTPRequest{"/command/b/c/d?=e"}, outUrl));
 
-	RequestProcessor& b = dispatcher.dispatch(HTTPRequest{"/command/b/c/d?=e"}, outUrl);
-	assert(b.iAm() == RequestProcessor::Type::eCommandDispatcher);
-	assert(outUrl == "b/c/d?=e");
+	// Test valid requests
+	RequestProcessor* a = dispatcher.dispatch(HTTPRequest{"http://some.host/suscribe/"}, outUrl);
+	assert(a->iAm() == RequestProcessor::Type::eEventPublisher);
+	assert(outUrl == "");
 }
 
 

@@ -5,13 +5,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-
-
 #include "RequestDispatcher.h"
 
-
 namespace dmc {
-	RequestProcessor & RequestDispatcher::dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl) {
+	RequestProcessor* RequestDispatcher::dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl) {
+
 		// Extract url from request.
 		// Choose proper Processor.
 		// Return processor.
