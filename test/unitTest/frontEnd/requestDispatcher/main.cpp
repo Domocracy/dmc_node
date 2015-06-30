@@ -70,12 +70,14 @@ int main(int, const char**) {
 	// Two suscribers
 	RequestDispatcher c;
 	RequestProcessor topLevel, specific;
-	c.suscribe(&topLevel, "/top");
-	c.suscribe(&specific, "/top/spec");
+	c.subscribe(&topLevel, "/top");
+	c.subscribe(&specific, "/top/spec");
 	assert(nullptr == c.dispatch({"/x"}, outUrl)); // No one suscribed here
 	assert(outUrl.empty());
 	assert(c.dispatch({urlBases[0] + "top/spec/what"}, outUrl) == &specific);
 	assert(outUrl == "top/spec/what");
+
+	// Test first subscriber have preference for equal specializations
 }
 
 
