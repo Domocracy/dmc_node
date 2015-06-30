@@ -53,7 +53,7 @@ int main(int, const char**) {
 	// Top level suscriber
 	RequestDispatcher b;
 	RequestProcessor foo;
-	b.suscribe(&foo, "/");
+	b.subscribe(&foo, "/");
 	assert(nullptr == b.dispatch({""}, outUrl)); // Ill-formed
 	assert(outUrl.empty());
 	assert(nullptr == b.dispatch({"/"}, outUrl)); // Ill-formed
