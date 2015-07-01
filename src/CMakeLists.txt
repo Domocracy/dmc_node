@@ -38,7 +38,9 @@ endif()
 
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/code)
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/cjson/src)
-target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Net/src)
+target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Net/include)
+target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Util/include)
 
 target_link_libraries(dmcNode LINK_PUBLIC cjson)
 target_link_libraries(dmcNode LINK_PUBLIC PocoNet)
+target_link_libraries(dmcNode LINK_PUBLIC PocoUtil)

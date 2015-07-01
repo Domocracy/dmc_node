@@ -4,6 +4,9 @@
 #ifndef _DMCNODE_CODE_FRONTEND_LOCALSERVER_H_
 #define _DMCNODE_CODE_FRONTEND_LOCALSERVER_H_
 
+#include <Poco/Net/HTTPServer.h>
+#include <Poco/Net/ServerSocket.h>
+
 namespace dmc {
 
 	class RequestDispatcher;
@@ -27,7 +30,9 @@ namespace dmc {
 		bool respond(const Request& request, const Response& response);
 
 	private:
-		RequestDispatcher& mDispatcher;
+		RequestDispatcher&			mDispatcher;
+		Poco::Net::HTTPServer*		mHTTPServer;
+		Poco::Net::ServerSocket*	mSrvSocket;
 	};
 
 }	//	namespace dmc
