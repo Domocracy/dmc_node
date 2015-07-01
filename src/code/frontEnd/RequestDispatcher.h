@@ -2,7 +2,6 @@
 //
 //	Dmc Node
 //
-//
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -33,6 +32,11 @@ namespace dmc {
 		RequestProcessor*	dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl) const;
 		/// Register a request processor to be retrieved for all requests to _localUrl
 		void				subscribe(RequestProcessor*, const std::string& _localUrl);
+
+	private:
+		const std::string cValidHostExpression = "(http|https):\/\/[a-zA-Z0-9\-\.]+\/";
+
+		bool extractHost(std::string &_url) const;
 
 	private:
 		std::unordered_map<std::string, RequestProcessor*>	mSubscriptions;
