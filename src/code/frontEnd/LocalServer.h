@@ -11,6 +11,7 @@ namespace dmc {
 	class Response;
 
 	class LocalServer {
+	public:
 		/// \param dispatcher Local server will use this to retrieve the proper RequestProcessor for each incomming Request
 		/// \param port the server will try to listen on
 		LocalServer(RequestDispatcher& dispatcher, unsigned port);
