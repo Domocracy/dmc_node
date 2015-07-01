@@ -1,10 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
 project(dmcNode)
-enable_testing()
 
-# Child projects
+# Actual node project
 add_subdirectory(src)
-
 # Used libraries
 add_subdirectory(lib/cjson/src)
 
@@ -36,5 +34,6 @@ set(POCO_UNBUNDLED OFF)
 add_subdirectory(lib/poco)
 
 # Add tests
+enable_testing()
 include_directories(src/code)
 add_subdirectory(test)
