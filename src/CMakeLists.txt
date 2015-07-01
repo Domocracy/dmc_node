@@ -3,7 +3,6 @@ if(POLICY CMP0048)
 	cmake_policy(SET CMP0048 OLD)
 endif()
 project(dmcNode)
-set(PROJECT_VERSION ${DMC_NODE_VERSION})
 
 # Collect all sources
 file(GLOB_RECURSE DMCNODE_SOURCE_FILES "code/*.cpp" "code/*.h" "code/*.inl")

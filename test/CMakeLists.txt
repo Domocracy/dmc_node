@@ -3,7 +3,6 @@ if(POLICY CMP0048)
 	cmake_policy(SET CMP0048 OLD)
 endif()
 project(test)
-set(PROJECT_VERSION ${DMC_NODE_VERSION})
 
 # Adding Test types
 add_subdirectory(unitTest)
