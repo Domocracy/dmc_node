@@ -82,7 +82,7 @@ int main(int, const char**) {
 	RequestProcessor specificA, specificB;
 	c.subscribe(&specificA, "/top/spec");
 	c.subscribe(&specificB, "/top/spec");
-	assert(c.dispatch({urlBases[0] + "top/spec/what"}, outUrl) == &specificA);
+	assert(c.dispatch({urlBases[0] + "top/spec/what"}, outUrl) == &specificB);
 	assert(outUrl.empty());
 
 }
