@@ -6,12 +6,18 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 #include "RequestDispatcher.h"
+#include <regex>
 
 namespace dmc {
-	RequestProcessor* RequestDispatcher::dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl) {
+	//-----------------------------------------------------------------------------------------------------------------
+	RequestProcessor * RequestDispatcher::dispatch(const Poco::Net::HTTPRequest & _request, std::string & _parsedUrl) const {
 
-		// Extract url from request.
-		// Choose proper Processor.
-		// Return processor.
+
+		return nullptr;
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	void RequestDispatcher::subscribe(RequestProcessor * _requestProcessor, const std::string & _localUrl) {
+		mSubscriptions[_localUrl] = _requestProcessor;
 	}
 }
