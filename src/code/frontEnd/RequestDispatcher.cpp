@@ -21,6 +21,7 @@ namespace dmc {
 				// Try key
 				auto iter = mSubscriptions.find(key);
 				if (iter != mSubscriptions.end()) {
+					_parsedUrl = url.substr(key.size(), url.size());
 					return (*iter).second;
 				}
 				// Not found, keep decomposing the url
@@ -31,6 +32,7 @@ namespace dmc {
 			// Check if exist default subscription "/"
 			auto iter = mSubscriptions.find("/");
 			if (iter != mSubscriptions.end()) {
+				_parsedUrl = url;
 				return (*iter).second;
 			}
 		}

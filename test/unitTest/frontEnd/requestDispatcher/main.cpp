@@ -29,57 +29,61 @@ int main(int, const char**) {
 			urlBases.push_back(protocol + "://"+ host + "/");
 
 	// Empty dispatcher should never retrieve anything
-	std::string outUrl;
+	std::string outUrlA;
 	RequestDispatcher a;
-	assert(nullptr == a.dispatch({""}, outUrl));
-	assert(outUrl.empty());
-	assert(nullptr == a.dispatch({"/"}, outUrl));
-	assert(outUrl.empty());
-	assert(nullptr == a.dispatch({"/suscribe"}, outUrl));
-	assert(outUrl.empty());
+	assert(nullptr == a.dispatch({""}, outUrlA));
+	assert(outUrlA.empty());
+	assert(nullptr == a.dispatch({"/"}, outUrlA));
+	assert(outUrlA.empty());
+	assert(nullptr == a.dispatch({"/suscribe"}, outUrlA));
+	assert(outUrlA.empty());
 	for(auto base : urlBases) {
-		assert(nullptr == a.dispatch({"GET",base+"suscribe"}, outUrl));
+		assert(nullptr == a.dispatch({"GET",base+"suscribe"}, outUrlA));
 	}
 
 	// Top level suscriber
+	std::string outUrlB;
 	RequestDispatcher b;
 	RequestProcessor foo;
 	b.subscribe(&foo, "/");
-	assert(nullptr == b.dispatch({"GET",""}, outUrl)); // Ill-formed
-	assert(outUrl.empty());
-	assert(nullptr == b.dispatch({"GET","/"}, outUrl)); // Ill-formed
-	assert(outUrl.empty());
-	assert(nullptr == b.dispatch({"GET","/suscribe"}, outUrl)); // Ill-formed
-	assert(outUrl.empty());
+	assert(nullptr == b.dispatch({"GET",""}, outUrlB)); // Ill-formed
+	assert(outUrlB.empty());
+	assert(nullptr == b.dispatch({"GET","/"}, outUrlB)); // Ill-formed
+	assert(outUrlB.empty());
+	assert(nullptr == b.dispatch({"GET","/suscribe"}, outUrlB)); // Ill-formed
+	assert(outUrlB.empty());
 	for(auto base : urlBases) {
-		assert(&foo == b.dispatch({"GET",base}, outUrl));
+		assert(&foo == b.dispatch({"GET",base}, outUrlB));
 	}
 	for(auto base : urlBases) {
-		assert(&foo == b.dispatch({"GET",base+"hello"}, outUrl));
+		assert(&foo == b.dispatch({"GET",base+"hello"}, outUrlB));
 	}
 
 	// Test invalid host and invalid protocol
-	RequestDispatcher e;
+	std::string outUrlC;
+	RequestDispatcher c;
 	RequestProcessor bar;
-	e.subscribe(&bar, "/hello/dolly");
-	assert(nullptr == e.dispatch({"GET", "ftp://localhost/hello/dolly"}, outUrl));	// Invalid protocol
-	assert(nullptr == e.dispatch({"GET", "https://www.@invalid@.com/hello/dolly"}, outUrl));	// Invalid Host
+	c.subscribe(&bar, "/hello/dolly");
+	assert(nullptr == c.dispatch({"GET", "ftp://localhost/hello/dolly"}, outUrlC));	// Invalid protocol
+	assert(nullptr == c.dispatch({"GET", "https://www.@invalid@.com/hello/dolly"}, outUrlC));	// Invalid Host
 
 	// Two suscribers
-	RequestDispatcher c;
+	std::string outUrlD;
+	RequestDispatcher d;
 	RequestProcessor topLevel, specific;
-	c.subscribe(&topLevel, "/top");
-	c.subscribe(&specific, "/top/spec");
-	assert(nullptr == c.dispatch({"GET","/x"}, outUrl)); // No one suscribed here
-	assert(outUrl.empty());
-	assert(c.dispatch({"GET",urlBases[0] + "top/spec/what"}, outUrl) == &specific);
-	assert(outUrl == "top/spec/what");
+	d.subscribe(&topLevel, "/top");
+	d.subscribe(&specific, "/top/spec");
+	assert(nullptr == d.dispatch({"GET","/x"}, outUrlD)); // No one suscribed here
+	assert(outUrlD.empty());
+	assert(d.dispatch({"GET",urlBases[0] + "top/spec/what"}, outUrlD) == &specific);
+	assert(outUrlD == "/what");
 
 	// Test first subscriber have preference for equal specializations
-	RequestDispatcher d;
+	std::string outUrlE;
+	RequestDispatcher e;
 	RequestProcessor specificA, specificB;
-	d.subscribe(&specificA, "/top/spec");
-	d.subscribe(&specificB, "/top/spec");
-	assert(d.dispatch({"GET",urlBases[0] + "top/spec/what"}, outUrl) == &specificB);
-	assert(outUrl.empty());
+	e.subscribe(&specificA, "/top/spec");
+	e.subscribe(&specificB, "/top/spec");
+	assert(e.dispatch({"GET",urlBases[0] + "top/spec/what"}, outUrlE) == &specificB);
+	assert(outUrlE == "/what");
 }
