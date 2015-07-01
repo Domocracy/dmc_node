@@ -78,6 +78,13 @@ int main(int, const char**) {
 	assert(outUrl == "top/spec/what");
 
 	// Test first subscriber have preference for equal specializations
+	RequestDispatcher c;
+	RequestProcessor specificA, specificB;
+	c.subscribe(&specificA, "/top/spec");
+	c.subscribe(&specificB, "/top/spec");
+	assert(c.dispatch({urlBases[0] + "top/spec/what"}, outUrl) == &specificA);
+	assert(outUrl.empty());
+
 }
 
 
