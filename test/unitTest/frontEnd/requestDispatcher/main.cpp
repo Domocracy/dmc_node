@@ -4,23 +4,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-#define Net_HTTPRequest_INCLUDED // Deactivate inclusion of POCO HTTP Requests
+
 #include "frontEnd/RequestDispatcher.h"
+
 #include <assert.h>
+#include <Poco/Net/HTTPRequest.h>
 #include <vector>
 
 // Mock classes
-namespace Poco {
-	namespace Net {
-		class HTTPRequest {
-		public:
-			const std::string& getURI() const { return url; }
-
-			std::string url;
-		};
-	}
-} // namespace Poco
-
 namespace dmc {
 	class RequestProcessor {};
 } // namespace dmc
