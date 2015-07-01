@@ -25,6 +25,9 @@ namespace dmc {
 		///\ param response the response you want to send
 		///\ return \c true on success, \c false otherwise
 		bool respond(const Request& request, const Response& response);
+
+	private:
+		RequestDispatcher& mDispatcher;
 	};
 
 }	//	namespace dmc
