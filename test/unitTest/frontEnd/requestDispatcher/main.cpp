@@ -38,47 +38,48 @@ int main(int, const char**) {
 	assert(nullptr == a.dispatch({"/suscribe"}, outUrl));
 	assert(outUrl.empty());
 	for(auto base : urlBases) {
-		assert(nullptr == a.dispatch({base+"suscribe"}, outUrl));
+		assert(nullptr == a.dispatch({"GET",base+"suscribe"}, outUrl));
 	}
 
 	// Top level suscriber
 	RequestDispatcher b;
 	RequestProcessor foo;
 	b.subscribe(&foo, "/");
-	assert(nullptr == b.dispatch({""}, outUrl)); // Ill-formed
+	assert(nullptr == b.dispatch({"GET",""}, outUrl)); // Ill-formed
 	assert(outUrl.empty());
-	assert(nullptr == b.dispatch({"/"}, outUrl)); // Ill-formed
+	assert(nullptr == b.dispatch({"GET","/"}, outUrl)); // Ill-formed
 	assert(outUrl.empty());
-	assert(nullptr == b.dispatch({"/suscribe"}, outUrl)); // Ill-formed
+	assert(nullptr == b.dispatch({"GET","/suscribe"}, outUrl)); // Ill-formed
 	assert(outUrl.empty());
 	for(auto base : urlBases) {
-		assert(&foo == b.dispatch({base}, outUrl));
+		assert(&foo == b.dispatch({"GET",base}, outUrl));
 	}
 	for(auto base : urlBases) {
-		assert(&foo == b.dispatch({base+"hello"}, outUrl));
+		assert(&foo == b.dispatch({"GET",base+"hello"}, outUrl));
 	}
+
+	// Test invalid host and invalid protocol
+	RequestDispatcher e;
+	RequestProcessor bar;
+	e.subscribe(&bar, "/hello/dolly");
+	assert(nullptr == e.dispatch({"GET", "ftp://localhost/hello/dolly"}, outUrl));	// Invalid protocol
+	assert(nullptr == e.dispatch({"GET", "https://www.@invalid@.com/hello/dolly"}, outUrl));	// Invalid Host
 
 	// Two suscribers
 	RequestDispatcher c;
 	RequestProcessor topLevel, specific;
 	c.subscribe(&topLevel, "/top");
 	c.subscribe(&specific, "/top/spec");
-	assert(nullptr == c.dispatch({"/x"}, outUrl)); // No one suscribed here
+	assert(nullptr == c.dispatch({"GET","/x"}, outUrl)); // No one suscribed here
 	assert(outUrl.empty());
-	assert(c.dispatch({urlBases[0] + "top/spec/what"}, outUrl) == &specific);
+	assert(c.dispatch({"GET",urlBases[0] + "top/spec/what"}, outUrl) == &specific);
 	assert(outUrl == "top/spec/what");
 
 	// Test first subscriber have preference for equal specializations
 	RequestDispatcher d;
 	RequestProcessor specificA, specificB;
-	c.subscribe(&specificA, "/top/spec");
-	c.subscribe(&specificB, "/top/spec");
-	assert(c.dispatch({urlBases[0] + "top/spec/what"}, outUrl) == &specificB);
+	d.subscribe(&specificA, "/top/spec");
+	d.subscribe(&specificB, "/top/spec");
+	assert(d.dispatch({"GET",urlBases[0] + "top/spec/what"}, outUrl) == &specificB);
 	assert(outUrl.empty());
-
 }
-
-
-
-
-
