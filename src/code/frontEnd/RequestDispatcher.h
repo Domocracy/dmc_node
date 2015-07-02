@@ -5,8 +5,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-#ifndef _DMCNODE_CODE_FRONTEND_REQUEST_DISPATCHER_H_
-#define _DMCNODE_CODE_FRONTEND_REQUEST_DISPATCHER_H_
+#ifndef _DMCNODE_CODE_FRONTEND_REQUESTDISPATCHER_H_
+#define _DMCNODE_CODE_FRONTEND_REQUESTDISPATCHER_H_
 
 #include <string>
 #include <unordered_map>
@@ -43,4 +43,4 @@ namespace dmc {
 	};
 }	//	namespace dmc
 
-#endif	//	_DMCNODE_CODE_FRONTEND_REQUEST_DISPATCHER_H_
+#endif	//	_DMCNODE_CODE_FRONTEND_REQUESTDISPATCHER_H_
