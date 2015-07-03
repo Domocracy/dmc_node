@@ -49,13 +49,17 @@ namespace dmc {
 	//-----------------------------------------------------------------------------------------------------------------
 	HTTPRequestHandler * LocalServer::createRequestHandler(const HTTPServerRequest & request)
 	{
-		return new RequestHandler(*this, mDispatcher);
+		unsigned id = 0;
+		while(mHandlers.find(id) != mHandlers.end())
+			++id;
+		return new RequestHandler(id, *this, mDispatcher);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	LocalServer::RequestHandler::RequestHandler(LocalServer& _server, RequestDispatcher& _dispatcher)
+	LocalServer::RequestHandler::RequestHandler(unsigned _reqId, LocalServer& _server, RequestDispatcher& _dispatcher)
 		: mServer(_server)
 		, mDispatcher(_dispatcher)
+		, mReqId(_reqId)
 	{
 	}
 

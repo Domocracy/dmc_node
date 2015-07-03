@@ -7,6 +7,7 @@
 #include <Poco/Net/HTTPServer.h>
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
+#include <map>
 
 namespace dmc {
 
@@ -35,14 +36,13 @@ namespace dmc {
 
 		class RequestHandler : public HTTPRequestHandler {
 		public:
-			RequestHandler(LocalServer& _server, RequestDispatcher& _dispatcher);
+			RequestHandler(unsigned _reqId, LocalServer& _server, RequestDispatcher& _dispatcher);
 
 			void lock	()		 { mFree = false;}
 			void release()		 { mFree = true; }
 			bool isFree	() const { return mFree; }
 
-			void setId	(unsigned _id) { mId = _id; }
-			unsigned id	() const { return mId; }
+			unsigned id	() const { return mReqId; }
 
 			void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response);
 			HTTPServerResponse& response() { return *mResponse; }
@@ -54,12 +54,13 @@ namespace dmc {
 			HTTPServerResponse* mResponse;
 			bool			mFree = true;
 			volatile bool	mWaiting = false;
-			unsigned		mId;
+			unsigned		mReqId;
 		};
 
 	private:
-		RequestDispatcher&				mDispatcher;
-		Poco::Net::HTTPServer*			mHTTPServer;
+		RequestDispatcher&					mDispatcher;
+		Poco::Net::HTTPServer*				mHTTPServer;
+		std::map<unsigned,RequestHandler*>	mHandlers;
 	};
 
 }	//	namespace dmc
