@@ -33,11 +33,10 @@ namespace dmc {
 	//-----------------------------------------------------------------------------------------------------------------
 	bool LocalServer::respond(const Request& _request, const Response& _response) {
 		// Get the adequate handler
-		if(mHandlerPool.size() < _request.id())
+		auto it = mHandlers.find(_request.id());
+		if(it == mHandlers.end())
 			return false;
-		RequestHandler* handler = mHandlerPool[_request.id()];
-		if(handler->isFree())
-			return false;
+		RequestHandler* handler = it->second;
 		// Translate response
 		HTTPTranslator t;
 		t.translate(_response, handler->response());
@@ -52,7 +51,9 @@ namespace dmc {
 		unsigned id = 0;
 		while(mHandlers.find(id) != mHandlers.end())
 			++id;
-		return new RequestHandler(id, *this, mDispatcher);
+		RequestHandler* h = new RequestHandler(id, *this, mDispatcher);
+		mHandlers.insert(std::make_pair(id, h));
+		return h;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -75,5 +76,10 @@ namespace dmc {
 		while(mWaiting)
 		{}
 		return;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	void LocalServer::RequestHandler::sendResponse() {
+		mWaiting = false;
 	}
 }
