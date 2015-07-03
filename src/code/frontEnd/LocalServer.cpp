@@ -5,6 +5,7 @@
 #include "Request.h"
 #include "HttpTranslator.h"
 
+#include <cassert>
 #include <Poco/Net/HTTPServerResponse.h>
 #include <Poco/Net/HTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
@@ -55,5 +56,23 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-
+	LocalServer::RequestHandler* LocalServer::reuseHandler() {
+		assert(mPoolTip <= mHandlerPool.size());
+		if(mPoolTip == mHandlerPool.size()) // Exhausted pool
+			return nullptr;
+		unsigned slot = mPoolTip;
+		do {
+			assert(mHandlerPool[slot]); // No slot should be empty
+			if (mHandlerPool[slot]->isFree())
+			{
+				// Set tip for next time
+				mPoolTip = slot+1;
+				mPoolTip %= mHandlerPool.size();
+				return mHandlerPool[slot];
+			}
+		} while(mPoolTip != slot);
+		// No slot available, pool exhausted
+		mPoolTip = mHandlerPool.size();
+		return nullptr;
+	}
 }

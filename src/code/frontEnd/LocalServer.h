@@ -60,7 +60,7 @@ namespace dmc {
 		// The pool must be a vector of handler pointers so that realocation doesn't kill the actual handles
 		// being used
 		std::vector<RequestHandler*>	mHandlerPool;
-		unsigned mHandlerTip = 0;
+		unsigned mPoolTip = 0;
 	};
 
 }	//	namespace dmc
