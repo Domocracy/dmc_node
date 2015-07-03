@@ -22,10 +22,11 @@ namespace dmc {
 		~LocalServer();
 
 		// Ongoing connections
-		/// Respond to a pending request
+		/// Respond to a pending request. The method will fail if you try
+		/// to respond to an inexisting request or to one that has already been responded.
 		///\ param request the request to which you intend to respond
 		///\ param response the response you want to send
-		///\ return \c true on success, \c false otherwise
+		///\ return \c true on success, \c false otherwise.
 		bool respond(const Request& request, const Response& response);
 
 	private:
