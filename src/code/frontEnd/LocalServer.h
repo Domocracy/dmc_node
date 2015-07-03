@@ -53,6 +53,7 @@ namespace dmc {
 
 		RequestHandler* reuseHandler();
 		RequestHandler* getNewHandler();
+		void			clearPool();
 
 	private:
 		RequestDispatcher&				mDispatcher;
@@ -61,6 +62,7 @@ namespace dmc {
 		// being used
 		std::vector<RequestHandler*>	mHandlerPool;
 		unsigned mPoolTip = 0;
+		static const unsigned poolIncreaseSize = 20;
 	};
 
 }	//	namespace dmc

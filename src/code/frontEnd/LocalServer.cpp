@@ -75,4 +75,18 @@ namespace dmc {
 		mPoolTip = mHandlerPool.size();
 		return nullptr;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	LocalServer::RequestHandler* LocalServer::getNewHandler() {
+		// Allocate space for more handlers
+		mHandlerPool.resize(mHandlerPool.size() + poolIncreaseSize, nullptr); // Init new slots to nullptr
+		// Allocate new handlers
+		RequestHandler* newArray = new RequestHandler[poolIncreaseSize];
+		// Assign slots
+		for (unsigned i = 0; i < poolIncreaseSize; ++i) {
+			mHandlerPool[mPoolTip+i] = & newArray[i];
+		}
+		// Return a new handler and advance the tip
+		return mHandlerPool[mPoolTip++];
+	}
 }
