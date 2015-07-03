@@ -35,6 +35,8 @@ namespace dmc {
 
 		class RequestHandler : public HTTPRequestHandler {
 		public:
+			RequestHandler(LocalServer& _server, RequestDispatcher& _dispatcher);
+
 			void lock	()		 { mFree = false;}
 			void release()		 { mFree = true; }
 			bool isFree	() const { return mFree; }
@@ -43,26 +45,21 @@ namespace dmc {
 			unsigned id	() const { return mId; }
 
 			void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response);
-			HTTPServerResponse& response();
+			HTTPServerResponse& response() { return *mResponse; }
 			void sendResponse();
+			LocalServer&		mServer;
+			RequestDispatcher&	mDispatcher;
 
 		private:
-			bool		mFree = true;
-			unsigned	mId;
+			HTTPServerResponse* mResponse;
+			bool			mFree = true;
+			volatile bool	mWaiting = false;
+			unsigned		mId;
 		};
-
-		RequestHandler* reuseHandler();
-		RequestHandler* getNewHandler();
-		void			clearPool();
 
 	private:
 		RequestDispatcher&				mDispatcher;
 		Poco::Net::HTTPServer*			mHTTPServer;
-		// The pool must be a vector of handler pointers so that realocation doesn't kill the actual handles
-		// being used
-		std::vector<RequestHandler*>	mHandlerPool;
-		unsigned mPoolTip = 0;
-		static const unsigned poolIncreaseSize = 20;
 	};
 
 }	//	namespace dmc

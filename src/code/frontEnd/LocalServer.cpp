@@ -4,6 +4,7 @@
 #include "LocalServer.h"
 #include "Request.h"
 #include "HttpTranslator.h"
+#include "RequestDispatcher.h"
 
 #include <cassert>
 #include <Poco/Net/HTTPServerResponse.h>
@@ -48,54 +49,27 @@ namespace dmc {
 	//-----------------------------------------------------------------------------------------------------------------
 	HTTPRequestHandler * LocalServer::createRequestHandler(const HTTPServerRequest & request)
 	{
-		RequestHandler* handler = reuseHandler();
-		if(handler)
-			return handler;
-		else
-			return getNewHandler();
+		return new RequestHandler(*this, mDispatcher);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	LocalServer::RequestHandler* LocalServer::reuseHandler() {
-		assert(mPoolTip <= mHandlerPool.size());
-		if(mPoolTip == mHandlerPool.size()) // Exhausted pool
-			return nullptr;
-		unsigned slot = mPoolTip;
-		do {
-			assert(mHandlerPool[slot]); // No slot should be empty
-			if (mHandlerPool[slot]->isFree())
-			{
-				// Set tip for next time
-				mPoolTip = slot+1;
-				mPoolTip %= mHandlerPool.size();
-				return mHandlerPool[slot];
-			}
-		} while(mPoolTip != slot);
-		// No slot available, pool exhausted
-		mPoolTip = mHandlerPool.size();
-		return nullptr;
+	LocalServer::RequestHandler::RequestHandler(LocalServer& _server, RequestDispatcher& _dispatcher)
+		: mServer(_server)
+		, mDispatcher(_dispatcher)
+	{
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	LocalServer::RequestHandler* LocalServer::getNewHandler() {
-		// Allocate space for more handlers
-		mHandlerPool.resize(mHandlerPool.size() + poolIncreaseSize, nullptr); // Init new slots to nullptr
-		// Allocate new handlers
-		RequestHandler* newArray = new RequestHandler[poolIncreaseSize];
-		// Assign slots
-		for (unsigned i = 0; i < poolIncreaseSize; ++i) {
-			mHandlerPool[mPoolTip+i] = & newArray[i];
-		}
-		// Return a new handler and advance the tip
-		return mHandlerPool[mPoolTip++];
-	}
-	
-	//-----------------------------------------------------------------------------------------------------------------
-	void LocalServer::clearPool() {
-		assert(mHandlerPool.size() / poolIncreaseSize * poolIncreaseSize == mHandlerPool.size()); // Pool size is a multiple of increase size
-		for(unsigned i = 0; i < mHandlerPool.size(); i+=poolIncreaseSize)
-			delete mHandlerPool[i];
-		mHandlerPool.clear();
-		mPoolTip = 0;
+	void LocalServer::RequestHandler::handleRequest(HTTPServerRequest& _request, HTTPServerResponse& _response) {
+		// Translate incomming message
+		HTTPTranslator t;
+		Request request;
+		// Dispatch the message
+		mWaiting = true; // This flag must be set before dispatching, because some component may be able to respond even before the dispatcher returns
+		mDispatcher.dispatch(request);
+		// Wait for someone to answer
+		while(mWaiting)
+		{}
+		return;
 	}
 }
