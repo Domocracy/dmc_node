@@ -6,6 +6,7 @@
 
 #include <Poco/Net/HTTPServer.h>
 #include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/HTTPRequestHandlerFactory.h>
 
 namespace dmc {
 
@@ -13,14 +14,12 @@ namespace dmc {
 	class Request;
 	class Response;
 
-	class LocalServer {
+	class LocalServer : private Poco::Net::HTTPRequestHandlerFactory {
 	public:
 		/// \param dispatcher Local server will use this to retrieve the proper RequestProcessor for each incomming Request
 		/// \param port the server will try to listen on
 		LocalServer(RequestDispatcher& dispatcher, unsigned port);
-		// Listening interface
-		bool startListening	();
-		bool stopListening	();
+		~LocalServer();
 
 		// Ongoing connections
 		/// Respond to a pending request
@@ -30,9 +29,35 @@ namespace dmc {
 		bool respond(const Request& request, const Response& response);
 
 	private:
-		RequestDispatcher&			mDispatcher;
-		Poco::Net::HTTPServer*		mHTTPServer;
-		Poco::Net::ServerSocket*	mSrvSocket;
+		// Inherited via HTTPRequestHandlerFactory
+		virtual HTTPRequestHandler * createRequestHandler(const HTTPServerRequest & request) override;
+
+		class RequestHandler : public HTTPRequestHandler {
+		public:
+			void lock	()		 { mFree = false;}
+			void release()		 { mFree = true; }
+			bool isFree	() const { return mFree; }
+
+			void setId	(unsigned _id) { mId = _id; }
+			unsigned id	() const { return mId; }
+
+			void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response);
+
+		private:
+			bool		mFree = true;
+			unsigned	mId;
+		};
+
+		RequestHandler* reuseHandler();
+		RequestHandler* getNewHandler();
+
+	private:
+		RequestDispatcher&				mDispatcher;
+		Poco::Net::HTTPServer*			mHTTPServer;
+		// The pool must be a vector of handler pointers so that realocation doesn't kill the actual handles
+		// being used
+		std::vector<RequestHandler*>	mHandlerPool;
+		unsigned mHandlerTip = 0;
 	};
 
 }	//	namespace dmc

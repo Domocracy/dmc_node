@@ -23,39 +23,35 @@ namespace dmc {
 			}
 		}
 
-		class DmcRequestHandlerFactory: public HTTPRequestHandlerFactory
-		{
-		public:
-			DmcRequestHandlerFactory(LocalServer& _server)
-				: mSever(_server) {}
-
-			HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
-			{
-				return new DmcRequestHandler(mSever);
-			}
-
-		private:
-			LocalServer& mSever;
-		};
-
 	}	// unnamed namespace
 
 	//-----------------------------------------------------------------------------------------------------------------
 	LocalServer::LocalServer(RequestDispatcher& _dispatcher, unsigned _port)
 		:mDispatcher(_dispatcher)
 	{
-
-		// set-up a server socket
-		mSrvSocket = new ServerSocket(_port);
 		// set-up a HTTPServer instance
-		mHTTPServer = new HTTPServer()
-		HTTPServer srv(new TimeRequestHandlerFactory(format), svs, new HTTPServerParams);
+		mHTTPServer = new HTTPServer(static_cast<HTTPRequestHandlerFactory*>(this), _port);
 		// start the HTTPServer
-		srv.start();
-		// wait for CTRL-C or kill
-		waitForTerminationRequest();
-		// Stop the HTTPServer
-		srv.stop();
+		mHTTPServer->start();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	LocalServer::~LocalServer() {
+		mHTTPServer->stop();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+
+	//-----------------------------------------------------------------------------------------------------------------
+	HTTPRequestHandler * LocalServer::createRequestHandler(const HTTPServerRequest & request)
+	{
+		RequestHandler* handler = reuseHandler();
+		if(handler)
+			return handler;
+		else
+			return getNewHandler();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 
 }

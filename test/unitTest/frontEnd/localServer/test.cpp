@@ -12,32 +12,12 @@ namespace Poco {
 }
 
 namespace dmc {
-	// --- Mock response
-	class Response {
-	public:
-	};
-
-	// --- Mock request processor
-	class RequestProcessor {
-	public:
-		void processRequest(const Request& _req, const std::string& _parsedUrl, LocalServer& _server) {
-			while(!mRespond)
-			{}
-			_server.respond(_req, response);
-			mRespond = false;
-		}
-
-		bool mRespond = false;
-		Response response;
-	};
-
-	RequestProcessor gA;
+	class Request;
 
 	// --- Mock request dispatcher
 	class RequestDispatcher {
 	public:
-		RequestProcessor* dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl) const {
-			return &gA;
+		void dispatch(const Request &_request, std::string &_parsedUrl) const {
 		}
 	};
 }	// namespace dmc
