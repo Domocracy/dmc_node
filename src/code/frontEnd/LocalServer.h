@@ -6,6 +6,7 @@
 
 #include <Poco/Net/HTTPServer.h>
 #include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/HTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 #include <map>
 
@@ -32,9 +33,9 @@ namespace dmc {
 
 	private:
 		// Inherited via HTTPRequestHandlerFactory
-		virtual HTTPRequestHandler * createRequestHandler(const HTTPServerRequest & request) override;
+		virtual Poco::Net::HTTPRequestHandler * createRequestHandler(const Poco::Net::HTTPServerRequest & request) override;
 
-		class RequestHandler : public HTTPRequestHandler {
+		class RequestHandler : public Poco::Net::HTTPRequestHandler {
 		public:
 			RequestHandler(unsigned _reqId, LocalServer& _server, RequestDispatcher& _dispatcher);
 
@@ -44,14 +45,14 @@ namespace dmc {
 
 			unsigned id	() const { return mReqId; }
 
-			void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response);
-			HTTPServerResponse& response() { return *mResponse; }
+			void handleRequest(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response);
+			Poco::Net::HTTPServerResponse& response() { return *mResponse; }
 			void sendResponse();
 			LocalServer&		mServer;
 			RequestDispatcher&	mDispatcher;
 
 		private:
-			HTTPServerResponse* mResponse;
+			Poco::Net::HTTPServerResponse* mResponse;
 			bool			mFree = true;
 			volatile bool	mWaiting = false;
 			unsigned		mReqId;
