@@ -2,6 +2,7 @@
 //	Dmc Node
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "LocalServer.h"
+#include "HttpTranslator.h"
 
 #include <Poco/Net/HTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
@@ -41,6 +42,13 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	void LocalServer::respond(const Request& _id, Response& _response) {
+		// Get the adequate handler
+		// Translate response
+		HTTPServerResponse response;
+		HTTPTranslator(_response, response);
+		// send
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	HTTPRequestHandler * LocalServer::createRequestHandler(const HTTPServerRequest & request)

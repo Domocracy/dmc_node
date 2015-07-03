@@ -42,6 +42,7 @@ namespace dmc {
 			unsigned id	() const { return mId; }
 
 			void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response);
+			void respond(const HTTPServerResponse& response);
 
 		private:
 			bool		mFree = true;
