@@ -89,4 +89,13 @@ namespace dmc {
 		// Return a new handler and advance the tip
 		return mHandlerPool[mPoolTip++];
 	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	void LocalServer::clearPool() {
+		assert(mHandlerPool.size() / poolIncreaseSize * poolIncreaseSize == mHandlerPool.size()); // Pool size is a multiple of increase size
+		for(unsigned i = 0; i < mHandlerPool.size(); i+=poolIncreaseSize)
+			delete mHandlerPool[i];
+		mHandlerPool.clear();
+		mPoolTip = 0;
+	}
 }
