@@ -23,8 +23,8 @@ add_subdirectory(src)
 add_subdirectory(lib/cjson/src)
 
 # Configure POCO build options
-set(ENABLE_XML OFF)
-set(ENABLE_JSON OFF)
+set(ENABLE_XML ON)
+set(ENABLE_JSON ON)
 set(ENABLE_MONGODB OFF)
 set(ENABLE_PDF OFF)
 set(ENABLE_UTIL ON)
@@ -49,6 +49,9 @@ set(POCO_STATIC ON)
 set(POCO_UNBUNDLED OFF)
 add_subdirectory(lib/poco)
 
+add_definitions( -DPOCO_STATIC -DPOCO_NO_AUTOMATIC_LIBS)
+set( LIB_MODE STATIC )
+	
 # Add tests
 enable_testing()
 include_directories(src/code)
