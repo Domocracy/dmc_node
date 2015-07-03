@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 #include <string>
 #include <frontEnd/LocalServer.h>
+#include <frontEnd/RequestDispatcher.h>
 
 // Mock classes
 namespace Poco {
@@ -15,9 +16,8 @@ namespace dmc {
 	class Request;
 
 	// --- Mock request dispatcher
-	class RequestDispatcher {
-	public:
-		void dispatch(const Request &_request, std::string &_parsedUrl) const {
+	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const{
+		return true;
 		}
 	};
 }	// namespace dmc
