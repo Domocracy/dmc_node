@@ -14,23 +14,6 @@ using namespace Poco::Net;
 namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Local classes for handles and factories
-	//-----------------------------------------------------------------------------------------------------------------
-	namespace {
-
-		class DmcRequestHandler : public HTTPRequestHandler{
-		public:
-			void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
-			{
-				//
-			}
-
-			HTTPServerResponse& respondTo();
-		}
-
-	}	// unnamed namespace
-
-	//-----------------------------------------------------------------------------------------------------------------
 	LocalServer::LocalServer(RequestDispatcher& _dispatcher, unsigned _port)
 		:mDispatcher(_dispatcher)
 	{
@@ -46,13 +29,19 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	void LocalServer::respond(const Request& _request, Response& _response) {
+	bool LocalServer::respond(const Request& _request, const Response& _response) {
 		// Get the adequate handler
+		if(mHandlerPool.size() < _request.id())
+			return false;
 		RequestHandler* handler = mHandlerPool[_request.id()];
+		if(handler->isFree())
+			return false;
 		// Translate response
 		HTTPTranslator t;
-		t.translate(_response, response);
+		t.translate(_response, handler->response());
 		// send
+		handler->sendResponse();
+		return true;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

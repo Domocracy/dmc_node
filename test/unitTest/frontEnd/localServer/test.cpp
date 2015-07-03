@@ -35,6 +35,8 @@ int main(int, const char**) {
 	// --- Test stop ---
 	server.stopListening();
 	return 0;
+
+	// Todo: Test responding to inexisting or free requests fails.
 }
 
 
