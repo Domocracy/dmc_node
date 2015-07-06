@@ -44,6 +44,7 @@ namespace dmc {
 		if (!t.translate(_response, handler->response()))
 		{
 			handler->response().setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+			handler->response().send();
 		}
 		// send
 		handler->sendResponse();

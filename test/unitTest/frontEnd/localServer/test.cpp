@@ -79,7 +79,8 @@ namespace dmc {
 		if(_dmc.serialize() == "ok")
 			_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK, "Ok");
 		if(_dmc.serialize() == "int") // Simulate internal server error
-			return false; 
+			return false;
+		_http.send();
 		return true;
 	}
 }	// namespace dmc
