@@ -68,7 +68,7 @@ namespace dmc {
 	}
 
 	// --- Mock http translator
-	bool HTTPTranslator::translate(const Poco::Net::HTTPServerRequest& _http, Request& _dmc) {
+	bool HTTPTranslator::translate(const Poco::Net::HTTPRequest& _http, Request& _dmc) {
 		if(_http.getURI() == "/c")
 			return false; // Bad request test
 		_dmc.url() = _http.getURI();

@@ -11,6 +11,7 @@ namespace dmc {
 	class Response {
 	public:
 		static Response ok();
+		static Response ok(const std::string& _body);
 		static Response internalError();
 
 		const std::string& serialize() const;
