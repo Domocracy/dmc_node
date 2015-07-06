@@ -38,7 +38,6 @@ int main(int, const char**) {
 	// --- Test setup ---
 	RequestDispatcher dispatcher;
 	LocalServer server(dispatcher, 5028);
-	// Test POCO systems were properly called during configuration
 	// --- Test listening ---
 	// Test translator failure
 	// Test dispatcher failure
