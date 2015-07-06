@@ -81,17 +81,23 @@ int main(int, const char**) {
 	LocalServer server(dispatcher, 5028);
 	// --- Common test data---
 	SocketAddress localHost("localHost:5028");
+	StreamSocket client(localHost);
+	char buffer[1024];
 	// Test adequate behavior
-	StreamSocket clientA(localHost);
 	std::string reqA = 
 		"Get /a HTTP/1.1\n"
 		"Host: localhost\r\n\r\n";
-	clientA.sendBytes(reqA.c_str(), reqA.size());
-	char buffer[1024];
-	clientA.receiveBytes(buffer, 1023);
+	client.sendBytes(reqA.c_str(), reqA.size());
+	client.receiveBytes(buffer, 1023);
 	assert(string(buffer).substr(0, 15) == "HTTP/1.1 200 ok");
-	// Test translator failure
 	// Test dispatcher failure
+	std::string reqB = 
+		"Get /b HTTP/1.1\n"
+		"Host: localhost\r\n\r\n";
+	client.sendBytes(reqB.c_str(), reqB.size());
+	client.receiveBytes(buffer, 1023);
+	assert(string(buffer).substr(0, 12) == "HTTP/1.1 404");
+	// Test translator failure
 	return 0;
 }
 
