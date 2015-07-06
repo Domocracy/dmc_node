@@ -68,8 +68,8 @@ namespace dmc {
 	void LocalServer::RequestHandler::handleRequest(HTTPServerRequest& _request, HTTPServerResponse& _response) {
 		// Translate incomming message
 		HTTPTranslator t;
-		Request request;
-		t.translate(_request, request, mReqId);
+		Request request(mReqId);
+		t.translate(_request, request);
 		// Dispatch the message
 		mWaiting = true; // This flag must be set before dispatching, because some component may be able to respond even before the dispatcher returns
 		mDispatcher.dispatch(mServer, request);
