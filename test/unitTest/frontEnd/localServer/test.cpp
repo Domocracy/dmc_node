@@ -3,7 +3,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 #include <string>
 #include <frontEnd/LocalServer.h>
+#include <frontEnd/HttpTranslator.h>
 #include <frontEnd/RequestDispatcher.h>
+
+// Call counter
+unsigned gCallCount = 0;
+unsigned callCount() { return ++gCallCount; }
 
 // Mock classes
 namespace Poco {
@@ -13,13 +18,18 @@ namespace Poco {
 }
 
 namespace dmc {
-	class Request;
 
+	class Request;
+	
 	// --- Mock request dispatcher
 	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const{
 		return true;
-		}
-	};
+	}
+
+	// --- Mock http translator
+	bool HTTPTranslator::translate(const Poco::Net::HTTPServerRequest&, Request&, unsigned _id) {
+		return true;
+	}
 }	// namespace dmc
 
 using namespace dmc;
@@ -30,13 +40,9 @@ int main(int, const char**) {
 	LocalServer server(dispatcher, 5028);
 	// Test POCO systems were properly called during configuration
 	// --- Test listening ---
-	server.startListening();
-	// Test a request
-	// --- Test stop ---
-	server.stopListening();
+	// Test translator failure
+	// Test dispatcher failure
 	return 0;
-
-	// Todo: Test responding to inexisting or free requests fails.
 }
 
 
