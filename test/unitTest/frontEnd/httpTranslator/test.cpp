@@ -12,6 +12,7 @@
 
 namespace dmc {
 	// --- Mock
+	Request
 }	// namespace dmc
 
 using namespace dmc;
