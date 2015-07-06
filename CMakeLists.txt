@@ -1,5 +1,21 @@
 cmake_minimum_required (VERSION 2.6)
+# dmc_node configuration
+set(DMC_NODE_VERSION 0.1.0)
+
+if(POLICY CMP0048)
+	cmake_policy(SET CMP0048 OLD)
+endif()
 project(dmcNode)
+set(PROJECT_VERSION ${DMC_NODE_VERSION})
+
+# Generate doxygen documentation if doxygen is available
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	COMMENT "Generating API documentation with Doxygen" VERBATIM)
+endif(DOXYGEN_FOUND)
 
 # Actual node project
 add_subdirectory(src)

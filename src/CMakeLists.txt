@@ -1,4 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
+if(POLICY CMP0048)
+	cmake_policy(SET CMP0048 OLD)
+endif()
 project(dmcNode)
 
 # Collect all sources
@@ -35,7 +38,9 @@ endif()
 
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/code)
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/cjson/src)
-target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Net/src)
+target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Net/include)
+target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Util/include)
 
 target_link_libraries(dmcNode LINK_PUBLIC cjson)
 target_link_libraries(dmcNode LINK_PUBLIC PocoNet)
+target_link_libraries(dmcNode LINK_PUBLIC PocoUtil)
