@@ -2,10 +2,11 @@
 //	Dmc Node
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Request.h"
+#include "Response.h"
 #include "HttpTranslator.h"
 #include <cassert>
-#include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPRequest.h>
+#include <Poco/Net/HTTPResponse.h>
 #include <sstream>
 #include <string>
 
@@ -25,10 +26,12 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	bool HTTPTranslator::translate(const Response&_dmc, Poco::Net::HTTPResponse& _http) {
-		string response = 
+	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPResponse& _http) {
+		std::string response = 
 			"HTTP/1.1 200 Ok\n"
-			""
-		 _http.
+			"\r\n"
+			+ _dmc.serialize();
+		 _http.read(stringstream(response));
+		 return true;
 	}
 }
