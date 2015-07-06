@@ -10,12 +10,12 @@
 
 namespace dmc {
 	//--------------------------------------------------------------------------------------------------------------------
-	CommandDispatcher::CommandDispatcher(DeviceManager &_devMgr, RequestDispatcher &_requestDispatcher): mDevMgr(_devMgr), mRequestDispatcher(_requestDispatcher) {
+	CommandDispatcher::CommandDispatcher(DeviceManager &_devMgr, RequestDispatcher &_requestDispatcher): mDevMgr(_devMgr) {
 
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------
-	void CommandDispatcher::process(const Request &_request, LocalServer *_server) {
+	void CommandDispatcher::process(const Request &_request, LocalServer &_server) {
 		// Decode request.
 		// Get device id.
 		// Get Device.

@@ -26,11 +26,10 @@ namespace dmc {
 		/// Process received dmc request and response properly to the server.
 		/// \param _request incoming request to be processed
 		/// \param _server pointer to server to respond to.
-		void process(const Request &_request, LocalServer *_server);
+		void process(const Request &_request, LocalServer &_server) override;
 
 	private:
 		DeviceManager		&mDevMgr;
-		RequestDispatcher	&mRequestDispatcher; // Will be stored to attach new urls if needed.
 	};	//	class CommandDispatcher
 }	//	namespace dmc
 
