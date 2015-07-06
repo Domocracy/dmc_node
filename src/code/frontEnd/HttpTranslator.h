@@ -18,7 +18,8 @@ namespace dmc {
 
 	class HTTPTranslator {
 	public:
-		bool translate(const Poco::Net::HTTPServerRequest&, Request&);
+		/// \param _id this will be the id assigned to the resulting request
+		bool translate(const Poco::Net::HTTPServerRequest&, Request&, unsigned _id);
 		bool translate(const Response&, Poco::Net::HTTPServerResponse&);
 	};
 
