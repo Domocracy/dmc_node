@@ -21,7 +21,6 @@ namespace dmc {
 		};
 
 	private:
-		Response() = default;
 		Response(bool _ok);
 		Response(const std::string& _errorMsg);
 

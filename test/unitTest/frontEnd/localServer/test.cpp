@@ -26,6 +26,9 @@ namespace dmc {
 	class Request;
 
 	// --- Mock dmc::Response
+	Response::Response(bool) {
+	}
+
 	Response Response::errorInvalidHttpRequest() {
 		Response error(false);
 		error.mContent = "invalidHttpRequest";
