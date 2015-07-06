@@ -39,7 +39,10 @@ namespace dmc {
 		RequestHandler* handler = it->second;
 		// Translate response
 		HTTPTranslator t;
-		t.translate(_response, handler->response());
+		if (!t.translate(_response, handler->response()))
+		{
+			handler->response().setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR, "Internal Server Error");
+		}
 		// send
 		handler->sendResponse();
 		return true;
