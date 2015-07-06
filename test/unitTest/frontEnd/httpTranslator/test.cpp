@@ -34,9 +34,19 @@ int main(int, const char**) {
 	HTTPTranslator t1;
 	HTTPResponse resp;
 	assert(t1.translate(empty, resp));
-	assert()
+	ostringstream oss;
+	resp.write(oss);
+	assert(oss.str().empty());
+	// Response with body
 	Response ok = Response::ok("a"); // Simple answer
+	HTTPTranslator t2;
+	HTTPResponse resp2;
+	assert(t2.translate(ok, resp2));
+	ostringstream oss2;
+	resp.write(oss2);
+	assert(oss2.str() == "a");
 	// --- http -> dmc
+	// Complete request
 	HTTPRequest req;
 	req.setURI("/a");
 	req.read(stringstream(string("body")));
@@ -45,6 +55,12 @@ int main(int, const char**) {
 	assert(a.translate(req, dmcReq));
 	assert(dmcReq.url() == "/a");
 	assert(dmcReq.body() == "body");
+	// Ill-formed request with no urlHTTPRequest req;
+	HTTPRequest req2;
+	req.setURI("");
+	HTTPTranslator b;
+	Request dmcReq2(2);
+	assert(!b.translate(req2, dmcReq2)); // Il-formed request must fail to translate
 	return 0;
 }
 
