@@ -66,6 +66,7 @@ namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	void LocalServer::RequestHandler::handleRequest(HTTPServerRequest& _request, HTTPServerResponse& _response) {
+		mResponse = &_response; // Answer to this response
 		// Translate incomming message
 		HTTPTranslator t;
 		Request request(mReqId);
@@ -76,6 +77,7 @@ namespace dmc {
 		// Wait for someone to answer
 		while(mWaiting)
 		{}
+		_response.send();
 		return;
 	}
 

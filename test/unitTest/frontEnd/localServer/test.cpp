@@ -88,7 +88,7 @@ int main(int, const char**) {
 	clientA.sendBytes(reqA.c_str(), reqA.size());
 	char buffer[1024];
 	clientA.receiveBytes(buffer, 1023);
-	assert(string(buffer) == "HTTP/1.1 200 ok\r\n\r\n");
+	assert(string(buffer).substr(0, 15) == "HTTP/1.1 200 ok");
 	// Test translator failure
 	// Test dispatcher failure
 	return 0;
