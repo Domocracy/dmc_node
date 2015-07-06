@@ -16,11 +16,18 @@ namespace dmc {
 	Response::Response(bool) {
 	}
 
+	Response Response::ok() {
+		Response r(true);
+		return r;
+	}
+
 	Response Response::ok(const std::string& _body) {
 		Response r(true);
 		r.mContent = _body;
 		return r;
 	}
+
+	const std::string& Response::serialize() const { return mContent; }
 }	// namespace dmc
 
 using namespace dmc;
@@ -36,7 +43,7 @@ int main(int, const char**) {
 	assert(t1.translate(empty, resp));
 	ostringstream oss;
 	resp.write(oss);
-	assert(oss.str().empty());
+	assert(oss.str() == "HTTP/1.1 200 Ok\r\n\r\n");
 	assert(resp.getStatus() == HTTPResponse::HTTP_OK);
 	// Response with body
 	Response ok = Response::ok("a"); // Simple answer
@@ -44,8 +51,8 @@ int main(int, const char**) {
 	HTTPResponse resp2;
 	assert(t2.translate(ok, resp2));
 	ostringstream oss2;
-	resp.write(oss2);
-	assert(oss2.str() == "a");
+	resp2.write(oss2);
+	assert(oss2.str() == "HTTP/1.1 200 Ok\r\n\r\na");
 	assert(resp.getStatus() == HTTPResponse::HTTP_OK);
 	// --- http -> dmc
 	// Complete request

@@ -5,6 +5,7 @@
 #define _DMCNODE_CODE_FRONTEND_RESPONSE_H_
 
 #include <string>
+#include <iostream>
 
 namespace dmc {
 
@@ -14,6 +15,7 @@ namespace dmc {
 		static Response ok(const std::string& _body);
 		static Response internalError();
 
+		void serialize (std::ostream&) const;
 		const std::string& serialize() const;
 
 	private:

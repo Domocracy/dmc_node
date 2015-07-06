@@ -6,8 +6,8 @@
 
 namespace Poco {
 	namespace Net {
-		class HTTPRequest;
-		class HTTPResponse;
+		class HTTPServerRequest;
+		class HTTPServerResponse;
 	}
 }
 
@@ -23,10 +23,10 @@ namespace dmc {
 		/// Translation will fail, the function will return false, and the contents of
 		/// the destination request will be undefined
 		/// \param _id this will be the id assigned to the resulting request
-		bool translate(const Poco::Net::HTTPRequest&, Request&);
+		bool translate(Poco::Net::HTTPServerRequest&, Request&);
 		/// Translate a dmc response into an adequate  HTTPServerResponse
 		/// \return \c false if the response is ill-formad, and can not be translated into HTTP. \c true otherwise.
-		bool translate(const Response&, Poco::Net::HTTPResponse&);
+		bool translate(const Response&, Poco::Net::HTTPServerResponse&);
 	};
 
 }	//	namespace dmc

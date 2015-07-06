@@ -5,8 +5,8 @@
 #include "Response.h"
 #include "HttpTranslator.h"
 #include <cassert>
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPServerRequest.h>
+#include <Poco/Net/HTTPServerResponse.h>
 #include <sstream>
 #include <string>
 
@@ -16,22 +16,17 @@ using std::stringstream;
 namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	bool HTTPTranslator::translate(const Poco::Net::HTTPRequest& _http, Request& _dmc) {
+	bool HTTPTranslator::translate(Poco::Net::HTTPServerRequest& _http, Request& _dmc) {
 		_dmc.url() = _http.getURI();
 		if(_dmc.url().empty())
 			return false;
-		stringstream ss;
-		_http.write(ss);
-		return _dmc.body().parse(ss);
+		return _dmc.body().parse(_http.stream());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPResponse& _http) {
-		std::string response = 
-			"HTTP/1.1 200 Ok\n"
-			"\r\n"
-			+ _dmc.serialize();
-		 _http.read(stringstream(response));
+	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPServerResponse& _http) {
+		_http.setStatusAndReason(HTTPResponse::HTTP_OK);
+		_dmc.serialize(_http.send());
 		 return true;
 	}
 }
