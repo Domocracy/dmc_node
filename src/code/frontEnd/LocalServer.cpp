@@ -43,7 +43,7 @@ namespace dmc {
 		HTTPTranslator t;
 		if (!t.translate(_response, handler->response()))
 		{
-			handler->response().setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR, "Internal Server Error");
+			handler->response().setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
 		}
 		// send
 		handler->sendResponse();
@@ -77,7 +77,7 @@ namespace dmc {
 		Request request(mReqId);
 		if (!t.translate(_request, request)) {
 			// Unable to translate, bad request
-			_response.setStatusAndReason(HTTPResponse::HTTP_BAD_REQUEST, "Bad Request");
+			_response.setStatusAndReason(HTTPResponse::HTTP_BAD_REQUEST);
 			_response.send();
 			return;
 		}
@@ -98,7 +98,7 @@ namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	void LocalServer::RequestHandler::send404(HTTPServerResponse& _response) {
-		_response.setStatusAndReason(HTTPResponse::HTTP_NOT_FOUND, "Not Found");
+		_response.setStatusAndReason(HTTPResponse::HTTP_NOT_FOUND);
 		_response.send();
 	}
 
