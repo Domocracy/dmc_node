@@ -17,7 +17,7 @@ namespace dmc {
 	class RequestProcessor {
 	public:
 		/// Process received dmc request and response properlly to the server.
-		virtual void process(const Request &_request, const LocalServer *_localServer) = 0;
+		virtual void process(const Request &_request, LocalServer *_localServer) = 0;
 
 
 	};	//	 class RequestProcessor
