@@ -4,15 +4,17 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+#include "Request.h"
 #include "RequestDispatcher.h"
+#include "backEnd/RequestProcessor.h"
 
 #include <Poco/Net/HTTPRequest.h>
 #include <regex>
 
 namespace dmc {
 	//-----------------------------------------------------------------------------------------------------------------
-	RequestProcessor * RequestDispatcher::dispatch(const Poco::Net::HTTPRequest & _request, std::string & _parsedUrl) const {
-		std::string url = _request.getURI();
+	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const {
+		std::string url = _request.url();
 
 		if(extractHost(url)) {
 			std::string key = url[0] == '/' ? url : (std::string("/") + url); // Add slash at the begining.
@@ -21,8 +23,8 @@ namespace dmc {
 				// Try key
 				auto iter = mSubscriptions.find(key);
 				if (iter != mSubscriptions.end()) {
-					_parsedUrl = url.substr(key.size(), url.size());
-					return (*iter).second;
+					url = url.substr(key.size(), url.size());
+					iter->second->process(_request, _server);
 				}
 				// Not found, keep decomposing the url
 				unsigned lastSlash = key.find_last_of('/');
@@ -32,12 +34,9 @@ namespace dmc {
 			// Check if exist default subscription "/"
 			auto iter = mSubscriptions.find("/");
 			if (iter != mSubscriptions.end()) {
-				_parsedUrl = url;
-				return (*iter).second;
+				iter->second->process(_request, _server);
 			}
 		}
-
-		return nullptr;
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
