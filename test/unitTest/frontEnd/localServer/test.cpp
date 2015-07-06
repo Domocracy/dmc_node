@@ -5,9 +5,11 @@
 #include <string>
 #include <frontEnd/LocalServer.h>
 #include <frontEnd/HttpTranslator.h>
+#include <frontEnd/Request.h>
 #include <frontEnd/RequestDispatcher.h>
 #include <frontEnd/Response.h>
 #include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Net/HTTPServerResponse.h>
 #include <Poco/Net/SocketAddress.h>
 #include <Poco/Net/StreamSocket.h>
@@ -31,6 +33,12 @@ namespace dmc {
 	Response::Response(bool) {
 	}
 
+	Response Response::ok() {
+		Response error(false);
+		error.mContent = "ok";
+		return error;
+	}
+
 	Response Response::errorInvalidHttpRequest() {
 		Response error(false);
 		error.mContent = "invalidHttpRequest";
@@ -42,19 +50,22 @@ namespace dmc {
 	}
 	
 	// --- Mock request dispatcher
-	bool gDispatched = false;
 	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const{
+		if(_request.url() == "/a") {
+			_server.respond(_request, Response::ok());
+		}
 		return true;
 	}
 
 	// --- Mock http translator
 	bool HTTPTranslator::translate(const Poco::Net::HTTPServerRequest& _http, Request& _dmc) {
-
+		_dmc.url() = _http.getURI();
 		return true;
 	}
 
 	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPServerResponse& _http) {
-		_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK, "ok");
+		if(_dmc.serialize() == "ok")
+			_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK, "ok");
 		return true;
 	}
 }	// namespace dmc
