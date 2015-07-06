@@ -7,6 +7,8 @@
 #include <frontEnd/HttpTranslator.h>
 #include <frontEnd/RequestDispatcher.h>
 #include <frontEnd/Response.h>
+#include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPServerResponse.h>
 #include <Poco/Net/SocketAddress.h>
 #include <Poco/Net/StreamSocket.h>
 
@@ -40,12 +42,19 @@ namespace dmc {
 	}
 	
 	// --- Mock request dispatcher
+	bool gDispatched = false;
 	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const{
 		return true;
 	}
 
 	// --- Mock http translator
-	bool HTTPTranslator::translate(const Poco::Net::HTTPServerRequest&, Request&, unsigned _id) {
+	bool HTTPTranslator::translate(const Poco::Net::HTTPServerRequest& _http, Request& _dmc) {
+
+		return true;
+	}
+
+	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPServerResponse& _http) {
+		_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK, "ok");
 		return true;
 	}
 }	// namespace dmc
@@ -63,12 +72,12 @@ int main(int, const char**) {
 	// Test adequate behavior
 	StreamSocket clientA(localHost);
 	std::string reqA = 
-		"Get /a HTTP/1.1"
+		"Get /a HTTP/1.1\n"
 		"Host: localhost\r\n\r\n";
 	clientA.sendBytes(reqA.c_str(), reqA.size());
 	char buffer[1024];
 	clientA.receiveBytes(buffer, 1023);
-	assert(string(buffer) == "200 Ok");
+	assert(string(buffer) == "HTTP/1.1 200 ok\r\n\r\n");
 	// Test translator failure
 	// Test dispatcher failure
 	return 0;
