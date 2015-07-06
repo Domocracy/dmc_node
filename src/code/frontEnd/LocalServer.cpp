@@ -73,12 +73,23 @@ namespace dmc {
 		t.translate(_request, request);
 		// Dispatch the message
 		mWaiting = true; // This flag must be set before dispatching, because some component may be able to respond even before the dispatcher returns
-		mDispatcher.dispatch(mServer, request);
+		if (!mDispatcher.dispatch(mServer, request))
+		{
+			// On dispatch error, return 404
+			send404(_response);
+			return;
+		}
 		// Wait for someone to answer
 		while(mWaiting)
 		{}
 		_response.send();
 		return;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	void LocalServer::RequestHandler::send404(HTTPServerResponse& _response) {
+		_response.setStatusAndReason(HTTPResponse::HTTP_NOT_FOUND, "Not Found");
+		_response.send();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

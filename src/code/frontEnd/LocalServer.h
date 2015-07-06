@@ -52,6 +52,8 @@ namespace dmc {
 			RequestDispatcher&	mDispatcher;
 
 		private:
+			void send404(Poco::Net::HTTPServerResponse& response);
+
 			Poco::Net::HTTPServerResponse* mResponse;
 			bool			mFree = true;
 			volatile bool	mWaiting = false;
