@@ -11,9 +11,20 @@ namespace dmc {
 	class Response {
 	public:
 		static Response ok();
+		static Response errorInvalidHttpRequest();
+
+		const std::string& serialize() const;
+
+	private:
+		enum class ErrorCode {
+			invalidHttpRequest = 1
+		};
+
 	private:
 		Response(bool _ok);
 		Response(const std::string& _errorMsg);
+
+		std::string mContent;
 	};
 
 }	//	namespace dmc
