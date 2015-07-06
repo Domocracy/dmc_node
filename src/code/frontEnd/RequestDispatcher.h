@@ -25,17 +25,12 @@ namespace dmc {
 		/// but B will be retrieved for "/a/b/bar". For the same level of specialization, however, last suscriber
 		/// has preferece.
 		/// \param _request Received Request to be parsed
-		/// \paramblock _parsedUrl
-		/// Output string that contains results of parsing the url of the request.
-		/// It corresponds to the whole url comming after the host, not including the first '/'
-		/// \return The request processor associated to the Request or nullptr if no good candidate was found
-		RequestProcessor*	dispatch(const Poco::Net::HTTPRequest &_request, std::string &_parsedUrl) const;
+		void dispatch(const Poco::Net::HTTPRequest &_request) const;
 		/// Register a request processor to be retrieved for all requests to _localUrl
 		void				subscribe(RequestProcessor*, const std::string& _localUrl);
 
 	private:
 		const std::string cValidHostExpression = "(http|https):\/\/[a-zA-Z0-9\-\.]+\/";
-
 		bool extractHost(std::string &_url) const;
 
 	private:
