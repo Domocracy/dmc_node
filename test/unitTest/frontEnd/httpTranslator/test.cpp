@@ -49,13 +49,19 @@ int main(int, const char**) {
 	// Complete request
 	HTTPRequest req;
 	req.setURI("/a");
-	req.read(stringstream(string("body")));
+	req.read(stringstream(string("{3}")));
 	HTTPTranslator a;
 	Request dmcReq(1);
 	assert(a.translate(req, dmcReq));
 	assert(dmcReq.url() == "/a");
-	assert(dmcReq.body() == "body");
-	// Ill-formed request with no urlHTTPRequest req;
+	assert(int(dmcReq.body()) == 3);
+	// Ill-formed request with no url HTTPRequest req;
+	HTTPRequest req2;
+	req.setURI("");
+	HTTPTranslator b;
+	Request dmcReq2(2);
+	assert(!b.translate(req2, dmcReq2)); // Il-formed request must fail to translate
+	// Ill-formed request with invalid json;
 	HTTPRequest req2;
 	req.setURI("");
 	HTTPTranslator b;
