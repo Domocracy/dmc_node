@@ -28,8 +28,13 @@ using namespace Poco::Net;
 using namespace std;
 
 int main(int, const char**) {
-	// --- Test setup ---
+	// --- dmc -> http
+	// Empty response
 	Response empty = Response::ok();
+	HTTPTranslator t1;
+	HTTPResponse resp;
+	assert(t1.translate(empty, resp));
+	assert()
 	Response ok = Response::ok("a"); // Simple answer
 	// --- http -> dmc
 	HTTPRequest req;
@@ -37,7 +42,9 @@ int main(int, const char**) {
 	req.read(stringstream(string("body")));
 	HTTPTranslator a;
 	Request dmcReq(1);
-	a.translate(req, dmcReq);
+	assert(a.translate(req, dmcReq));
+	assert(dmcReq.url() == "/a");
+	assert(dmcReq.body() == "body");
 	return 0;
 }
 

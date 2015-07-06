@@ -75,7 +75,7 @@ namespace dmc {
 		return true;
 	}
 
-	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPServerResponse& _http) {
+	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPResponse& _http) {
 		if(_dmc.serialize() == "ok")
 			_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK, "Ok");
 		if(_dmc.serialize() == "int") // Simulate internal server error
