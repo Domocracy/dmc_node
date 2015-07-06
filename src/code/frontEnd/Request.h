@@ -9,9 +9,9 @@
 namespace dmc {
 	class Request {
 	public:
-		unsigned id() const;
-		std::string url() const;
-		cjson::Json body() const;
+		unsigned	id	() const { return mId;	}
+		std::string url	() const { return mUrl;	}
+		cjson::Json body() const { return mJson;}
 
 	private:
 		unsigned	mId;
