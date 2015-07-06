@@ -5,14 +5,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 #include "RequestDispatcher.h"
+#include "Request.h"
 
 #include <Poco/Net/HTTPRequest.h>
 #include <regex>
 
 namespace dmc {
 	//-----------------------------------------------------------------------------------------------------------------
-	void RequestDispatcher::dispatch(const Poco::Net::HTTPRequest & _request, const LocalServer *_localServer) const {
-		std::string url = _request.getURI();
+	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const {
+		std::string url = _request.url();
 
 		if(extractHost(url)) {
 			std::string key = url[0] == '/' ? url : (std::string("/") + url); // Add slash at the begining.
