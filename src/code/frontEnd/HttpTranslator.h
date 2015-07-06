@@ -24,6 +24,8 @@ namespace dmc {
 		/// the destination request will be undefined
 		/// \param _id this will be the id assigned to the resulting request
 		bool translate(const Poco::Net::HTTPServerRequest&, Request&);
+		/// Translate a dmc response into an adequate  HTTPServerResponse
+		/// \return \c false if the response is ill-formad, and can not be translated into HTTP. \c true otherwise.
 		bool translate(const Response&, Poco::Net::HTTPServerResponse&);
 	};
 
