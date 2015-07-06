@@ -92,7 +92,6 @@ namespace dmc {
 		// Wait for someone to answer
 		while(mWaiting)
 		{}
-		_response.send();
 		return;
 	}
 
