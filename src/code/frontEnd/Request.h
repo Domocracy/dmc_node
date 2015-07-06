@@ -9,6 +9,7 @@
 namespace dmc {
 	class Request {
 	public:
+		Request(unsigned _id) : mId(_id) {}
 		// Accessors
 		unsigned			id	() const { return mId;	}
 		const std::string&	url	() const { return mUrl;	}
