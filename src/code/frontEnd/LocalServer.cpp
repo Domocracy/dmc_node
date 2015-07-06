@@ -70,7 +70,12 @@ namespace dmc {
 		// Translate incomming message
 		HTTPTranslator t;
 		Request request(mReqId);
-		t.translate(_request, request);
+		if (!t.translate(_request, request)) {
+			// Unable to translate, bad request
+			_response.setStatusAndReason(HTTPResponse::HTTP_BAD_REQUEST, "Bad Request");
+			_response.send();
+			return;
+		}
 		// Dispatch the message
 		mWaiting = true; // This flag must be set before dispatching, because some component may be able to respond even before the dispatcher returns
 		if (!mDispatcher.dispatch(mServer, request))

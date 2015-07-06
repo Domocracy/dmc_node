@@ -39,12 +39,6 @@ namespace dmc {
 		return error;
 	}
 
-	Response Response::badRequest() {
-		Response error(false);
-		error.mContent = "bad";
-		return error;
-	}
-
 	Response Response::internalError() {
 		Response error(false);
 		error.mContent = "int";
@@ -84,8 +78,6 @@ namespace dmc {
 	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPServerResponse& _http) {
 		if(_dmc.serialize() == "ok")
 			_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK, "Ok");
-		if(_dmc.serialize() == "bad")
-			_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_BAD_REQUEST, "Bad Request");
 		if(_dmc.serialize() == "int") // Simulate internal server error
 			return false; 
 		return true;
