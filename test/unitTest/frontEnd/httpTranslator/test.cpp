@@ -57,16 +57,17 @@ int main(int, const char**) {
 	assert(int(dmcReq.body()) == 3);
 	// Ill-formed request with no url HTTPRequest req;
 	HTTPRequest req2;
-	req.setURI("");
+	req2.setURI("");
 	HTTPTranslator b;
 	Request dmcReq2(2);
 	assert(!b.translate(req2, dmcReq2)); // Il-formed request must fail to translate
 	// Ill-formed request with invalid json;
-	HTTPRequest req2;
-	req.setURI("");
-	HTTPTranslator b;
-	Request dmcReq2(2);
-	assert(!b.translate(req2, dmcReq2)); // Il-formed request must fail to translate
+	HTTPRequest req3;
+	req3.setURI("/b");
+	req3.read(stringstream(string("meh!")));
+	HTTPTranslator c;
+	Request dmcReq3(3);
+	assert(!b.translate(req3, dmcReq3)); // Il-formed request must fail to translate
 	return 0;
 }
 
