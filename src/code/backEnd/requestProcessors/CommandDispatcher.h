@@ -28,6 +28,9 @@ namespace dmc {
 		/// \param _server pointer to server to respond to.
 		void process(const Request &_request, LocalServer *_server);
 
+	private:
+		DeviceManager		&mDevMgr;
+		RequestDispatcher	&mRequestDispatcher; // Will be stored to attach new urls if needed.
 	};	//	class CommandDispatcher
 }	//	namespace dmc
 
