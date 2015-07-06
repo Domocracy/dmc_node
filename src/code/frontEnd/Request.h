@@ -9,6 +9,7 @@ namespace dmc {
 	class Request {
 	public:
 		unsigned id() const;
+		std::string url() const;
 	};
 
 }	//	namespace dmc

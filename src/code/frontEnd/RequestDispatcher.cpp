@@ -4,8 +4,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-#include "RequestDispatcher.h"
 #include "Request.h"
+#include "RequestDispatcher.h"
+#include "backEnd/RequestProcessor.h"
 
 #include <Poco/Net/HTTPRequest.h>
 #include <regex>
@@ -23,7 +24,7 @@ namespace dmc {
 				auto iter = mSubscriptions.find(key);
 				if (iter != mSubscriptions.end()) {
 					url = url.substr(key.size(), url.size());
-					//iter->second->process(request, _localServer);
+					iter->second->process(_request, _server);
 				}
 				// Not found, keep decomposing the url
 				unsigned lastSlash = key.find_last_of('/');
@@ -33,7 +34,7 @@ namespace dmc {
 			// Check if exist default subscription "/"
 			auto iter = mSubscriptions.find("/");
 			if (iter != mSubscriptions.end()) {
-				//iter->second->process(request, _localServer);
+				iter->second->process(_request, _server);
 			}
 		}
 	}
