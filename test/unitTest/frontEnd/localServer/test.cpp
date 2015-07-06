@@ -53,8 +53,9 @@ namespace dmc {
 	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const{
 		if(_request.url() == "/a") {
 			_server.respond(_request, Response::ok());
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	// --- Mock http translator
