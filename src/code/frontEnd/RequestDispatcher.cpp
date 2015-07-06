@@ -11,7 +11,7 @@
 
 namespace dmc {
 	//-----------------------------------------------------------------------------------------------------------------
-	void RequestDispatcher::dispatch(const Poco::Net::HTTPRequest & _request) const {
+	void RequestDispatcher::dispatch(const Poco::Net::HTTPRequest & _request, const LocalServer *_localServer) const {
 		std::string url = _request.getURI();
 
 		if(extractHost(url)) {
@@ -22,7 +22,7 @@ namespace dmc {
 				auto iter = mSubscriptions.find(key);
 				if (iter != mSubscriptions.end()) {
 					url = url.substr(key.size(), url.size());
-					//iter->second->process(dmcRequest);
+					//iter->second->process(request, _localServer);
 				}
 				// Not found, keep decomposing the url
 				unsigned lastSlash = key.find_last_of('/');
@@ -32,7 +32,7 @@ namespace dmc {
 			// Check if exist default subscription "/"
 			auto iter = mSubscriptions.find("/");
 			if (iter != mSubscriptions.end()) {
-				//iter->second->process(dmcRequest);
+				//iter->second->process(request, _localServer);
 			}
 		}
 	}

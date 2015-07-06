@@ -16,6 +16,7 @@ namespace Poco { namespace Net { class HTTPRequest; } }
 
 namespace dmc {
 	class RequestProcessor;
+	class LocalServer;
 
 	class RequestDispatcher {
 	public:
@@ -25,7 +26,7 @@ namespace dmc {
 		/// but B will be retrieved for "/a/b/bar". For the same level of specialization, however, last suscriber
 		/// has preferece.
 		/// \param _request Received Request to be parsed
-		void dispatch(const Poco::Net::HTTPRequest &_request) const;
+		void dispatch(const Poco::Net::HTTPRequest &_request, const LocalServer *_localServer) const;
 		/// Register a request processor to be retrieved for all requests to _localUrl
 		void				subscribe(RequestProcessor*, const std::string& _localUrl);
 
