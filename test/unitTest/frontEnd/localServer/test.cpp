@@ -39,9 +39,15 @@ namespace dmc {
 		return error;
 	}
 
-	Response Response::errorInvalidHttpRequest() {
+	Response Response::badRequest() {
 		Response error(false);
-		error.mContent = "invalidHttpRequest";
+		error.mContent = "bad";
+		return error;
+	}
+
+	Response Response::internalError() {
+		Response error(false);
+		error.mContent = "int";
 		return error;
 	}
 
@@ -53,9 +59,18 @@ namespace dmc {
 	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const{
 		if(_request.url() == "/a") {
 			_server.respond(_request, Response::ok());
-			return true;
 		}
-		return false;
+		if(_request.url() == "/b")
+			return false;
+		if (_request.url() == "/c")
+		{
+			assert(false); // Bad requests don't get dispatched
+		}
+		if (_request.url() == "/d") // internal error
+		{
+			_server.respond(_request, Response::internalError()); // To alert mock translator
+		}
+		return true;
 	}
 
 	// --- Mock http translator
@@ -69,6 +84,10 @@ namespace dmc {
 	bool HTTPTranslator::translate(const Response& _dmc, Poco::Net::HTTPServerResponse& _http) {
 		if(_dmc.serialize() == "ok")
 			_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK, "Ok");
+		if(_dmc.serialize() == "bad")
+			_http.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_BAD_REQUEST, "Bad Request");
+		if(_dmc.serialize() == "int") // Simulate internal server error
+			return false; 
 		return true;
 	}
 }	// namespace dmc
