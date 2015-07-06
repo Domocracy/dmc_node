@@ -1,0 +1,21 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	Dmc Node
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef _DMCNODE_CODE_FRONTEND_RESPONSE_H_
+#define _DMCNODE_CODE_FRONTEND_RESPONSE_H_
+
+#include <string>
+
+namespace dmc {
+
+	class Response {
+	public:
+		static Response ok();
+	private:
+		Response(bool _ok);
+		Response(const std::string& _errorMsg);
+	};
+
+}	//	namespace dmc
+
+#endif	// _DMCNODE_CODE_FRONTEND_RESPONSE_H_
