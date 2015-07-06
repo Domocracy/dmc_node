@@ -37,6 +37,7 @@ int main(int, const char**) {
 	ostringstream oss;
 	resp.write(oss);
 	assert(oss.str().empty());
+	assert(resp.getStatus() == HTTPResponse::HTTP_OK);
 	// Response with body
 	Response ok = Response::ok("a"); // Simple answer
 	HTTPTranslator t2;
@@ -45,6 +46,7 @@ int main(int, const char**) {
 	ostringstream oss2;
 	resp.write(oss2);
 	assert(oss2.str() == "a");
+	assert(resp.getStatus() == HTTPResponse::HTTP_OK);
 	// --- http -> dmc
 	// Complete request
 	HTTPRequest req;
@@ -67,7 +69,7 @@ int main(int, const char**) {
 	req3.read(stringstream(string("meh!")));
 	HTTPTranslator c;
 	Request dmcReq3(3);
-	assert(!b.translate(req3, dmcReq3)); // Il-formed request must fail to translate
+	assert(!c.translate(req3, dmcReq3)); // Il-formed request must fail to translate
 	return 0;
 }
 

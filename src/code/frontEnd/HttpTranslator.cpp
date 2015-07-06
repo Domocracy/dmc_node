@@ -7,6 +7,7 @@
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <sstream>
+#include <string>
 
 using namespace Poco::Net;
 using std::stringstream;
@@ -21,5 +22,13 @@ namespace dmc {
 		stringstream ss;
 		_http.write(ss);
 		return _dmc.body().parse(ss);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	bool HTTPTranslator::translate(const Response&_dmc, Poco::Net::HTTPResponse& _http) {
+		string response = 
+			"HTTP/1.1 200 Ok\n"
+			""
+		 _http.
 	}
 }
