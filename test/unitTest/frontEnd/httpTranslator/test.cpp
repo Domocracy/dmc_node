@@ -91,19 +91,17 @@ int main(int, const char**) {
 	HTTPTranslator t1;
 	TestHttpResponse resp;
 	assert(t1.translate(empty, resp));
-	ostringstream oss;
-	resp.write(oss);
-	assert(oss.str() == "HTTP/1.1 200 Ok\r\n\r\n");
 	assert(resp.getStatus() == HTTPResponse::HTTP_OK);
+	assert(resp.getReason() == HTTPResponse::HTTP_REASON_OK);
+	assert(resp.mSS.str().empty());
 	// Response with body
 	Response ok = Response::ok("a"); // Simple answer
 	HTTPTranslator t2;
 	TestHttpResponse resp2;
 	assert(t2.translate(ok, resp2));
-	ostringstream oss2;
-	resp2.write(oss2);
-	assert(oss2.str() == "HTTP/1.1 200 Ok\r\n\r\na");
-	assert(resp.getStatus() == HTTPResponse::HTTP_OK);
+	assert(resp2.getStatus() == HTTPResponse::HTTP_OK);
+	assert(resp2.getReason() == HTTPResponse::HTTP_REASON_OK);
+	assert(resp2.mSS.str() == "a");
 	// --- http -> dmc
 	// Complete request
 	TestHttpRequest req;
