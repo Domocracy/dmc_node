@@ -5,7 +5,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-#include "frontEnd/RequestDispatcher.h"
+#include <frontEnd/RequestDispatcher.h>
+#include <frontEnd/Request.h>
 
 #include <assert.h>
 #include <cjson/json.h>
@@ -14,16 +15,6 @@
 
 // Mock classes
 namespace dmc {
-	class Request {
-	public:
-		unsigned id() const { return mId; };
-		std::string url() const { return mUrl; };
-		cjson::Json body() const { return mBody; };
-
-		unsigned mId = 0;
-		std::string mUrl = "";
-		cjson::Json mBody;
-	};
 	class Response {};
 	class LocalServer {
 	public:
