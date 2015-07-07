@@ -6,3 +6,4 @@ project(test)
 
 # Adding Test types
 add_subdirectory(unitTest)
+add_subdirectory(integrationTest)
