@@ -20,7 +20,24 @@ namespace dmc {
 
 	//------------------------------------------------------------------------------------------------------------------
 	Response Response::invalidRequestUrl() {
-		return error(ErrorCode::invalidRequest, "Invalid request url");
+		return error(ErrorCode::invalidRequestUrl, "Invalid request url");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	Response Response::deviceNotFound(unsigned _devId) {
+		return error(ErrorCode::deviceNotFound, "Device Not Found");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	Response Response::failedToParseRequestBody(const std::string& _info) {
+		std::string message = "Failed to parse request body.\n" + _info;
+		return error(ErrorCode::failedToParseRequestBody, message);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	Response Response::commandExecutionError(const std::string& _info) {
+		std::string message = "Error runninc command.\n" + _info;
+		return error(ErrorCode::commandExecutionError, message);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

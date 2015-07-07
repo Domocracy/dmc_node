@@ -25,14 +25,12 @@ namespace dmc {
 			if(_request.url() == mName)
 				_localServer.respond(_request, Response::ok());
 			else
-				_localServer.respond(_request, Response::invalidRequest());
+				_localServer.respond(_request, Response::invalidRequestUrl());
 		}
 
 		std::string mName = "";
 	};
 }	//	namespace dmc
-
-
 
 using namespace dmc;
 using namespace Poco::Net;
