@@ -14,6 +14,18 @@ namespace dmc {
 	class Response {
 	public:
 		std::string mContent;
+
+		static Response invalidRequestUrl() { return Response { "urlError" }; }
+		static Response deviceNotFound(unsigned _devId) { 
+			assert(_devId == 0);
+			return Response { "devNotFound: 0" }; 
+		}
+		static Response failedToParseRequestBody() {
+			return Response { "parse" }; 
+		}
+		static Response commandExecutionError(const std::string& _info) {
+			return Response { std::string("run")+_info };
+		}
 	};
 
 	class LocalServer {
@@ -101,7 +113,7 @@ void testDeviceFailsParse() {
 	assert(rd.suscribed);
 	cmdDisp.process(req, server);
 	assert(server.responded);
-	assert(server.response == "parseInfo");
+	assert(server.response == "parse");
 }
 
 void testDeviceFailsExecution() {
@@ -128,7 +140,7 @@ void testDeviceNotFound() {
 	assert(rd.suscribed);
 	cmdDisp.process(req, server);
 	assert(server.responded);
-	assert(server.response == "devNotFound");
+	assert(server.response == "devNotFound: 0");
 }
 
 void testUrlError(const std::string& _url) {
