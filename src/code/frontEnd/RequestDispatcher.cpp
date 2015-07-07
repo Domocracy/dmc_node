@@ -22,8 +22,8 @@ namespace dmc {
 			// Try key
 			auto iter = mSubscriptions.find(key);
 			if (iter != mSubscriptions.end()) {
-				url = url.substr(key.size(), url.size());
 				iter->second->process(_request, _server);
+				return true;
 			}
 			// Not found, keep decomposing the url
 			unsigned lastSlash = key.find_last_of('/');
@@ -34,7 +34,9 @@ namespace dmc {
 		auto iter = mSubscriptions.find("/");
 		if (iter != mSubscriptions.end()) {
 			iter->second->process(_request, _server);
+			return true;
 		}
+		return false;
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
