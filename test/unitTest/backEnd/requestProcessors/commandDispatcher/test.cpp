@@ -4,18 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "backEnd/requestProcessors/CommandDispatcher.h"
+#include "frontEnd/Request.h"
 #include <cassert>
 #include <string>
 
 namespace dmc {
 	// --- Mock classes ---
-	class Request {
-	public:
-	};
-
 	class Response {
 	public:
-		Response(const std::string& _content) { mContent = _content; }
 		std::string mContent;
 	};
 
