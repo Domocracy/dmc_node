@@ -34,7 +34,7 @@ namespace dmc {
 		return Response(std::string("ok"));
 	}
 
-	Response Response::invalidRequest() {
+	Response Response::invalidRequestUrl() {
 		return Response(std::string("int"));
 	}
 	
@@ -51,7 +51,7 @@ namespace dmc {
 		}
 		if (_request.url() == "/d") // internal error
 		{
-			_server.respond(_request, Response::invalidRequest()); // To alert mock translator
+			_server.respond(_request, Response::invalidRequestUrl()); // To alert mock translator
 		}
 		return true;
 	}

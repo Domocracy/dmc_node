@@ -33,7 +33,7 @@ namespace dmc {
 
 	private:
 		// Inherited via HTTPRequestHandlerFactory
-		virtual Poco::Net::HTTPRequestHandler * createRequestHandler(const Poco::Net::HTTPServerRequest & request) override;
+		Poco::Net::HTTPRequestHandler * createRequestHandler(const Poco::Net::HTTPServerRequest & request) override;
 
 		class RequestHandler : public Poco::Net::HTTPRequestHandler {
 		public:

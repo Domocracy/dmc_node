@@ -67,10 +67,6 @@ namespace dmc {
 		return Response(std::string());
 	}
 
-	Response::Response(const std::string& _body) {
-		mContent = _body;
-	}
-
 	void Response::serialize(std::ostream& _os) const {
 		_os << mContent;
 	}
