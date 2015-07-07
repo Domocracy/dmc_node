@@ -3,9 +3,11 @@
 // DMC_NODE
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "backEnd/requestProcessors/CommandDispatcher.h"
-#include "backEnd/Device.h"
-#include "frontEnd/Request.h"
+#include <backEnd/requestProcessors/CommandDispatcher.h>
+#include <backEnd/DeviceManager.h>
+#include <backEnd/Device.h>
+#include <frontEnd/LocalServer.h>
+#include <frontEnd/Request.h>
 #include <cassert>
 #include <string>
 
@@ -28,18 +30,15 @@ namespace dmc {
 		}
 	};
 
-	class LocalServer {
-	public:
-		bool respond(const Request& request, const Response& _response) {
-			assert(!responded);
-			responded = true;
-			response = _response.mContent;
-			return true;
-		}
 
-		bool responded = false;
-		std::string response;
-	};
+	std::string gResponse;
+
+	LocalServer::LocalServer(RequestDispatcher& _rd, unsigned _port) :mDispatcher(_rd) {}
+
+	bool LocalServer::respond(const Request& request, const Response& _response) {
+		gResponse = _response.mContent;
+		return true;
+	}
 
 	class TestDevice : public Device {
 		
@@ -61,19 +60,12 @@ namespace dmc {
 		}
 	};
 
-	class DeviceManager {
-	public:
-		TestDevice dev;
-		Device* devPtr;
-
-		DeviceManager() { devPtr = &dev; }
-
-		Device*	device(unsigned _id) const {
-			if(_id == 1)
-				return devPtr;
-			return nullptr;
-		}
-	};
+	TestDevice dev;
+	Device*	DeviceManager::device(unsigned _id) const {
+		if(_id == 1)
+			return &dev;
+		return nullptr;
+	}
 
 	class RequestDispatcher {
 	public:
@@ -88,84 +80,29 @@ namespace dmc {
 
 using namespace dmc;
 
-void testEverythingOk() {
-	LocalServer server;
+void test(const std::string& url, const std::string& body, const std::string& expect) {
 	Request req(0);
-	req.url() = "/command/1";
-	req.body() = "ok";
+	req.url() = url;
+	req.body() = body;
 	DeviceManager mgr;
 	RequestDispatcher rd;
+	LocalServer server(rd, 0);
 	CommandDispatcher cmdDisp(mgr, rd);
 	assert(rd.suscribed);
 	cmdDisp.process(req, server);
-	assert(server.responded);
-	assert(server.response == "ok");
-}
-
-void testDeviceFailsParse() {
-	LocalServer server;
-	Request req(0);
-	req.url() = "/command/1";
-	req.body() = "parse";
-	DeviceManager mgr;
-	RequestDispatcher rd;
-	CommandDispatcher cmdDisp(mgr, rd);
-	assert(rd.suscribed);
-	cmdDisp.process(req, server);
-	assert(server.responded);
-	assert(server.response == "parse");
-}
-
-void testDeviceFailsExecution() {
-	LocalServer server;
-	Request req(0);
-	req.url() = "/command/1";
-	req.body() = "execution";
-	DeviceManager mgr;
-	RequestDispatcher rd;
-	CommandDispatcher cmdDisp(mgr, rd);
-	assert(rd.suscribed);
-	cmdDisp.process(req, server);
-	assert(server.responded);
-	assert(server.response == "runError");
-}
-
-void testDeviceNotFound() {
-	LocalServer server;
-	Request req(0);
-	req.url() = "/command/0";
-	DeviceManager mgr;
-	RequestDispatcher rd;
-	CommandDispatcher cmdDisp(mgr, rd);
-	assert(rd.suscribed);
-	cmdDisp.process(req, server);
-	assert(server.responded);
-	assert(server.response == "devNotFound: 0");
-}
-
-void testUrlError(const std::string& _url) {
-	LocalServer server;
-	Request req(0);
-	req.url() = _url;
-	DeviceManager mgr;
-	RequestDispatcher rd;
-	CommandDispatcher cmdDisp(mgr, rd);
-	assert(rd.suscribed);
-	cmdDisp.process(req, server);
-	assert(server.responded);
-	assert(server.response == "urlError");
+	assert(gResponse == expect);
 }
 
 int main(int, const char**) {
 	// All tests
-	testEverythingOk();
+	test("/command/1", "ok", "ok"); // Test with everything ok
 	// Test Device fails to run request
-	testDeviceFailsParse();
-	testDeviceFailsExecution();
+	test("/command/1", "parse", "parse");
+	test("/command/1", "execution", "runError");
 	// Test Device not found
-	testDeviceNotFound();
+	test("/command/0", "", "devNotFound: 0");
 	// Test url error
-	testUrlError("/comm");
-	testUrlError("/command/asd");
-	testUrlError("/command/023/what");
+	test("/comm", "", "urlError");
+	test("/command/asd", "", "urlError");
+	test("/command/023/what", "", "urlError");
 }
