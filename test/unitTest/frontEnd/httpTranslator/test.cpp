@@ -13,17 +13,17 @@
 
 class TestHttpRequest : public Poco::Net::HTTPServerRequest {
 public:
-	stringstream mStream;
-	SocketAddress mAddress;
-	HTTPServerParams *mParams;
-	HTTPServerResponse* mResponse;
+	std::stringstream mStream;
+	Poco::Net::SocketAddress mAddress;
+	Poco::Net::HTTPServerParams *mParams;
+	Poco::Net::HTTPServerResponse* mResponse;
 	// Inherited via HTTPServerRequest
 	virtual std::istream & stream() override { return mStream; }
 	virtual bool expectContinue() const override { return false; }
-	virtual const SocketAddress & clientAddress() const override { return mAddress; }
-	virtual const SocketAddress & serverAddress() const override { return mAddress;	}
-	virtual const HTTPServerParams & serverParams() const override { return *mParams; }
-	virtual HTTPServerResponse & response() const override { return *mResponse; }
+	virtual const Poco::Net::SocketAddress & clientAddress() const override { return mAddress; }
+	virtual const Poco::Net::SocketAddress & serverAddress() const override { return mAddress;	}
+	virtual const Poco::Net::HTTPServerParams & serverParams() const override { return *mParams; }
+	virtual Poco::Net::HTTPServerResponse & response() const override { return *mResponse; }
 
 };
 
@@ -78,6 +78,10 @@ namespace dmc {
 	}
 
 	const std::string& Response::serialize() const { return mContent; }
+
+	void Response::serialize(std::ostream& _os) const {
+		_os << mContent;
+	}
 }	// namespace dmc
 
 using namespace dmc;
@@ -106,7 +110,7 @@ int main(int, const char**) {
 	// Complete request
 	TestHttpRequest req;
 	req.setURI("/a");
-	req.mStream << "{3}";
+	req.mStream << "3";
 	HTTPTranslator a;
 	Request dmcReq(1);
 	assert(a.translate(req, dmcReq));
