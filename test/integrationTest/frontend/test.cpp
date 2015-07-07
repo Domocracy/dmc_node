@@ -37,28 +37,28 @@ using namespace Poco::Net;
 using namespace std;
 
 void testUri(const string& _uri, const string& _expected) {
-	// Setup server
-	RequestDispatcher dispatcher;
-	Processor procA("/subscribe");
-	dispatcher.subscribe(&procA, "/subscribe");
-	LocalServer server(dispatcher, 5028);
-
 	// Test
 	SocketAddress localHost("localHost:5028");
 	char buffer[1024];
 	StreamSocket client(localHost);
 	std::string req = 
 		"Get " + _uri + " HTTP/1.1\n"
-		"Host: localhost\r\n\r\n";
+		"Host: localhost\n"
+		"Content-Length: 0\r\n\r\n";
 	client.sendBytes(req.c_str(), req.size());
 	client.receiveBytes(buffer, 1023);
 	assert(string(buffer).substr(0, _expected.size()) == _expected);
 }
 
 
-int main(int, const char**) {	
+int main(int, const char**) {
+	// Setup server
+	RequestDispatcher dispatcher;
+	Processor procA("/subscribe");
+	dispatcher.subscribe(&procA, "/subscribe");
+	LocalServer server(dispatcher, 5028);
 	// --- Actual tests ---
-	testUri("/subscribe", "HTTP/1.1 200 Ok");// Test adequate behavior
+	testUri("/subscribe", "HTTP/1.1 200 OK");// Test adequate behavior
 	testUri("/noexist", "HTTP/1.1 404"); // Url not found
 	//testUri("/c", "HTTP/1.1 400"); // Bad request
 	//testUri("/d", "HTTP/1.1 500"); // Internal server error

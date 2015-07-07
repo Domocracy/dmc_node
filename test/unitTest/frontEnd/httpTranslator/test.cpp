@@ -99,11 +99,19 @@ int main(int, const char**) {
 	TestHttpRequest req;
 	req.setURI("/a");
 	req.mStream << "3";
+	req.setContentLength(1);
 	HTTPTranslator a;
 	Request dmcReq(1);
 	assert(a.translate(req, dmcReq));
 	assert(dmcReq.url() == "/a");
 	assert(int(dmcReq.body()) == 3);
+	// Complete request except for content-length (must fail)
+	TestHttpRequest req5;
+	req5.setURI("/a");
+	req5.mStream << "3";
+	HTTPTranslator f;
+	Request dmcReq5(1);
+	assert(!f.translate(req5, dmcReq5));
 	// Ill-formed request with no url HTTPRequest req;
 	TestHttpRequest req2;
 	req2.setURI("");
@@ -114,6 +122,7 @@ int main(int, const char**) {
 	TestHttpRequest req3;
 	req3.setURI("/b");
 	req3.mStream << "meh!";
+	req3.setContentLength(4);
 	HTTPTranslator c;
 	Request dmcReq3(3);
 	assert(!c.translate(req3, dmcReq3)); // Il-formed request must fail to translate

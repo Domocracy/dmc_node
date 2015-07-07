@@ -20,7 +20,11 @@ namespace dmc {
 		_dmc.url() = _http.getURI();
 		if(_dmc.url().empty())
 			return false;
-		return _dmc.body().parse(_http.stream());
+		if(!_http.hasContentLength())
+			return false;
+		if(_http.getContentLength() > 0)
+			return _dmc.body().parse(_http.stream());
+		else return true;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
