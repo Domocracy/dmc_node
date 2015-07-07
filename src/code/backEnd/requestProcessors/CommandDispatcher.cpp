@@ -66,7 +66,11 @@ namespace dmc {
 				--size; // Skip trailing slash
 			if(devLabel.substr(0,size).find('/') != std::string::npos)
 				return false; // Slashes in the middle of the url
-			_id = unsigned(atol(devLabel.c_str()));
+			char* end;
+			unsigned id = strtol(devLabel.c_str(), &end, 10);
+			if(end - devLabel.c_str() != size)
+				return false;
+			_id = id;
 			return true;
 		}
 		return false;
