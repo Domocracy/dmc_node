@@ -19,7 +19,7 @@ namespace dmc {
 		/// The received request's url doesn't meet the format expected by the message processor
 		static Response invalidRequestUrl();
 		static Response deviceNotFound(unsigned _devId);
-		static Response failedToParseRequestBody();
+		static Response failedToParseRequestBody(const std::string& _info);
 		static Response commandExecutionError(const std::string& _info);
 
 		void serialize (std::ostream&) const;

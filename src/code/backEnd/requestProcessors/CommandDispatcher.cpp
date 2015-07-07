@@ -3,12 +3,14 @@
 //	Dmc Node
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 #include "CommandDispatcher.h"
+#include <backEnd/Device.h>
+#include <backEnd/DeviceManager.h>
 #include <frontEnd/LocalServer.h>
 #include <frontEnd/RequestDispatcher.h>
 #include <frontEnd/Request.h>
 #include <frontEnd/Response.h>
+#include <sstream>
 
 namespace dmc {
 	//--------------------------------------------------------------------------------------------------------------------
@@ -26,10 +28,32 @@ namespace dmc {
 		unsigned devId;
 		if (parseUrl(_request.url(), devId))
 		{
-			//
+			Device* dev = mDevMgr.device(devId);
+			if (!dev)
+			{
+				_server.respond(_request, Response::deviceNotFound(devId));
+				return;
+			}
+			std::ostringstream info;
+			auto result = dev->process(_request.body(), info);
+			switch (result)
+			{
+			case dmc::Device::CmdResult::Ok:
+				_server.respond(_request, Response::ok());
+				return;
+			case dmc::Device::CmdResult::CommandError:
+				_server.respond(_request, Response::failedToParseRequestBody(info.str()));
+				return;
+			case dmc::Device::CmdResult::ExecutionError:
+				_server.respond(_request, Response::commandExecutionError(info.str()));
+				return;
+			default:
+				assert(false); // Unexpected case
+				return;
+			}
 		}
 		else { // Parsing error
-			_server.respond(_request, Response::failedToParseRequestBody());
+			_server.respond(_request, Response::invalidRequestUrl());
 		}
 	}
 
