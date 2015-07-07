@@ -30,23 +30,12 @@ namespace dmc {
 	class Request;
 
 	// --- Mock dmc::Response
-	Response::Response(bool) {
-	}
-
 	Response Response::ok() {
-		Response error(false);
-		error.mContent = "ok";
-		return error;
+		return Response(std::string("ok"));
 	}
 
-	Response Response::internalError() {
-		Response error(false);
-		error.mContent = "int";
-		return error;
-	}
-
-	const std::string& Response::serialize() const {
-		return mContent;
+	Response Response::invalidRequest() {
+		return Response(std::string("int"));
 	}
 	
 	// --- Mock request dispatcher
@@ -62,7 +51,7 @@ namespace dmc {
 		}
 		if (_request.url() == "/d") // internal error
 		{
-			_server.respond(_request, Response::internalError()); // To alert mock translator
+			_server.respond(_request, Response::invalidRequest()); // To alert mock translator
 		}
 		return true;
 	}
