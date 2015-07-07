@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['dmcnode_2ecpp',['DmcNode.cpp',['../_dmc_node_8cpp.html',1,'']]],
-  ['dmcnode_2eh',['DmcNode.h',['../_dmc_node_8h.html',1,'']]]
+  ['commanddispatcher_2ecpp',['CommandDispatcher.cpp',['../_command_dispatcher_8cpp.html',1,'']]],
+  ['commanddispatcher_2eh',['CommandDispatcher.h',['../_command_dispatcher_8h.html',1,'']]]
 ];

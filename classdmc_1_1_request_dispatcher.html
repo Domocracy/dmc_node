@@ -73,6 +73,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -118,31 +119,30 @@ $(document).ready(function(){initNavTree('classdmc_1_1_request_dispatcher.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9d8ab0dd49b953e0104bd321530c1d1c"><td class="memItemLeft" align="right" valign="top">RequestProcessor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdmc_1_1_request_dispatcher.html#a9d8ab0dd49b953e0104bd321530c1d1c">dispatch</a> (const Poco::Net::HTTPRequest &amp;_request, std::string &amp;_parsedUrl) const </td></tr>
-<tr class="separator:a9d8ab0dd49b953e0104bd321530c1d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66d9692fa247f73e6d83a308860212fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdmc_1_1_request_dispatcher.html#a66d9692fa247f73e6d83a308860212fc">subscribe</a> (RequestProcessor *, const std::string &amp;_localUrl)</td></tr>
-<tr class="memdesc:a66d9692fa247f73e6d83a308860212fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a request processor to be retrieved for all requests to _localUrl.  <a href="#a66d9692fa247f73e6d83a308860212fc">More...</a><br /></td></tr>
+<tr class="memitem:a16a48f53fa4f5924bf6fcee129929434"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdmc_1_1_request_dispatcher.html#a16a48f53fa4f5924bf6fcee129929434">dispatch</a> (<a class="el" href="classdmc_1_1_local_server.html">LocalServer</a> &amp;_server, const <a class="el" href="classdmc_1_1_request.html">Request</a> &amp;_request) const </td></tr>
+<tr class="separator:a16a48f53fa4f5924bf6fcee129929434"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66d9692fa247f73e6d83a308860212fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdmc_1_1_request_dispatcher.html#a66d9692fa247f73e6d83a308860212fc">subscribe</a> (<a class="el" href="classdmc_1_1_request_processor.html">RequestProcessor</a> *, const std::string &amp;_localUrl)</td></tr>
 <tr class="separator:a66d9692fa247f73e6d83a308860212fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="_request_dispatcher_8h_source.html#l00020">20</a> of file <a class="el" href="_request_dispatcher_8h_source.html">RequestDispatcher.h</a>.</p>
+<p>Definition at line <a class="el" href="_request_dispatcher_8h_source.html#l00022">22</a> of file <a class="el" href="_request_dispatcher_8h_source.html">RequestDispatcher.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a9d8ab0dd49b953e0104bd321530c1d1c"></a>
+<a class="anchor" id="a16a48f53fa4f5924bf6fcee129929434"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RequestProcessor * dmc::RequestDispatcher::dispatch </td>
+          <td class="memname">bool dmc::RequestDispatcher::dispatch </td>
           <td>(</td>
-          <td class="paramtype">const Poco::Net::HTTPRequest &amp;&#160;</td>
-          <td class="paramname"><em>_request</em>, </td>
+          <td class="paramtype"><a class="el" href="classdmc_1_1_local_server.html">LocalServer</a> &amp;&#160;</td>
+          <td class="paramname"><em>_server</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>_parsedUrl</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classdmc_1_1_request.html">Request</a> &amp;&#160;</td>
+          <td class="paramname"><em>_request</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -151,15 +151,16 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parse given request and return the proper request processor. For every new request, the RequestProcessor that most specifically fits the url will be returned. For example, if A is suscribed to "/a" and B is suscribed to "/a/b", A will be retrieved for "/a/foo" but B will be retrieved for "/a/b/bar". For the same level of specialization, however, first suscribers have preferece. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Parse given request and send it to the best fitting request processor subscribed. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">_request</td><td>Received Request to be parsed  _parsedUrl Output string that contains results of parsing the url of the request. It corresponds to the whole url comming after the host, not including the first '/' </td></tr>
+    <tr><td class="paramname">_request</td><td>Received <a class="el" href="classdmc_1_1_request.html">Request</a> to be dispatched </td></tr>
+    <tr><td class="paramname">_server</td><td>where request processors should answer the requests </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The request processor associated to the Request or nullptr if no good candidate was found </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if no requestProcessor was found for the incomming request, <code>true</code> otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="_request_dispatcher_8cpp_source.html#l00011">11</a> of file <a class="el" href="_request_dispatcher_8cpp_source.html">RequestDispatcher.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_request_dispatcher_8cpp_source.html#l00016">16</a> of file <a class="el" href="_request_dispatcher_8cpp_source.html">RequestDispatcher.cpp</a>.</p>
 
 </div>
 </div>
@@ -170,8 +171,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void dmc::RequestDispatcher::subscribe </td>
           <td>(</td>
-          <td class="paramtype">RequestProcessor *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramtype"><a class="el" href="classdmc_1_1_request_processor.html">RequestProcessor</a> *&#160;</td>
+          <td class="paramname"><em>_requestProcessor</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -186,8 +187,9 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Register a request processor to listen for all requests to _localUrl For example, if A is suscribed to "/a" and B is suscribed to "/a/b", A will be called for "/a/foo" but B will be called for "/a/b/bar". For the same level of specialization, however, last suscriber has preferece. Indeed, any new suscriber erases old entries, which efectively means you can Unsuscribe to an url by calling suscribe with a nullptr as the request processor param </p>
 
-<p>Register a request processor to be retrieved for all requests to _localUrl. </p>
+<p>Definition at line <a class="el" href="_request_dispatcher_8cpp_source.html#l00043">43</a> of file <a class="el" href="_request_dispatcher_8cpp_source.html">RequestDispatcher.cpp</a>.</p>
 
 </div>
 </div>
@@ -201,7 +203,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacedmc.html">dmc</a></li><li class="navelem"><a class="el" href="classdmc_1_1_request_dispatcher.html">RequestDispatcher</a></li>
-    <li class="footer">Generated on Wed Jul 1 2015 13:06:18 for dmcNode by
+    <li class="footer">Generated on Tue Jul 7 2015 12:15:14 for dmcNode by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>

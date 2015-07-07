@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['cdeviceurl',['cDeviceUrl',['../namespacedmc.html#acdf475ed95eb798445581e7f7b72ce4a',1,'dmc']]],
-  ['crequestinfourl',['cRequestInfoUrl',['../namespacedmc.html#ab17c3e45fd914981610ea47228861c19',1,'dmc']]],
-  ['csubscriptionurl',['cSubscriptionUrl',['../namespacedmc.html#a0f96b87623fa17d5a5018c8141312598',1,'dmc']]]
+  ['body',['body',['../classdmc_1_1_request.html#a2e2e60c5ba6f88abe0f0008342d4b44e',1,'dmc::Request::body() const '],['../classdmc_1_1_request.html#ab8c5b79b688bc77f002f781767207386',1,'dmc::Request::body()']]]
 ];

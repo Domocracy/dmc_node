@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['subscribe',['subscribe',['../classdmc_1_1_request_dispatcher.html#a66d9692fa247f73e6d83a308860212fc',1,'dmc::RequestDispatcher']]]
+  ['localserver',['LocalServer',['../classdmc_1_1_local_server.html',1,'dmc']]],
+  ['localserver',['LocalServer',['../classdmc_1_1_local_server.html#a36f73f7be7c3ee82f3a4bef2add10e57',1,'dmc::LocalServer']]],
+  ['localserver_2ecpp',['LocalServer.cpp',['../_local_server_8cpp.html',1,'']]],
+  ['localserver_2eh',['LocalServer.h',['../_local_server_8h.html',1,'']]]
 ];

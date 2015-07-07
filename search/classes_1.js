@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['requestdispatcher',['RequestDispatcher',['../classdmc_1_1_request_dispatcher.html',1,'dmc']]]
+  ['dmcnode',['DmcNode',['../classdmc_1_1_dmc_node.html',1,'dmc']]]
 ];

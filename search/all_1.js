@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['dispatch',['dispatch',['../classdmc_1_1_request_dispatcher.html#a9d8ab0dd49b953e0104bd321530c1d1c',1,'dmc::RequestDispatcher']]],
-  ['dmc',['dmc',['../namespacedmc.html',1,'']]],
-  ['dmcnode',['DmcNode',['../classdmc_1_1_dmc_node.html',1,'dmc']]],
-  ['dmcnode',['DmcNode',['../classdmc_1_1_dmc_node.html#a3a3df511ebe1e47e15057205aa3f45bc',1,'dmc::DmcNode']]],
-  ['dmcnode_2ecpp',['DmcNode.cpp',['../_dmc_node_8cpp.html',1,'']]],
-  ['dmcnode_2eh',['DmcNode.h',['../_dmc_node_8h.html',1,'']]]
+  ['cdeviceurl',['cDeviceUrl',['../namespacedmc.html#acdf475ed95eb798445581e7f7b72ce4a',1,'dmc']]],
+  ['commanddispatcher',['CommandDispatcher',['../classdmc_1_1_command_dispatcher.html',1,'dmc']]],
+  ['commanddispatcher',['CommandDispatcher',['../classdmc_1_1_command_dispatcher.html#aa118ce52d6196a0b4e91af6cd2fd13ce',1,'dmc::CommandDispatcher']]],
+  ['commanddispatcher_2ecpp',['CommandDispatcher.cpp',['../_command_dispatcher_8cpp.html',1,'']]],
+  ['commanddispatcher_2eh',['CommandDispatcher.h',['../_command_dispatcher_8h.html',1,'']]],
+  ['crequestinfourl',['cRequestInfoUrl',['../namespacedmc.html#ab17c3e45fd914981610ea47228861c19',1,'dmc']]],
+  ['csubscriptionurl',['cSubscriptionUrl',['../namespacedmc.html#a0f96b87623fa17d5a5018c8141312598',1,'dmc']]]
 ];

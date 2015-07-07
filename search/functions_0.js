@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['dispatch',['dispatch',['../classdmc_1_1_request_dispatcher.html#a9d8ab0dd49b953e0104bd321530c1d1c',1,'dmc::RequestDispatcher']]],
-  ['dmcnode',['DmcNode',['../classdmc_1_1_dmc_node.html#a3a3df511ebe1e47e15057205aa3f45bc',1,'dmc::DmcNode']]]
+  ['body',['body',['../classdmc_1_1_request.html#a2e2e60c5ba6f88abe0f0008342d4b44e',1,'dmc::Request::body() const '],['../classdmc_1_1_request.html#ab8c5b79b688bc77f002f781767207386',1,'dmc::Request::body()']]]
 ];
