@@ -19,6 +19,7 @@ namespace dmc {
 	class CommandDispatcher : public RequestProcessor {
 	public:
 		/// Construct command dispatcher with the given manager of devices and subscribe itself to the request dispatcher.
+		/// This object will suscribe to the /command url.
 		/// \param _devMgr instance to a DeviceManager in order to retreive devices afterwards-
 		/// \param _requestDispatcher instance to RequestDispatcher to subscribe itself to inconming requests.
 		CommandDispatcher(DeviceManager &_devMgr, RequestDispatcher &_requestDispatcher);
