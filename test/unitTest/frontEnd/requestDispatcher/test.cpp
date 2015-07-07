@@ -7,6 +7,7 @@
 
 #include <frontEnd/RequestDispatcher.h>
 #include <frontEnd/Request.h>
+#include <backEnd/RequestProcessor.h>
 
 #include <assert.h>
 #include <cjson/json.h>
@@ -23,9 +24,9 @@ namespace dmc {
 		}
 	};
 
-	class RequestProcessor {
+	class Processor: public RequestProcessor {
 	public:
-		void process(const Request &_request, LocalServer &_localServer){
+		void process(const Request &_request, LocalServer &_localServer) override{
 			mCounter++;
 			Response response;
 			_localServer.respond(_request, response);
@@ -65,7 +66,7 @@ int main(int, const char**) {
 
 
 void standardResponse(const Request &_req) {
-	RequestProcessor proc;
+	Processor proc;
 	RequestDispatcher disp;
 	disp.subscribe(&proc, "/");	// Standard Responder.
 
@@ -76,9 +77,9 @@ void standardResponse(const Request &_req) {
 
 void validRequests() {
 	RequestDispatcher disp;
-	RequestProcessor procA;
+	Processor procA;
 	disp.subscribe(&procA, "/");	// Standard Responder.
-	RequestProcessor procB;
+	Processor procB;
 	disp.subscribe(&procB, "/subscribe");
 
 	LocalServer server;
@@ -107,9 +108,9 @@ void validRequests() {
 
 void specificDispatch() {
 	RequestDispatcher disp;
-	RequestProcessor procA;
+	Processor procA;
 	disp.subscribe(&procA, "/subscribe");
-	RequestProcessor procB;
+	Processor procB;
 	disp.subscribe(&procB, "/subscribe/dev");
 
 	LocalServer server;
