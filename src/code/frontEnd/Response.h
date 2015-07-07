@@ -13,6 +13,7 @@ namespace dmc {
 	class Response {
 	public:
 		Response(const cjson::Json& _content);
+		Response(const std::string& _content);
 		// Default responses
 		static Response ok();
 		/// The received request's format doesn't meet the requirements. There might be missing content in the Json.
@@ -28,7 +29,6 @@ namespace dmc {
 
 	private:
 		static Response error(ErrorCode, const std::string& _message);
-		Response(const std::string& _content);
 
 		std::string mContent;
 	};

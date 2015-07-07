@@ -63,21 +63,13 @@ public:
 
 namespace dmc {
 	// --- Mock
-	Response::Response(bool) {
-	}
-
 	Response Response::ok() {
-		Response r(true);
-		return r;
+		return Response(std::string());
 	}
 
-	Response Response::ok(const std::string& _body) {
-		Response r(true);
-		r.mContent = _body;
-		return r;
+	Response::Response(const std::string& _body) {
+		mContent = _body;
 	}
-
-	const std::string& Response::serialize() const { return mContent; }
 
 	void Response::serialize(std::ostream& _os) const {
 		_os << mContent;
@@ -99,7 +91,7 @@ int main(int, const char**) {
 	assert(resp.getReason() == HTTPResponse::HTTP_REASON_OK);
 	assert(resp.mSS.str().empty());
 	// Response with body
-	Response ok = Response::ok("a"); // Simple answer
+	Response ok = Response(std::string("a")); // Simple answer
 	HTTPTranslator t2;
 	TestHttpResponse resp2;
 	assert(t2.translate(ok, resp2));
