@@ -13,18 +13,24 @@ namespace dmc {
 	class Response {
 	public:
 		Response(const cjson::Json& _content);
-		Response(const std::string& _content);
+		Response(const std::string& _content) { mContent = _content; }
 		// Default responses
 		static Response ok();
-		/// The received request's format doesn't meet the requirements. There might be missing content in the Json.
-		static Response invalidRequest();
+		/// The received request's url doesn't meet the format expected by the message processor
+		static Response invalidRequestUrl();
+		static Response deviceNotFound(unsigned _devId);
+		static Response failedToParseRequestBody(const std::string& _info);
+		static Response commandExecutionError(const std::string& _info);
 
 		void serialize (std::ostream&) const;
 		const std::string& serialize() const { return mContent; }
 
 	private:
 		enum class ErrorCode {
-			invalidRequest = 1
+			invalidRequestUrl = 1,
+			deviceNotFound,
+			failedToParseRequestBody,
+			commandExecutionError
 		};
 
 	private:

@@ -19,8 +19,8 @@ namespace dmc {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	Response Response::invalidRequest() {
-		return error(ErrorCode::invalidRequest, "Invalid request");
+	Response Response::invalidRequestUrl() {
+		return error(ErrorCode::invalidRequest, "Invalid request url");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
