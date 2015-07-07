@@ -106,7 +106,7 @@ int main(int, const char**) {
 	// Complete request
 	TestHttpRequest req;
 	req.setURI("/a");
-	req.read(stringstream(string("{3}")));
+	req.mStream << "{3}";
 	HTTPTranslator a;
 	Request dmcReq(1);
 	assert(a.translate(req, dmcReq));
@@ -121,7 +121,7 @@ int main(int, const char**) {
 	// Ill-formed request with invalid json;
 	TestHttpRequest req3;
 	req3.setURI("/b");
-	req3.read(stringstream(string("meh!")));
+	req3.mStream << "meh!";
 	HTTPTranslator c;
 	Request dmcReq3(3);
 	assert(!c.translate(req3, dmcReq3)); // Il-formed request must fail to translate
