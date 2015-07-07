@@ -44,7 +44,8 @@ using namespace dmc;
 
 void testEverythingOk() {
 	LocalServer server;
-	Request req;
+	Request req(0);
+	req.url() = "/command/ok";
 	DeviceManager mgr;
 	RequestDispatcher rd;
 	CommandDispatcher cmdDisp(mgr, rd);
