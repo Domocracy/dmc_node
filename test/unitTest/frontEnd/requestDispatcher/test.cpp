@@ -5,22 +5,17 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 
-#include "frontEnd/RequestDispatcher.h"
+#include <frontEnd/RequestDispatcher.h>
+#include <frontEnd/Request.h>
+#include <backEnd/RequestProcessor.h>
 
 #include <assert.h>
+#include <cjson/json.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <vector>
 
 // Mock classes
 namespace dmc {
-	class Request {
-	public:
-		unsigned id() const { return mId; };
-		std::string url() const { return mUrl; };
-
-		unsigned mId = 0;
-		std::string mUrl = "";
-	};
 	class Response {};
 	class LocalServer {
 	public:
@@ -29,37 +24,107 @@ namespace dmc {
 		}
 	};
 
-	class RequestProcessor {
+	class Processor: public RequestProcessor {
 	public:
-		void process(const Request &_request, LocalServer &_localServer){
+		void process(const Request &_request, LocalServer &_localServer) override{
+			mCounter++;
 			Response response;
 			_localServer.respond(_request, response);
 		}
-	};
 
+		unsigned mCounter = 0;
+	};
 } // namespace dmc
 
 using namespace Poco::Net;
 using namespace dmc;
 using namespace std;
 
-
-// Global tick counter.
-unsigned gTickCounter = 0;
+void standardResponse(const Request &_req);
+void validRequests();
+void specificDispatch();
 
 int main(int, const char**) {
 	
-	// Init mocks
-	RequestProcessor proc;
-	RequestDispatcher dispatcher;
-	dispatcher.subscribe(&proc, "/subscribe");
+	// Standard response.
+	Request reqA(64);
+	reqA.url() = "";
+	reqA.body() = "";
+	standardResponse(reqA);
+
+	Request reqB(64);
+	reqB.url() = "/";
+	reqB.body() = "";
+	standardResponse(reqB);
+
+	// Valid requests.
+	validRequests();
 	
+	// Top vs Specific dispatching.
+	specificDispatch();
+}
+
+
+void standardResponse(const Request &_req) {
+	Processor proc;
+	RequestDispatcher disp;
+	disp.subscribe(&proc, "/");	// Standard Responder.
+
 	LocalServer server;
+	assert(disp.dispatch(server, _req));
+	assert(proc.mCounter == 1);
+}
 
-	// Test Valid subscription
-	Request req({64, "/subscribe"});
-	dispatcher.dispatch(server, req);
+void validRequests() {
+	RequestDispatcher disp;
+	Processor procA;
+	disp.subscribe(&procA, "/");	// Standard Responder.
+	Processor procB;
+	disp.subscribe(&procB, "/subscribe");
 
-	Request req({64, "/subscribe"});
+	LocalServer server;
+	Request reqA(64);
+	reqA.url() = "subscribe";
+	reqA.body() = "";
+	assert(disp.dispatch(server, reqA));
+	assert(procA.mCounter == 0);
+	assert(procB.mCounter == 1);
 
+	Request reqB(64);
+	reqB.url() = "/subscribe";
+	reqB.body() = "";
+	assert(disp.dispatch(server, reqB));
+	assert(procA.mCounter == 0);
+	assert(procB.mCounter == 2);
+
+	Request reqC(64);
+	reqC.url() = "/noexist";
+	reqC.body() = "";
+	assert(disp.dispatch(server, reqC));
+	assert(procA.mCounter == 1);
+	assert(procB.mCounter == 2);
+}
+
+
+void specificDispatch() {
+	RequestDispatcher disp;
+	Processor procA;
+	disp.subscribe(&procA, "/subscribe");
+	Processor procB;
+	disp.subscribe(&procB, "/subscribe/dev");
+
+	LocalServer server;
+	Request reqA(64);
+	reqA.url() = "/subscribe";
+	reqA.body() = "";
+	assert(disp.dispatch(server, reqA));
+	assert(procA.mCounter == 1);
+	assert(procB.mCounter == 0);
+
+	Request reqB(64);
+	reqB.url() = "/subscribe/dev";
+	reqB.body() = "";
+	assert(disp.dispatch(server, reqB));
+	assert(procA.mCounter == 1);
+	assert(procB.mCounter == 1);
 }

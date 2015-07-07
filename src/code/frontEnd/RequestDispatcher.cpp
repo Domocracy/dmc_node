@@ -16,45 +16,31 @@ namespace dmc {
 	bool RequestDispatcher::dispatch(LocalServer& _server, const Request &_request) const {
 		std::string url = _request.url();
 
-		if(extractHost(url)) {
-			std::string key = url[0] == '/' ? url : (std::string("/") + url); // Add slash at the begining.
+		std::string key = url[0] == '/' ? url : (std::string("/") + url); // Add slash at the begining.
 
-			while (!key.empty()) {
-				// Try key
-				auto iter = mSubscriptions.find(key);
-				if (iter != mSubscriptions.end()) {
-					url = url.substr(key.size(), url.size());
-					iter->second->process(_request, _server);
-				}
-				// Not found, keep decomposing the url
-				unsigned lastSlash = key.find_last_of('/');
-				key = key.substr(0, lastSlash);
-			}
-
-			// Check if exist default subscription "/"
-			auto iter = mSubscriptions.find("/");
+		while (!key.empty()) {
+			// Try key
+			auto iter = mSubscriptions.find(key);
 			if (iter != mSubscriptions.end()) {
 				iter->second->process(_request, _server);
+				return true;
 			}
+			// Not found, keep decomposing the url
+			unsigned lastSlash = key.find_last_of('/');
+			key = key.substr(0, lastSlash);
 		}
+
+		// Check if exist default subscription "/"
+		auto iter = mSubscriptions.find("/");
+		if (iter != mSubscriptions.end()) {
+			iter->second->process(_request, _server);
+			return true;
+		}
+		return false;
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	void RequestDispatcher::subscribe(RequestProcessor * _requestProcessor, const std::string & _localUrl) {
 		mSubscriptions[_localUrl] = _requestProcessor;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	bool RequestDispatcher::extractHost(std::string &_url) const{
-		std::regex hostRegex(cValidHostExpression);
-		std::smatch matches; 
-
-		if (std::regex_search(_url, matches, hostRegex)) {
-			std::string host = matches[0];
-			_url = _url.substr(host.size() - 1, _url.size());
-			return true;	// Has valid host.
-		}
-		return false;	// No host or invalid host.
-	}
-
 }
