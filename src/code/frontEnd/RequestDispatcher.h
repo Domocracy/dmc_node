@@ -21,7 +21,9 @@ namespace dmc {
 
 	class RequestDispatcher {
 	public:
-		/// Parse given request and send it to the best fitting request processor subscribed.
+		/// Parse given request and send it to the best fitting request processor subscribed. Is assumed that requests 
+		/// contains URLs not URIs. Requests which url does not start with / are assumed as with /, i.e., 
+		/// "subscribe" == "/subscribe".
 		/// \param _request Received Request to be dispatched
 		/// \param _server where request processors should answer the requests
 		/// \return \c false if no requestProcessor was found for the incomming request, \c true otherwise.
@@ -32,11 +34,6 @@ namespace dmc {
 		/// has preferece. Indeed, any new suscriber erases old entries, which efectively means you can
 		/// Unsuscribe to an url by calling suscribe with a nullptr as the request processor param
 		void subscribe(RequestProcessor*, const std::string& _localUrl);
-
-	private:
-		const std::string cValidHostExpression = "(http|https):\/\/[a-zA-Z0-9\-\.]+\/";
-
-		bool extractHost(std::string &_url) const;
 
 	private:
 		std::unordered_map<std::string, RequestProcessor*>	mSubscriptions;
