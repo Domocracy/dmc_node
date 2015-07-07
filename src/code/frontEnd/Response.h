@@ -4,6 +4,7 @@
 #ifndef _DMCNODE_CODE_FRONTEND_RESPONSE_H_
 #define _DMCNODE_CODE_FRONTEND_RESPONSE_H_
 
+#include <cjson/json.h>
 #include <string>
 #include <iostream>
 
@@ -11,21 +12,23 @@ namespace dmc {
 
 	class Response {
 	public:
+		Response(const cjson::Json& _content);
+		Response(const std::string& _content);
+		// Default responses
 		static Response ok();
-		static Response ok(const std::string& _body);
-		static Response internalError();
+		/// The received request's format doesn't meet the requirements. There might be missing content in the Json.
+		static Response invalidRequest();
 
 		void serialize (std::ostream&) const;
-		const std::string& serialize() const;
+		const std::string& serialize() const { return mContent; }
 
 	private:
 		enum class ErrorCode {
-			invalidHttpRequest = 1
+			invalidRequest = 1
 		};
 
 	private:
-		Response(bool _ok);
-		Response(const std::string& _errorMsg);
+		static Response error(ErrorCode, const std::string& _message);
 
 		std::string mContent;
 	};
