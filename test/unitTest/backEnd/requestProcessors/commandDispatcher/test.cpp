@@ -16,7 +16,6 @@
 namespace dmc {
 	// --- Mock classes ---
 	// Mock response
-	Response::Response(const std::string& _s) : mContent(_s) {}
 	Response Response::ok() {return Response(std::string("ok")); }
 	Response Response::invalidRequestUrl() { return Response( std::string("urlError")); }
 	Response Response::deviceNotFound(unsigned _devId) { 

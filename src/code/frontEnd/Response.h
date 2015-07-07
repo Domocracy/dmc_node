@@ -13,7 +13,7 @@ namespace dmc {
 	class Response {
 	public:
 		Response(const cjson::Json& _content);
-		Response(const std::string& _content);
+		Response(const std::string& _content) { mContent = _content; }
 		// Default responses
 		static Response ok();
 		/// The received request's url doesn't meet the format expected by the message processor
