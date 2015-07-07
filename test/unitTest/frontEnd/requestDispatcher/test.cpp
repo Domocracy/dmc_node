@@ -46,10 +46,14 @@ void specificDispatch();
 int main(int, const char**) {
 	
 	// Standard response.
-	Request reqA({64, "", ""});
+	Request reqA(64);
+	reqA.url() = "";
+	reqA.body() = "";
 	standardResponse(reqA);
 
-	Request reqB({64, "/", ""});
+	Request reqB(64);
+	reqB.url() = "/";
+	reqB.body() = "";
 	standardResponse(reqB);
 
 	// Valid requests.
@@ -78,24 +82,30 @@ void validRequests() {
 	disp.subscribe(&procB, "/subscribe");
 
 	LocalServer server;
-	Request reqA({64, "/subscribe", ""});
+	Request reqA(64);
+	reqA.url() = "subscribe";
+	reqA.body() = "";
 	assert(disp.dispatch(server, reqA));
 	assert(procA.mCounter == 0);
 	assert(procB.mCounter == 1);
 
-	Request reqB({64, "/subscribe/dev", ""});
+	Request reqB(64);
+	reqB.url() = "/subscribe";
+	reqB.body() = "";
 	assert(disp.dispatch(server, reqB));
 	assert(procA.mCounter == 0);
 	assert(procB.mCounter == 2);
 
-	Request reqC({64, "/noexist", ""});
+	Request reqC(64);
+	reqC.url() = "/noexist";
+	reqC.body() = "";
 	assert(disp.dispatch(server, reqC));
 	assert(procA.mCounter == 1);
 	assert(procB.mCounter == 2);
 }
 
 
-void specificDispatching() {
+void specificDispatch() {
 	RequestDispatcher disp;
 	RequestProcessor procA;
 	disp.subscribe(&procA, "/subscribe");
@@ -103,12 +113,16 @@ void specificDispatching() {
 	disp.subscribe(&procB, "/subscribe/dev");
 
 	LocalServer server;
-	Request reqA({64, "subscribe", ""});
+	Request reqA(64);
+	reqA.url() = "/subscribe";
+	reqA.body() = "";
 	assert(disp.dispatch(server, reqA));
 	assert(procA.mCounter == 1);
 	assert(procB.mCounter == 0);
 
-	Request reqB({64, "subscribe/dev", ""});
+	Request reqB(64);
+	reqB.url() = "/subscribe/dev";
+	reqB.body() = "";
 	assert(disp.dispatch(server, reqB));
 	assert(procA.mCounter == 1);
 	assert(procB.mCounter == 1);
