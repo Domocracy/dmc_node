@@ -4,6 +4,8 @@
 #ifndef _DMC_NODE_BACKEND_DEVICEMANAGER_H_
 #define _DMC_NODE_BACKEND_DEVICEMANAGER_H_
 
+#include <map>
+
 namespace dmc {
 
 	class Device;
@@ -16,6 +18,9 @@ namespace dmc {
 		Device*	device	(unsigned _id);
 		/// Register a new device into the device manager.
 		void	add		(Device* _dev);
+
+	private:
+		std::map<unsigned, Device*>	mDevices;
 	};
 
 }	// namespace dmc
