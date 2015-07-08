@@ -9,6 +9,7 @@
 #define _DMCNODE_CODE_FRONTEND_DEVICEFACTORY_H_
 
 #include <string>
+#include <unordered_map>
 
 // Forward declarations
 namespace cjson { class Json; };
@@ -33,7 +34,7 @@ namespace dmc {
 		/// Load existing device from persistent memory.
 		/// \param _id identification number to search the device
 		/// \return \c null pointer if device does not exist, \c pointer to device if exist.
-		Device* load(unsigned _id);
+		Device* load(const std::string &_type, unsigned _id);
 
 		/// Create a new device that have never been registered on the system.
 		/// \param _type string containing information about the type of device to be created.
@@ -44,6 +45,10 @@ namespace dmc {
 
 	private:
 		DeviceFactory();
+
+		static DeviceFactory *mInstance;
+
+		std::unordered_map<std::string, DeviceCreator*> mCreators;
 	};	//	class DeviceFactory
 }	//	namespace dmc
 
