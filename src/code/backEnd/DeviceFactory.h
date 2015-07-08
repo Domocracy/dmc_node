@@ -28,7 +28,7 @@ namespace dmc {
 
 		/// Add new device creator to the factory.
 		/// \param _devCreator pointer to a DeviceCreator.
-		void subscribe(DeviceCreator *_devCreator);
+		void subscribe(std::string _key, DeviceCreator *_devCreator);
 
 		/// Load existing device from persistent memory.
 		/// \param _id identification number to search the device
@@ -42,6 +42,8 @@ namespace dmc {
 		/// \return \c null pointer if device could not be created, \c pointer to new created device.
 		Device* createDevice(const std::string &_type, unsigned _id, const cjson::Json &_data);
 
+	private:
+		DeviceFactory();
 	};	//	class DeviceFactory
 }	//	namespace dmc
 
