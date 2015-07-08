@@ -46,6 +46,8 @@ namespace dmc {
 
 	// Mock device
 	class TestDevice : public Device {
+	public:
+		TestDevice(unsigned _id) : Device(_id) {}
 		
 		Device::CmdResult process(const std::string& _command, std::ostream& _info) override{
 			if(_command == "ok")
@@ -66,8 +68,8 @@ namespace dmc {
 	};
 
 	// Mock device manager
-	TestDevice dev;
-	Device*	DeviceManager::device(unsigned _id) const {
+	TestDevice dev(0);
+	Device*	DeviceManager::device(unsigned _id) {
 		if(_id == 1)
 			return &dev;
 		return nullptr;
