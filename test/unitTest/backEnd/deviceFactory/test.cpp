@@ -9,6 +9,7 @@
 #include <backEnd/Device.h>
 
 #include <cassert>
+#include <cjson/json.h>
 #include <unordered_map>
 
 // Mocks
@@ -72,9 +73,17 @@ void testSubscription() {
 	DummyCreator dummyCreator;
 	dummyCreator.mDevices[64] = new DummyDevice(64);	// Added to internal list in order to simulate loading.
 
+	// Test existing DeviceCreator
 	factory->subscribe(cDummyTypeKey, &dummyCreator);
-	assert(nullptr != factory->load(64));
-	assert(nullptr == factory->load(32));
+	assert(nullptr != factory->load(cDummyTypeKey, 64));
+	assert(nullptr == factory->load(cDummyTypeKey, 32));
+
+	assert(nullptr != factory->createDevice(cDummyTypeKey,64, ""));
+	assert(nullptr == factory->createDevice(cDummyTypeKey,32, ""));
+
+	// Test non-subscribed DeviceCreator
+	assert(nullptr == factory->load("noExist", 64));
+	assert(nullptr == factory->createDevice("noExist",64, ""));
 
 	DeviceFactory::end();
 }
