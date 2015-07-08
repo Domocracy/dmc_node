@@ -10,7 +10,8 @@ namespace dmc {
 
 	class DeviceManager {
 	public:
-		Device*	device	(unsigned _id) const;
+		Device*	device	(unsigned _id);
+		void	add		(Device* _dev);
 	};
 
 }	// namespace dmc
