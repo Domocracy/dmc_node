@@ -14,6 +14,8 @@ namespace dmc {
 	/// Logical devices are abstract constructions that act like a device (e.g. scenes, triggers, ...).
 	class Device {
 	public:
+		Device(unsigned _id) : mId(_id) {}
+
 		enum class CmdResult {
 			Ok, ///< Command properly executed
 			CommandError, ///< The received command is ill-formed and could not be processed by this device.
@@ -26,6 +28,12 @@ namespace dmc {
 		/// this string. In case of error, the error message will be stored here. If the command requested some
 		/// information and there was no error, the information will be saved here.
 		virtual CmdResult process(const std::string& command, std::ostream& info) = 0;
+
+		// Accessors
+		unsigned id() const { return mId; }
+
+	private:
+		unsigned mId;
 	};
 
 }	// namespace dmc
