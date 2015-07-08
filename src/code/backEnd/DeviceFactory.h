@@ -22,7 +22,7 @@ namespace dmc {
 		/// Static initialization of DeviceFactory. 
 		static void init();
 		/// Get instance of DeviceFactory.
-		static void get();
+		static DeviceFactory* get();
 		/// Static deinitialization of DeviceFactory.
 		static void end();
 
