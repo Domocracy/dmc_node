@@ -5,11 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <backEnd/DeviceFactory.h>
-#include <backEnd/DeviceCreator.h>
 #include <backEnd/Device.h>
 
 #include <cassert>
 #include <cjson/json.h>
+#include <fstream>
 #include <unordered_map>
 
 // Mocks
@@ -22,23 +22,15 @@ namespace dmc {
 		}
 	};
 
-	class DummyCreator : public DeviceCreator {
+	class DummyCreator {
 	public:
-		Device* load(unsigned _id) {
+		Device* operator()(unsigned _id, const cjson::Json &_data) {
 			auto iter = mDevices.find(_id);
 			if(iter != mDevices.end())
 				return iter->second;
 			else
 				return nullptr;
 		}
-		Device* createDevice(unsigned _id, const cjson::Json &_data) {
-			auto iter = mDevices.find(_id);
-			if(iter != mDevices.end())
-				return iter->second;
-			else
-				return nullptr;
-		}
-
 		std::unordered_map<unsigned, Device*> mDevices;
 	};
 }
@@ -46,11 +38,17 @@ namespace dmc {
 using namespace dmc;
 
 void testSingletonCycle();
-void testSubscription();
+void testLoad();
+void testCreation();
+
+void createDeviceFile(unsigned _id, std::string _type);
 
 int main(int, const char**) {
 	testSingletonCycle();
-	testSubscription();
+
+	testLoad();
+
+	testCreation();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -65,27 +63,41 @@ void testSingletonCycle() {
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void testSubscription() {
+void testLoad() {
+	// --- Init Factory ---
 	DeviceFactory::init();
 	DeviceFactory *factory = DeviceFactory::get();
 	
-	const std::string cDummyTypeKey = "Dummy";
-	DummyCreator dummyCreator;
-	dummyCreator.mDevices[64] = new DummyDevice(64);	// Added to internal list in order to simulate loading.
+	// --- Dummy DeviceCreator for testing ---
+	const std::string cDummyType = "dummy";
+	DummyCreator creator;
+	creator.mDevices[64] = new DummyDevice(64);
+	factory->subscribe(cDummyType, creator);
 
-	// Test existing DeviceCreator
-	factory->subscribe(cDummyTypeKey, &dummyCreator);
-	assert(nullptr != factory->load(cDummyTypeKey, 64));
-	assert(nullptr == factory->load(cDummyTypeKey, 32));
+	// --- Create file to be load ---
+	createDeviceFile(64, cDummyType);
 
-	assert(nullptr != factory->createDevice(cDummyTypeKey,64, ""));
-	assert(nullptr == factory->createDevice(cDummyTypeKey,32, ""));
-
-	// Test non-subscribed DeviceCreator
-	assert(nullptr == factory->load("noExist", 64));
-	assert(nullptr == factory->createDevice("noExist",64, ""));
+	// --- Test ---
+	assert(factory->load(64));	// Existing device.
+	assert(!factory->load(32));	// Non Existing Device.
 
 	DeviceFactory::end();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+void testCreation() {
+	DeviceFactory::init();
+	DeviceFactory *factory = DeviceFactory::get();
+
+	assert(factory->createDevice("dummy", 64, ""));
+	assert(factory->createDevice("noExist", 64, ""));
+
+	DeviceFactory::end();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+void createDeviceFile(unsigned _id, std::string _type) {
+	std::ofstream file("device_"+std::to_string(_id));
+	file << R"({"type":")" << _type << R"(", "data":{"state":true}})";
+	file.close();
+}
