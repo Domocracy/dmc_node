@@ -12,6 +12,7 @@ namespace dmc {
 		//------------------------------------------------------------------------------------------------------------------
 		HueDevice::CmdResult HueDevice::process(const std::string & _command, std::ostream & _info) {
 			assert(mJson.parse(_command.c_str()));
+
 			std::string method = mJson["method"];
 			HueDriver* hubDriver = HueDriver::get();
 
