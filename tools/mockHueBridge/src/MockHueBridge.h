@@ -1,8 +1,11 @@
 //----------------------------------------------------------------------------------------------------------------------
 // dmc_node
 //----------------------------------------------------------------------------------------------------------------------
-#include "MockHueBridge.h"
+#ifndef _MOCKHUEBRIDGE_MOCKHUEBRIDGE_H_
+#define _MOCKHUEBRIDGE_MOCKHUEBRIDGE_H_
 
-int main(int, const char**) {
+class MockHueBridge {
 	//
-}
+}; 
+
+#endif // _MOCKHUEBRIDGE_MOCKHUEBRIDGE_H_
