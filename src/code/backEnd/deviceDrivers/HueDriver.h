@@ -20,7 +20,6 @@ namespace dmc{
 				connected,
 				connecting,
 				disconnected
-
 			};
 
 			//Singleton
@@ -28,19 +27,23 @@ namespace dmc{
 			static HueDriver*	get();
 			static void			init();
 
-			State state() const{ return mState; }
+			State state() const	{ return mState; }
 
-			bool putData	(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
-			bool getData	(const std::string& _url, cjson::Json& _data, std::ostream& _errorInfo);
-			bool postData	(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
-			bool deleteData	(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
+			bool putData		(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
+			bool getData		(const std::string& _url, cjson::Json& _data, std::ostream& _errorInfo);
+			bool postData		(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
+			bool deleteData		(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
 
+			bool			autoConnect		();
+			cjson::Json		scanBridges		();
+			bool			registerBridge	(const cjson::Json& _bridgeToConnect);
 		private:
 
 			State mState;
 			HueDriver(const cjson::Json&);
 
 			static HueDriver* sHueDriver;
+
 
 		};
 	
