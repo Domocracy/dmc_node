@@ -21,7 +21,7 @@ namespace dmc {
 		if(_dmc.url().empty())
 			return false;
 		if(!_http.hasContentLength())
-			return false;
+			return true; // Skip body
 		if(_http.getContentLength() > 0)
 			return _dmc.body().parse(_http.stream());
 		else return true;

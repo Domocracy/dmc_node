@@ -5,6 +5,7 @@
 #include "ErrorMessage.h"
 #include <frontEnd/LocalServer.h>
 #include <frontEnd/Response.h>
+#include <frontEnd/Request.h>
 #include <frontEnd/RequestDispatcher.h>
 #include <Poco/Net/HTTPServer.h>
 #include <cjson/json.h>
@@ -23,8 +24,8 @@ MockHueBridge::MockHueBridge(unsigned _port)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void generateResponse(const dmc::Request & _request, std::ostream& _responseBody) {
-	ErrorMessage::resourceNotAvailable().serialize(_responseBody);
+void MockHueBridge::HueReqProcessor::generateResponse(const dmc::Request & _request, std::ostream& _responseBody) {
+	ErrorMessage::resourceNotAvailable(_request.url()).serialize(_responseBody);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

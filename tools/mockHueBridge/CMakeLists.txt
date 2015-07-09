@@ -23,9 +23,13 @@ macro(GroupSources curdir)
 	endforeach()
 endmacro()
 
-GroupSources(code)
-
-add_executable(mockHueBridge ${MOCKHUEBRIDGE_SOURCE_FILES})
+GroupSources(src)
+set(NODE_SOURCES ${PROJECT_SOURCE_DIR}/../../src/code/frontEnd/RequestDispatcher.cpp
+	${PROJECT_SOURCE_DIR}/../../src/code/frontEnd/LocalServer.cpp
+	${PROJECT_SOURCE_DIR}/../../src/code/frontEnd/HTTPTranslator.cpp
+	${PROJECT_SOURCE_DIR}/../../src/code/frontEnd/Response.cpp)
+source_group(dmc_node FILES ${NODE_SOURCES})
+add_executable(mockHueBridge ${MOCKHUEBRIDGE_SOURCE_FILES} ${NODE_SOURCES})
 
 # Compiler specific options
 if(MSVC)
