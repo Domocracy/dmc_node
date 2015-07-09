@@ -18,6 +18,11 @@ public:
 	static ErrorMessage methodNotAvailable();
 	static ErrorMessage missingBodyParameters();
 	static ErrorMessage parameterNotAvailable();
+	static ErrorMessage invalidValue();
+	static ErrorMessage parameterNotModifiable();
+	static ErrorMessage tooManyItems();
+	static ErrorMessage portalConnRequired();
+	static ErrorMessage internalError();
 };
 
 #endif // _MOCKHUEBRIDGE_ERRORMESSAGE_H_
