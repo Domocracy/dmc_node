@@ -18,13 +18,14 @@ namespace dmc {
 	//-----------------------------------------------------------------------------------------------------------------
 	bool HTTPTranslator::translate(Poco::Net::HTTPServerRequest& _http, Request& _dmc) {
 		_dmc.url() = _http.getURI();
+		_dmc.method() = _http.getMethod();
 		if(_dmc.url().empty())
 			return false;
 		if(!_http.hasContentLength())
 			return true; // Skip body
 		if(_http.getContentLength() > 0)
-			return _dmc.body().parse(_http.stream());
-		else return true;
+			_http.stream() >> _dmc.body();
+		return true;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
