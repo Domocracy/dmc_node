@@ -6,9 +6,11 @@
 //
 
 #include <cassert>
+#include <cjson/json.h>
+#include <fstream>
 
 #include "DeviceFactory.h"
-#include "DeviceCreator.h"
+#include <iostream>
 
 namespace dmc {
 	// Static data initialization
@@ -32,15 +34,23 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	void DeviceFactory::subscribe(std::string _key, DeviceCreator *_devCreator){
+	void DeviceFactory::subscribe(std::string _key, DeviceCreator _devCreator){
 		mCreators[_key] = _devCreator;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Device* DeviceFactory::load(const std::string &_type, unsigned _id){
-		auto iter = mCreators.find(_type);
+	Device* DeviceFactory::load(unsigned _id){
+		// Load dev file, 
+		std::ifstream devFile("device_"+std::to_string(_id));
+		// Parse to Json,
+		cjson::Json devData;
+		devData.parse(devFile);
+		// Extract device type,
+		std::string devType = devData["type"];
+		// Find device creator,
+		auto iter = mCreators.find(devType);
 		if (iter != mCreators.end())
-			return iter->second->load(_id);	// Found device creator
+			return iter->second(_id, devData);	// Found device creator
 		else
 			return nullptr;	// Not found device creator
 	}
@@ -49,7 +59,7 @@ namespace dmc {
 	Device* DeviceFactory::createDevice(const std::string &_type, unsigned _id, const cjson::Json &_data){
 		auto iter = mCreators.find(_type);
 		if (iter != mCreators.end())
-			return iter->second->createDevice(_id, _data);	// Found device creator
+			return iter->second(_id, _data);	// Found device creator
 		else
 			return nullptr;	// Not found device creator
 	}
