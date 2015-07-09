@@ -5,7 +5,7 @@ endif()
 project(mockHueBridge)
 
 # Collect all sources
-file(GLOB_RECURSE MOCKHUEBRIDGE_SOURCE_FILES "code/*.cpp" "code/*.h" "code/*.inl")
+file(GLOB_RECURSE MOCKHUEBRIDGE_SOURCE_FILES "src/*.cpp" "src/*.h" "src/*.inl")
 
 # Clasify sources according to folder structure.
 # This creates a nice layout for the project in visual studio
