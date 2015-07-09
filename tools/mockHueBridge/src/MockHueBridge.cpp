@@ -3,37 +3,35 @@
 //----------------------------------------------------------------------------------------------------------------------
 #include "MockHueBridge.h"
 #include "ErrorMessage.h"
+#include <frontEnd/LocalServer.h>
+#include <frontEnd/Response.h>
+#include <frontEnd/RequestDispatcher.h>
 #include <Poco/Net/HTTPServer.h>
 #include <cjson/json.h>
+#include <sstream>
 
 using namespace Poco::Net;
 using namespace cjson;
+using namespace dmc;
+using namespace std;
 
 //----------------------------------------------------------------------------------------------------------------------
-MockHueBridge::MockHueBridge(unsigned _port) {
-	mHTTPServer = new HTTPServer(static_cast<HTTPRequestHandlerFactory*>(this), _port);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-bool MockHueBridge::listen() {
-	mHTTPServer->start();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-HTTPRequestHandler * MockHueBridge::createRequestHandler(const HTTPServerRequest & request)
+MockHueBridge::MockHueBridge(unsigned _port)
+	:mServer(mDispatcher, _port)
 {
-	return new HueRequestHandler;
+	mDispatcher.subscribe(&mReqProcessor, "/");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void MockHueBridge::HueRequestHandler::handleRequest(HTTPServerRequest & request, HTTPServerResponse & response)
+void generateResponse(const dmc::Request & _request, std::ostream& _responseBody) {
+	ErrorMessage::resourceNotAvailable().serialize(_responseBody);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void MockHueBridge::HueReqProcessor::process(const Request & _request, LocalServer & _localServer)
 {
-	Json req;
-	if (req.parse(request.stream())) {
-		//
-	} // Valid request
-	else {
-		ErrorMessage error = ErrorMessage::invalidJson();
-		error.serialize(response.send());
-	}
+	stringstream responseBody;
+	generateResponse(_request, responseBody);
+	Response resp(responseBody.str());
+	_localServer.respond(_request, resp);
 }

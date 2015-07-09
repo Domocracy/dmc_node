@@ -26,7 +26,6 @@ void processArguments(int _argc, const char** _argv) {
 int main(int _argc, const char** _argv) {
 	processArguments(_argc, _argv);
 	MockHueBridge bridge(gPort);
-	bridge.listen();
 	std::string s;
 	cin >> s;
 }
