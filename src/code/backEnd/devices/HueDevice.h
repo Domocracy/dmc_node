@@ -8,13 +8,16 @@
 #ifndef _DMCNODE_CODE_FRONTEND_HUEDEVICE_H_
 #define _DMCNODE_CODE_FRONTEND_HUEDEVICE_H_
 
+#include "backEnd\Device.h"
+
 namespace dmc{
 	namespace hue{
 			
-	
-	
-	
-	
+		class HueDevice : public Device {
+
+			CmdResult process(const std::string& command, std::ostream& info);
+		
+		};
 	
 	} //namespace hue
 } //namespace dmc
