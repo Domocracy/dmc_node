@@ -8,8 +8,8 @@
 #ifndef _DMCNODE_CODE_FRONTEND_HUEDEVICE_H_
 #define _DMCNODE_CODE_FRONTEND_HUEDEVICE_H_
 
-#include "backEnd\Device.h"
-#include "cjson\json.h"
+#include "backEnd/Device.h"
+#include "cjson/json.h"
 
 namespace dmc{
 	namespace hue{

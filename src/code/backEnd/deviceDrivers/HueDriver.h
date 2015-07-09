@@ -9,7 +9,7 @@
 #define _DMCNODE_CODE_FRONTEND_HUEDRIVER_H_
 
 #include <ostream>
-#include "cjson\json.h"
+#include "cjson/json.h"
 
 namespace dmc{ 
 	namespace hue {

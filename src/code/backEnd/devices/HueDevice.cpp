@@ -6,7 +6,8 @@
 //
 
 #include "HueDevice.h"
-#include "backEnd\deviceDrivers\HueDriver.h"
+#include "backEnd/deviceDrivers/HueDriver.h"
+#include <cassert>
 namespace dmc {
 	namespace hue {
 		//------------------------------------------------------------------------------------------------------------------
