@@ -2,6 +2,7 @@
 // Mock Hue Bridge
 //----------------------------------------------------------------------------------------------------------------------
 #include "MockHueBridge.h"
+#include "ErrorMessage.h"
 #include <Poco/Net/HTTPServer.h>
 #include <cjson/json.h>
 
@@ -32,6 +33,7 @@ void MockHueBridge::HueRequestHandler::handleRequest(HTTPServerRequest & request
 		//
 	} // Valid request
 	else {
-		//
+		ErrorMessage error = ErrorMessage::invalidJson();
+		error.serialize(response.send());
 	}
 }
