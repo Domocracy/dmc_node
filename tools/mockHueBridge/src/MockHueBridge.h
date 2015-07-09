@@ -15,13 +15,16 @@ public:
 private:
 	class HueReqProcessor : public dmc::RequestProcessor {
 		// Inherited via RequestProcessor
-		virtual void process(const dmc::Request & _request, dmc::LocalServer & _localServer) override;
+		void process(const dmc::Request & _request, dmc::LocalServer & _localServer) override;
+		virtual void generateResponse(const dmc::Request & _request, std::ostream& _responseBody) = 0;
+	};
 
-		void generateResponse(const dmc::Request & _request, std::ostream& _responseBody);
+	class NoUser : public HueReqProcessor {
+		void generateResponse(const dmc::Request & _request, std::ostream& _responseBody) override;
 	};
 
 private:
-	HueReqProcessor			mReqProcessor;
+	NoUser					mNoUser;
 	dmc::RequestDispatcher	mDispatcher;
 	dmc::LocalServer		mServer;
 };

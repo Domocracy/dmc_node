@@ -20,12 +20,13 @@ using namespace std;
 MockHueBridge::MockHueBridge(unsigned _port)
 	:mServer(mDispatcher, _port)
 {
-	mDispatcher.subscribe(&mReqProcessor, "/");
+	mDispatcher.subscribe(&mNoUser, "/api/"); // By default, users not accepted
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void MockHueBridge::HueReqProcessor::generateResponse(const dmc::Request & _request, std::ostream& _responseBody) {
-	if (_request.method() == "GET") {
+void MockHueBridge::NoUser::generateResponse(const dmc::Request & _request, std::ostream& _responseBody) {
+	ErrorMessage::unauthorizedUser(_request.url()).serialize(_responseBody);
+	/*if (_request.method() == "GET") {
 		ErrorMessage::resourceNotAvailable(_request.url()).serialize(_responseBody);
 	}
 	else if (_request.method() == "POST") {
@@ -39,6 +40,7 @@ void MockHueBridge::HueReqProcessor::generateResponse(const dmc::Request & _requ
 	}
 	else
 		ErrorMessage::methodNotAvailable(_request.url(), _request.method()).serialize(_responseBody);
+		*/
 }
 
 //----------------------------------------------------------------------------------------------------------------------
