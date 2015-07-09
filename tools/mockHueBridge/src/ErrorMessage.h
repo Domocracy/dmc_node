@@ -15,7 +15,7 @@ public:
 	static ErrorMessage unauthorizedUser(const std::string& _uri);
 	static ErrorMessage invalidJson(const std::string& _uri);
 	static ErrorMessage resourceNotAvailable(const std::string& _uri);
-	static ErrorMessage methodNotAvailable(const std::string& _uri);
+	static ErrorMessage methodNotAvailable(const std::string& _uri, const std::string& _method);
 	static ErrorMessage missingBodyParameters(const std::string& _uri);
 	static ErrorMessage parameterNotAvailable(const std::string& _uri);
 	static ErrorMessage invalidValue(const std::string& _uri);

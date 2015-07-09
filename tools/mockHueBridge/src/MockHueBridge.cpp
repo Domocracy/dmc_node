@@ -25,7 +25,20 @@ MockHueBridge::MockHueBridge(unsigned _port)
 
 //----------------------------------------------------------------------------------------------------------------------
 void MockHueBridge::HueReqProcessor::generateResponse(const dmc::Request & _request, std::ostream& _responseBody) {
-	ErrorMessage::resourceNotAvailable(_request.url()).serialize(_responseBody);
+	if (_request.method() == "GET") {
+		ErrorMessage::resourceNotAvailable(_request.url()).serialize(_responseBody);
+	}
+	else if (_request.method() == "POST") {
+		ErrorMessage::resourceNotAvailable(_request.url()).serialize(_responseBody);
+	}
+	else if (_request.method() == "PUT") {
+		ErrorMessage::resourceNotAvailable(_request.url()).serialize(_responseBody);
+	}
+	else if (_request.method() == "DELETE") {
+		ErrorMessage::resourceNotAvailable(_request.url()).serialize(_responseBody);
+	}
+	else
+		ErrorMessage::methodNotAvailable(_request.url(), _request.method()).serialize(_responseBody);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
