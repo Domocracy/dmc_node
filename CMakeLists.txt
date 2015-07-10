@@ -52,6 +52,8 @@ add_subdirectory(lib/poco)
 add_definitions( -DPOCO_STATIC -DPOCO_NO_AUTOMATIC_LIBS)
 set( LIB_MODE STATIC )
 	
+# Add tools
+add_subdirectory(tools)
 # Add tests
 enable_testing()
 include_directories(src/code)
