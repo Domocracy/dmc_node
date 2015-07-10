@@ -3,8 +3,6 @@
 //	Dmc Node
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-
 #ifndef _DMCNODE_CODE_FRONTEND_HUEDRIVER_H_
 #define _DMCNODE_CODE_FRONTEND_HUEDRIVER_H_
 
@@ -25,7 +23,11 @@ namespace dmc{
 			//Singleton
 
 			static HueDriver*	get();
-			static void			init();
+			/// Creates the singleton instance of HueDriver using the configuration read from the _config stream
+			/// \param _config A stream containing a configuration for the driver. It must be in Json format.
+			/// \return \c false if any issue prevented correct initialization of the driver. \c true if everything
+			/// worked fine.
+			static bool			init(std::istream& _config);
 
 			State state() const	{ return mState; }
 
@@ -38,13 +40,10 @@ namespace dmc{
 			cjson::Json		scanBridges		();
 			bool			registerBridge	(const cjson::Json& _bridgeToConnect);
 		private:
-
 			State mState;
 			HueDriver(const cjson::Json&);
 
 			static HueDriver* sHueDriver;
-
-
 		};
 	
 	} //namespace hue
