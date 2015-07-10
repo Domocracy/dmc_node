@@ -25,13 +25,12 @@ namespace dmc {
 	class DummyCreator {
 	public:
 		Device* operator()(unsigned _id, const cjson::Json &_data) {
-			auto iter = mDevices.find(_id);
-			if(iter != mDevices.end())
-				return iter->second;
+			if(_data.isObject() && _data.contains("state"))
+				return new DummyDevice(_id);
 			else
 				return nullptr;
 		}
-		std::unordered_map<unsigned, Device*> mDevices;
+		
 	};
 }
 
@@ -71,7 +70,6 @@ void testLoad() {
 	// --- Dummy DeviceCreator for testing ---
 	const std::string cDummyType = "dummy";
 	DummyCreator creator;
-	creator.mDevices[64] = new DummyDevice(64);
 	factory->subscribe(cDummyType, creator);
 
 	// --- Create file to be load ---
@@ -88,9 +86,16 @@ void testLoad() {
 void testCreation() {
 	DeviceFactory::init();
 	DeviceFactory *factory = DeviceFactory::get();
+	// --- Dummy DeviceCreator for testing ---
+	const std::string cDummyType = "dummy";
+	DummyCreator creator;
+	factory->subscribe(cDummyType, creator);
 
-	assert(factory->createDevice("dummy", 64, ""));
-	assert(factory->createDevice("noExist", 64, ""));
+	cjson::Json validData;
+	validData.parse(R"({"state":true})");
+	assert(factory->createDevice("dummy", 64, validData));		// Valid creation.
+	assert(!factory->createDevice("dummy", 64, ""));			// Invalid Data.
+	assert(!factory->createDevice("NoExist", 64, validData));	// Unexisting device creator.
 
 	DeviceFactory::end();
 }

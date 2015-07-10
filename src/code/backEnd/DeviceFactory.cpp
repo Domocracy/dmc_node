@@ -53,7 +53,7 @@ namespace dmc {
 		// Find device creator,
 		auto iter = mCreators.find(devType);
 		if (iter != mCreators.end()) 
-			return iter->second(_id, devData);	// Found device creator	
+			return iter->second(_id, devData["data"]);	// Found device creator	
 		else
 			return nullptr;	// Not found device creator
 	}
