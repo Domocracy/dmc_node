@@ -21,7 +21,7 @@ namespace dmc {
 	class DeviceFactory {
 	public:
 		/// Interface of device creators/loaders
-		typedef std::function<Device* (unsigned _id, cjson::Json _data)> DeviceCreator;
+		typedef std::function<Device* (unsigned _id, const cjson::Json &_data)> DeviceCreator;
 
 		/// Static initialization of DeviceFactory. 
 		static void init();

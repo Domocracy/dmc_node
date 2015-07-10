@@ -39,18 +39,21 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Device* DeviceFactory::load(unsigned _id){
+	Device* DeviceFactory::load(unsigned _id) {
 		// Load dev file, 
-		std::ifstream devFile("device_"+std::to_string(_id));
+		std::ifstream devFile("device_" + std::to_string(_id));
+		if(!devFile.is_open())	// Check if device file exists.
+			return nullptr;
 		// Parse to Json,
 		cjson::Json devData;
 		devData.parse(devFile);
+		devFile.close();
 		// Extract device type,
 		std::string devType = devData["type"];
 		// Find device creator,
 		auto iter = mCreators.find(devType);
-		if (iter != mCreators.end())
-			return iter->second(_id, devData);	// Found device creator
+		if (iter != mCreators.end()) 
+			return iter->second(_id, devData);	// Found device creator	
 		else
 			return nullptr;	// Not found device creator
 	}
