@@ -22,14 +22,15 @@ int main(int, const char**) {
 	HueDriver::init(serverConfig);
 	HueDriver* driver = HueDriver::get();
 	Json response;
-	if (driver->getData("/api/newdeveloper/lights/2", response, cout))
+	/*if (driver->getData("/api/newdeveloper/lights/2", response, cout))
 	{
-		stringstream ss;
-		response.serialize(ss);
-		cout << ss.str();
 		cout << "\nResponse is ok\n";
+		Json req;
+		req["on"] = true;
+		req.serialize(cout);
+		driver->putData("/api/newdeveloper/lights/2/state", req, cout);
 	}
 	else {
 		cout << "\nError response\n";
-	}
+	}*/
 }

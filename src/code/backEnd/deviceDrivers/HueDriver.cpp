@@ -62,11 +62,13 @@ namespace dmc { namespace hue {
 		HTTPRequest req;
 		req.setMethod("PUT");
 		req.setURI(_url);
-		_request.serialize(session.sendRequest(req));
-		stringstream ss;
-		receiveResp(session, ss);
+		std::string body = _request.serialize();
+		req.setContentLength(body.size());
+		session.sendRequest(req) << body;
+		stringstream respSs;
+		receiveResp(session, respSs);
 		Json respData;
-		if(!respData.parse(ss)){
+		if(!respData.parse(respSs)){
 			_errorInfo << "Error parsing bridge response\n";
 			return false;
 		}
@@ -79,7 +81,9 @@ namespace dmc { namespace hue {
 		HTTPRequest req;
 		req.setMethod("POST");
 		req.setURI(_url);
-		_request.serialize(session.sendRequest(req));
+		std::string body = _request.serialize();
+		req.setContentLength(body.size());
+		session.sendRequest(req) << body;
 		stringstream ss;
 		receiveResp(session, ss);
 		Json respData;
@@ -96,7 +100,9 @@ namespace dmc { namespace hue {
 		HTTPRequest req;
 		req.setMethod("DELETE");
 		req.setURI(_url);
-		_request.serialize(session.sendRequest(req));
+		std::string body = _request.serialize();
+		req.setContentLength(body.size());
+		session.sendRequest(req) << body;
 		stringstream ss;
 		receiveResp(session, ss);
 		Json respData;
