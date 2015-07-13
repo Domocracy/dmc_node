@@ -46,44 +46,82 @@ namespace dmc { namespace hue {
 		HTTPRequest req;
 		req.setMethod("GET");
 		req.setURI(_url);
-		//req.setHost(mBridgeIp.host().toString());
 		session.sendRequest(req);
-		HTTPResponse resp;
-		string msgPiece;
 		stringstream ss;
-		std::istream& respBody = session.receiveResponse(resp);
-		while(!respBody.eof()) {
-			respBody >> msgPiece;
-			ss << msgPiece;
-		}
-		cout << ss.str();
+		receiveResp(session, ss);
 		if(!_data.parse(ss)){
 			_errorInfo << "Error parsing bridge response\n";
 			return false;
 		}
-		if (_data.contains("error")) {
-			_errorInfo << std::string(_data["error"].serialize());
-			return false;
-		}
-		return true;
+		return isSuccess(_data, _errorInfo);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	bool HueDriver::putData(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo) {
 		HTTPClientSession session(mBridgeIp);
 		HTTPRequest req;
-		req.setMethod("GET");
+		req.setMethod("PUT");
 		req.setURI(_url);
-		//req.setHost(mBridgeIp.host().toString());
 		_request.serialize(session.sendRequest(req));
-		HTTPResponse resp;
+		stringstream ss;
+		receiveResp(session, ss);
 		Json respData;
-		if(!respData.parse(session.receiveResponse(resp))){
+		if(!respData.parse(ss)){
 			_errorInfo << "Error parsing bridge response\n";
 			return false;
 		}
-		if (respData.contains("error")) {
-			_errorInfo << std::string(respData["error"].serialize());
+		return isSuccess(respData, _errorInfo);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	bool HueDriver::postData(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo) {
+		HTTPClientSession session(mBridgeIp);
+		HTTPRequest req;
+		req.setMethod("POST");
+		req.setURI(_url);
+		_request.serialize(session.sendRequest(req));
+		stringstream ss;
+		receiveResp(session, ss);
+		Json respData;
+		if(!respData.parse(ss)){
+			_errorInfo << "Error parsing bridge response\n";
+			return false;
+		}
+		return isSuccess(respData, _errorInfo);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	bool HueDriver::deleteData(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo) {
+		HTTPClientSession session(mBridgeIp);
+		HTTPRequest req;
+		req.setMethod("DELETE");
+		req.setURI(_url);
+		_request.serialize(session.sendRequest(req));
+		stringstream ss;
+		receiveResp(session, ss);
+		Json respData;
+		if(!respData.parse(ss)){
+			_errorInfo << "Error parsing bridge response\n";
+			return false;
+		}
+		return isSuccess(respData, _errorInfo);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	void HueDriver::receiveResp(HTTPClientSession& _session, std::stringstream& _dst) {
+		HTTPResponse resp;
+		string msgPiece;
+		std::istream& respBody = _session.receiveResponse(resp);
+		while(!respBody.eof()) {
+			respBody >> msgPiece;
+			_dst << msgPiece;
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	bool HueDriver::isSuccess(const cjson::Json& _data, std::ostream& _errorInfo) {
+		if (_data.isArray() && _data(0).contains("error")) {
+			_data.serialize(_errorInfo);
 			return false;
 		}
 		return true;
