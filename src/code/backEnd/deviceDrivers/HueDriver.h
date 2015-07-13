@@ -30,13 +30,21 @@ namespace dmc{
 			/// \return \c false if any issue prevented correct initialization of the driver. \c true if everything
 			/// worked fine.
 			static bool			init(std::istream& _config);
+			static bool			init(cjson::Json& _config);
 
 			State state() const	{ return mState; }
 
-			bool getData		(const std::string& _url, cjson::Json& _data, std::ostream& _errorInfo);
-			bool putData		(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
-			bool postData		(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
-			bool deleteData		(const std::string& _url, const cjson::Json& _data, std::ostream& _errorInfo);
+			/// Puts a get request to the current bridge
+			/// It also processes the result in case of error.
+			/// \param _url RESTfull API resource url.
+			/// \param _response This Json will be filled with the bridge's response.
+			/// \param _errorInfo In case of error, information about the error will be put to this stream
+			/// \return \c true if everything went fine, \c false if an error was returned by the server or some
+			/// other error happened
+			bool getData		(const std::string& _url, cjson::Json& _response, std::ostream& _errorInfo);
+			bool putData		(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo);
+			bool postData		(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo);
+			bool deleteData		(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo);
 
 			bool			autoConnect		();
 			cjson::Json		scanBridges		();
