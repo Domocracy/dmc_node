@@ -112,6 +112,7 @@ void specificDispatch() {
 	disp.subscribe(&procA, "/subscribe");
 	Processor procB;
 	disp.subscribe(&procB, "/subscribe/dev");
+	disp.subscribe(&procB, "/subscribe/dev2/");
 
 	LocalServer server;
 	Request reqA(64);
@@ -127,4 +128,11 @@ void specificDispatch() {
 	assert(disp.dispatch(server, reqB));
 	assert(procA.mCounter == 1);
 	assert(procB.mCounter == 1);
+
+	Request reqC(64);
+	reqC.url() = "/subscribe/dev2";
+	reqC.body() = "";
+	assert(disp.dispatch(server, reqC));
+	assert(procA.mCounter == 1);
+	assert(procB.mCounter == 2);
 }
