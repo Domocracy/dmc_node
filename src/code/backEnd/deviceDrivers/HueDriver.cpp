@@ -33,6 +33,7 @@ namespace dmc { namespace hue {
 		if(!config.parse(_configStream))
 			return false;
 		sHueDriver = new HueDriver(config);
+		registerDeviceCreators();
 		return sHueDriver != nullptr;
 	}
 
@@ -40,6 +41,7 @@ namespace dmc { namespace hue {
 	bool HueDriver::init(cjson::Json& _config) {
 		assert(!sHueDriver);
 		sHueDriver = new HueDriver(_config);
+		registerDeviceCreators();
 		return sHueDriver != nullptr;
 	}
 
@@ -119,7 +121,6 @@ namespace dmc { namespace hue {
 	//------------------------------------------------------------------------------------------------------------------
 	void HueDriver::registerDeviceCreators() {
 		DeviceFactory *factory = DeviceFactory::get();
-
 		factory->subscribe("HueDevice", [](unsigned _id, const cjson::Json &_data) { return new HueDevice(_id, _data);});
 	}
 
