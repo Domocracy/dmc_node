@@ -17,8 +17,6 @@ add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 	COMMENT "Generating API documentation with Doxygen" VERBATIM)
 endif(DOXYGEN_FOUND)
 
-# Actual node project
-add_subdirectory(src)
 # Used libraries
 add_subdirectory(lib/cjson/src)
 
@@ -51,7 +49,10 @@ add_subdirectory(lib/poco)
 
 add_definitions( -DPOCO_STATIC -DPOCO_NO_AUTOMATIC_LIBS)
 set( LIB_MODE STATIC )
-	
+
+# Actual node project
+add_subdirectory(src)
+
 # Add tools
 add_subdirectory(tools)
 # Add tests

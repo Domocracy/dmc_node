@@ -13,23 +13,31 @@
 #define _DMC_NODE_DMC_NODE_H_
 
 #include <string>
+#include <frontEnd/RequestDispatcher.h>
+#include <frontEnd/LocalServer.h>
+#include <backEnd/DeviceManager.h>
+#include <backEnd/requestProcessors/CommandDispatcher.h>
 
 namespace dmc{
 
 	/// Main process of Domocracy. Initialize application.
 	class DmcNode{
 	public:	// Public interface
-		/// Constructor. Receive params from command line with information for properly initialization.
-		/// \param _argc Number of input arguments
-		/// \param _argv Array with arguments.
-		DmcNode	(int _argc, const char** _argv);
+		const int cHttpPort = 5028;
+
+		/// Initialize main components of the application
+		DmcNode	();
 
 	private:	// Private methods
-		void processArguments	(int _argc, char **_argv);
-		void initServer			();
+		
 
 	private:	// Members
+		RequestDispatcher	mRequestDispatcher;
+		LocalServer			mServer;
+		DeviceManager		mDevMgr;
 
+		// Request processors.
+		CommandDispatcher	mCmdDispatcher;
 	};
 
 

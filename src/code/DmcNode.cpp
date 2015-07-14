@@ -11,20 +11,10 @@
 
 namespace dmc{
 	//---------------------------------------------------------------------------------------------------------------------
-	DmcNode::DmcNode(int _argc, const char** _argv){
-		/*processArguments(_argc, _argv);
-		initServer();*/
+	DmcNode::DmcNode(): mServer(mRequestDispatcher, cHttpPort), mCmdDispatcher(mDevMgr, mRequestDispatcher){
+		
 	}
 
-	//---------------------------------------------------------------------------------------------------------------------
-	void DmcNode::processArguments(int _argc, char** _argv){
-		/*for (int i = 0; i < _argc; ++i) {
-			std::string argument(_argv[i]);
-			if (argument.substr(0, 9) == "-httpPort=") {
-				mHttpPort = atoi(argument.substr(9).c_str());
-			}
-		}*/
-	}
 
 	//---------------------------------------------------------------------------------------------------------------------
 }
