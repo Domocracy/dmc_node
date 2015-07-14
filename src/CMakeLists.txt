@@ -42,5 +42,4 @@ target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Net/
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Util/include)
 
 target_link_libraries(dmcNode LINK_PUBLIC cjson)
-target_link_libraries(dmcNode LINK_PUBLIC PocoNet)
-target_link_libraries(dmcNode LINK_PUBLIC PocoUtil)
+target_link_libraries(dmcNode LINK_PUBLIC PocoNet PocoFoundation PocoUtil)

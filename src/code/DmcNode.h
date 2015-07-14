@@ -14,30 +14,22 @@
 
 #include <string>
 
-#include <http/httpServer.h>
-
 namespace dmc{
-	const std::string cDeviceUrl		= "dev/";
-	const std::string cSubscriptionUrl	= "subscription/";
-	const std::string cRequestInfoUrl	= "request/";
 
+	/// Main process of Domocracy. Initialize application.
 	class DmcNode{
 	public:	// Public interface
-		DmcNode	(int _argc, char** _argv);
+		/// Constructor. Receive params from command line with information for properly initialization.
+		/// \param _argc Number of input arguments
+		/// \param _argv Array with arguments.
+		DmcNode	(int _argc, const char** _argv);
 
 	private:	// Private methods
 		void processArguments	(int _argc, char **_argv);
 		void initServer			();
 
-		http::Response infoRequest		(http::Request);
-		http::Response newSubscription	(http::Request);
-		http::Response execCmd			(http::Request);
-
 	private:	// Members
-		int mHttpPort = 80;
-		dmc::http::Server *mServer;
 
-		friend http::Server::UrlHandler;
 	};
 
 
