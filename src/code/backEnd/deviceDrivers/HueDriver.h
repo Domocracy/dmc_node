@@ -51,6 +51,8 @@ namespace dmc{
 			cjson::Json		scanBridges		();
 			bool			registerBridge	(const cjson::Json& _bridgeToConnect);
 		private:
+			void registerDeviceCreators();
+
 			void receiveResp(Poco::Net::HTTPClientSession& _session, std::stringstream& _dst);
 			bool isSuccess(const cjson::Json& _response, std::ostream& _errorInfo);
 

@@ -16,11 +16,13 @@ namespace dmc{
 			
 		class HueDevice : public Device {
 		public:
+			HueDevice(unsigned _id, const cjson::Json &_data);
 			CmdResult process(const std::string& command, std::ostream& info);
 		private:
 			bool parseCommand(const std::string& command);
 		private:
-			cjson::Json mJson;
+			cjson::Json mCurrentCmd;
+			std::string mUrl;
 		};
 	
 	} //namespace hue

@@ -8,6 +8,9 @@
 #include <istream>
 #include <sstream>
 
+#include <backEnd/DeviceFactory.h>
+#include <backEnd/devices/HueDevice.h>
+
 #include <Poco/Net/HTTPClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
@@ -111,6 +114,13 @@ namespace dmc { namespace hue {
 			return false;
 		}
 		return isSuccess(respData, _errorInfo);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	void HueDriver::registerDeviceCreators() {
+		DeviceFactory *factory = DeviceFactory::get();
+
+		factory->subscribe("HueDevice", [](unsigned _id, const cjson::Json &_data) { return new HueDevice(_id, _data);});
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
