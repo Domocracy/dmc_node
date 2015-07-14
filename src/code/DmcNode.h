@@ -29,7 +29,7 @@ namespace dmc{
 		DmcNode	();
 
 	private:	// Private methods
-		
+		void initDrivers();
 
 	private:	// Members
 		RequestDispatcher	mRequestDispatcher;
