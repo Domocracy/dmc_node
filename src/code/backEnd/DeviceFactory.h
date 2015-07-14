@@ -9,16 +9,20 @@
 #define _DMCNODE_CODE_FRONTEND_DEVICEFACTORY_H_
 
 #include <string>
+#include <functional>
+#include <unordered_map>
 
 // Forward declarations
 namespace cjson { class Json; };
 
 namespace dmc {
-	class DeviceCreator;
 	class Device;
 
 	class DeviceFactory {
 	public:
+		/// Interface of device creators/loaders
+		typedef std::function<Device* (unsigned _id, const cjson::Json &_data)> DeviceCreator;
+
 		/// Static initialization of DeviceFactory. 
 		static void init();
 		/// Get instance of DeviceFactory.
@@ -28,7 +32,7 @@ namespace dmc {
 
 		/// Add new device creator to the factory.
 		/// \param _devCreator pointer to a DeviceCreator.
-		void subscribe(std::string _key, DeviceCreator *_devCreator);
+		void subscribe(std::string _key, DeviceCreator _devCreator);
 
 		/// Load existing device from persistent memory.
 		/// \param _id identification number to search the device
@@ -44,6 +48,10 @@ namespace dmc {
 
 	private:
 		DeviceFactory();
+
+		static DeviceFactory *mInstance;
+
+		std::unordered_map<std::string, DeviceCreator> mCreators;
 	};	//	class DeviceFactory
 }	//	namespace dmc
 

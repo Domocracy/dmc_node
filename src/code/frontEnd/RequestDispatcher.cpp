@@ -41,6 +41,12 @@ namespace dmc {
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	void RequestDispatcher::subscribe(RequestProcessor * _requestProcessor, const std::string & _localUrl) {
-		mSubscriptions[_localUrl] = _requestProcessor;
+		std::string url;
+		size_t urlSize = _localUrl.size();
+		if(urlSize > 1 && _localUrl[urlSize-1] == '/')
+			url = _localUrl.substr(0, urlSize-1); // Skip trailing slash
+		else
+			url = _localUrl;
+		mSubscriptions[url] = _requestProcessor;
 	}
 }

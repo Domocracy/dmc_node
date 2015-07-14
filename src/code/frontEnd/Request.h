@@ -4,23 +4,26 @@
 #ifndef _DMCNODE_CODE_FRONTEND_REQUEST_H_
 #define _DMCNODE_CODE_FRONTEND_REQUEST_H_
 
-#include <cjson/json.h>
+#include <string>
 
 namespace dmc {
 	class Request {
 	public:
 		Request(unsigned _id) : mId(_id) {}
 		// Accessors
-		unsigned			id	() const { return mId;	}
-		const std::string&	url	() const { return mUrl;	}
-		const cjson::Json&	body() const { return mJson;}
-		std::string&		url	() { return mUrl;	}
-		cjson::Json&		body() { return mJson;	}
+		unsigned			id		() const { return mId;	}
+		const std::string&	url		() const { return mUrl;	}
+		const std::string&	method	() const { return mMethod;	}
+		const std::string&	body	() const { return mJson;}
+		std::string&		url		() { return mUrl;	}
+		std::string&		method	() { return mMethod;	}
+		std::string&		body	() { return mJson;	}
 
 	private:
 		unsigned	mId;
 		std::string mUrl;
-		cjson::Json mJson;
+		std::string mJson;
+		std::string mMethod;
 
 	};
 

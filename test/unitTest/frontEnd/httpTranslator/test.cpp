@@ -104,28 +104,23 @@ int main(int, const char**) {
 	Request dmcReq(1);
 	assert(a.translate(req, dmcReq));
 	assert(dmcReq.url() == "/a");
-	assert(int(dmcReq.body()) == 3);
-	// Complete request except for content-length (must fail)
+	assert(dmcReq.method() == "GET");
+	assert(dmcReq.body() == "3");
+	// Complete request except for content-length. Must ignore the body
 	TestHttpRequest req5;
 	req5.setURI("/a");
 	req5.mStream << "3";
 	HTTPTranslator f;
 	Request dmcReq5(1);
-	assert(!f.translate(req5, dmcReq5));
+	assert(f.translate(req5, dmcReq5));
+	assert(dmcReq5.method() == "GET");
+	assert(dmcReq5.body() == "");
 	// Ill-formed request with no url HTTPRequest req;
 	TestHttpRequest req2;
 	req2.setURI("");
 	HTTPTranslator b;
 	Request dmcReq2(2);
 	assert(!b.translate(req2, dmcReq2)); // Il-formed request must fail to translate
-	// Ill-formed request with invalid json;
-	TestHttpRequest req3;
-	req3.setURI("/b");
-	req3.mStream << "meh!";
-	req3.setContentLength(4);
-	HTTPTranslator c;
-	Request dmcReq3(3);
-	assert(!c.translate(req3, dmcReq3)); // Il-formed request must fail to translate
 	return 0;
 }
 
