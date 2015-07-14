@@ -20,7 +20,8 @@ namespace dmc{
 		private:
 			bool parseCommand(const std::string& command);
 		private:
-			cjson::Json mJson;
+			cjson::Json mCurrentCmd;
+			std::string mUrl;
 		};
 	
 	} //namespace hue

@@ -19,33 +19,33 @@ namespace dmc {
 			if (!parseCommand(_command))
 				return HueDevice::CmdResult::CommandError;
 	
-			std::string method = mJson["method"];
-			Json& commandData = mJson["command"];
+			std::string method = mCurrentCmd["method"];
+			Json& commandData = mCurrentCmd["command"];
 			HueDriver* hubDriver = HueDriver::get();
 
 			bool res;
 			if (method == "GET") {
 				Json dst;
-				res = hubDriver->getData(mJson["url"], dst, _info);
+				res = hubDriver->getData(mUrl, dst, _info);
 			} else if (method == "POST") {
-				res = hubDriver->postData(mJson["url"], mJson["command"], _info);
+				res = hubDriver->postData(mUrl, mCurrentCmd["command"], _info);
 			} else if (method == "DELETE") {
-				res = hubDriver->deleteData(mJson["url"], mJson["command"], _info);
+				res = hubDriver->deleteData(mUrl, mCurrentCmd["command"], _info);
 			} else if (method == "PUT") {
-				res = hubDriver->putData(mJson["url"], mJson["command"], _info);
+				res = hubDriver->putData(mUrl, mCurrentCmd["command"], _info);
 			}
 			return res? CmdResult::Ok : CmdResult::ExecutionError;
 		};
 
 		//------------------------------------------------------------------------------------------------------------------
 		bool HueDevice::parseCommand(const std::string& _command) {
-			if(!mJson.parse(_command.c_str()))
+			if(!mCurrentCmd.parse(_command.c_str()))
 				return false;
-			if(!mJson.contains("method"))
+			if(!mCurrentCmd.contains("method"))
 				return false;
-			if(!mJson["method"].isString())
+			if(!mCurrentCmd["method"].isString())
 				return false;
-			if(!mJson.contains("command"))
+			if(!mCurrentCmd.contains("command"))
 				return false;
 			return true;
 		}
