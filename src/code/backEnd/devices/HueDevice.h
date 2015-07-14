@@ -18,8 +18,9 @@ namespace dmc{
 		public:
 			CmdResult process(const std::string& command, std::ostream& info);
 		private:
+			bool parseCommand(const std::string& command);
+		private:
 			cjson::Json mJson;
-			
 		};
 	
 	} //namespace hue

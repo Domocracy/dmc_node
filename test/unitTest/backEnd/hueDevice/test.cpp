@@ -14,7 +14,7 @@ using namespace dmc;
 using namespace cjson;
 int main(int, const char**) {
 	
-	Json testGet;
+	/*Json testGet;
 	Json testPost;
 	Json testPut;
 	Json testDelete;
@@ -23,7 +23,7 @@ int main(int, const char**) {
 	testDelete["command"] = "this is the test for delete";
 
 
-
+	*/
 
 
 }
