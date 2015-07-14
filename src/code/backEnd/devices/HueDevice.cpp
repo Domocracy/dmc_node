@@ -14,6 +14,11 @@ using namespace cjson;
 namespace dmc {
 	namespace hue {
 		//------------------------------------------------------------------------------------------------------------------
+		HueDevice::HueDevice(unsigned _id, const Json &_data) : Device(_id) {
+			mUrl = _data["url"];
+		}
+
+		//------------------------------------------------------------------------------------------------------------------
 		HueDevice::CmdResult HueDevice::process(const std::string & _command, std::ostream & _info) {
 			// Validate command
 			if (!parseCommand(_command))
