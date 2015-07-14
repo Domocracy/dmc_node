@@ -31,13 +31,13 @@ namespace dmc {
 			bool res;
 			if (method == "GET") {
 				Json dst;
-				res = hubDriver->getData(mUrl, dst, _info);
+				res = hubDriver->getData(mUrl + std::string(mCurrentCmd["urlAp"]), dst, _info);
 			} else if (method == "POST") {
-				res = hubDriver->postData(mUrl, mCurrentCmd["command"], _info);
+				res = hubDriver->postData(mUrl + std::string(mCurrentCmd["urlAp"]), mCurrentCmd["command"], _info);
 			} else if (method == "DELETE") {
-				res = hubDriver->deleteData(mUrl, mCurrentCmd["command"], _info);
+				res = hubDriver->deleteData(mUrl + std::string(mCurrentCmd["urlAp"]), mCurrentCmd["command"], _info);
 			} else if (method == "PUT") {
-				res = hubDriver->putData(mUrl, mCurrentCmd["command"], _info);
+				res = hubDriver->putData(mUrl + std::string(mCurrentCmd["urlAp"]), mCurrentCmd["command"], _info);
 			}
 			return res? CmdResult::Ok : CmdResult::ExecutionError;
 		};
