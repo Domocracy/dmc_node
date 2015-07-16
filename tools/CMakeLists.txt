@@ -4,4 +4,4 @@ if(POLICY CMP0048)
 endif()
 
 # Adding Test types
-add_subdirectory(mockHueBridge)
+add_subdirectory(hueAttack)
