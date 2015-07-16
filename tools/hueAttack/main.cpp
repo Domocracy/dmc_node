@@ -17,7 +17,7 @@ int main(int, const char**) {
 	HTTPClientSession session("10.100.3.211");
 	HTTPRequest cmdOff;
 	cmdOff.setMethod("PUT");
-	cmdOff.setURI("/api/newdeveloper/lights/2/state");
+	cmdOff.setURI("/api/attack/lights/2/state");
 	std::string body = "{\n\t\"on\": false\n}";
 	cmdOff.setContentLength(body.size());
 
