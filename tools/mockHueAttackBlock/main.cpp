@@ -3,25 +3,34 @@
 // DMC_NODE
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include <iostream>
+#include <fstream>
+#include <cjson/json.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPClientSession.h>
+#include <backEnd/deviceDrivers/HueDriver.h>
 
 using namespace Poco::Net;
+using namespace cjson;
+using namespace std;
+using namespace dmc::hue;
+
+Json config;
+HueDriver* gDriver = nullptr;
+
+bool isHueVulnerable() {
+	//
+	return false;
+}
 
 int main(int, const char**) {
-	
-	std::cout << "Scanning network" << std::endl;
-	Sleep(3000);
-	std::cout << "Detected intrusion in Hue Bridge" << std::endl;
-	
-	HTTPClientSession session("10.100.3.211");
-	HTTPRequest delUsr;
-	delUsr.setMethod("DELETE");
-	delUsr.setURI("/api/newdeveloper/config/whitelist/attack");
-	session.sendRequest(delUsr);
+	config.parse(fstream("config.json"));
+	HueDriver::init(config["bridge"]);
+	gDriver = HueDriver::get();
 
-	Sleep(1000);
-	std::cout << "Blocked intrusion" << std::endl;
+	// Detect vulnerabilities: -Vulnerable software version & vulnerable users.
+	if(isHueVulnerable()) {
+		// Delete attacker Id.
+		// Update bridge software.
+	}
 }

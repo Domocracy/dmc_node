@@ -27,22 +27,20 @@ namespace dmc { namespace hue {
 	HueDriver* HueDriver::sHueDriver = nullptr;
 
 	//------------------------------------------------------------------------------------------------------------------
-	bool HueDriver::init(std::istream& _configStream) {
+	void HueDriver::init(std::istream& _configStream) {
 		assert(!sHueDriver);
 		Json config;
 		if(!config.parse(_configStream))
-			return false;
+			return;
 		sHueDriver = new HueDriver(config);
 		registerDeviceCreators();
-		return sHueDriver != nullptr;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	bool HueDriver::init(cjson::Json& _config) {
+	void HueDriver::init(cjson::Json& _config) {
 		assert(!sHueDriver);
 		sHueDriver = new HueDriver(_config);
 		registerDeviceCreators();
-		return sHueDriver != nullptr;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -30,8 +30,8 @@ namespace dmc{
 			/// \param _config A stream containing a configuration for the driver. It must be in Json format.
 			/// \return \c false if any issue prevented correct initialization of the driver. \c true if everything
 			/// worked fine.
-			static bool			init(std::istream& _config);
-			static bool			init(cjson::Json& _config);
+			static void			init(std::istream& _config);
+			static void			init(cjson::Json& _config);
 
 			State state() const	{ return mState; }
 
