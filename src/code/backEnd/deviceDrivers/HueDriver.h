@@ -55,10 +55,12 @@ namespace dmc{
 
 			void receiveResp(Poco::Net::HTTPClientSession& _session, std::stringstream& _dst);
 			bool isSuccess(const cjson::Json& _response, std::ostream& _errorInfo);
+			bool sendRequest(const std::string& _method, const std::string& _uri, const cjson::Json& _body, cjson::Json& _dst, std::ostream& _errorInfo);
 
 			State mState;
 			HueDriver(const cjson::Json&);
 			Poco::Net::SocketAddress mBridgeIp;
+			string mPrefix;
 
 			static HueDriver* sHueDriver;
 		};

@@ -44,76 +44,45 @@ namespace dmc { namespace hue {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	bool HueDriver::getData(const std::string& _url, cjson::Json& _data, std::ostream& _errorInfo) {
+	bool HueDriver::sendRequest(const std::string& _method, const std::string& _uri, const cjson::Json& _body, cjson::Json& _dst, std::ostream& _errorInfo) {
 		HTTPClientSession session(mBridgeIp);
 		HTTPRequest req;
-		req.setMethod("GET");
-		req.setURI(_url);
-		session.sendRequest(req);
+		req.setMethod(_method);
+		req.setURI(mPrefix + _uri);
+		std::ostream& reqStrm = session.sendRequest(req);
+		if (!_body.isNull()) {
+			_body.serialize(reqStrm);
+		}
 		stringstream ss;
 		receiveResp(session, ss);
-		if(!_data.parse(ss)){
+		if(!_dst.parse(ss)){
 			_errorInfo << "Error parsing bridge response\n";
 			return false;
 		}
-		return isSuccess(_data, _errorInfo);
+		return isSuccess(_dst, _errorInfo);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	bool HueDriver::getData(const std::string& _url, cjson::Json& _data, std::ostream& _errorInfo) {
+		return sendRequest("GET", _url, Json(), _data, _errorInfo);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	bool HueDriver::putData(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo) {
-		HTTPClientSession session(mBridgeIp);
-		HTTPRequest req;
-		req.setMethod("PUT");
-		req.setURI(_url);
-		std::string body = _request.serialize();
-		req.setContentLength(body.size());
-		session.sendRequest(req) << body;
-		stringstream respSs;
-		receiveResp(session, respSs);
 		Json respData;
-		if(!respData.parse(respSs)){
-			_errorInfo << "Error parsing bridge response\n";
-			return false;
-		}
-		return isSuccess(respData, _errorInfo);
+		return sendRequest("PUT", _url, _request, respData, _errorInfo);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	bool HueDriver::postData(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo) {
-		HTTPClientSession session(mBridgeIp);
-		HTTPRequest req;
-		req.setMethod("POST");
-		req.setURI(_url);
-		std::string body = _request.serialize();
-		req.setContentLength(body.size());
-		session.sendRequest(req) << body;
-		stringstream ss;
-		receiveResp(session, ss);
 		Json respData;
-		if(!respData.parse(ss)){
-			_errorInfo << "Error parsing bridge response\n";
-			return false;
-		}
-		return isSuccess(respData, _errorInfo);
+		return sendRequest("POST", _url, _request, respData, _errorInfo);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	bool HueDriver::deleteData(const std::string& _url, const cjson::Json& _request, std::ostream& _errorInfo) {
-		HTTPClientSession session(mBridgeIp);
-		HTTPRequest req;
-		req.setMethod("DELETE");
-		req.setURI(_url);
-		std::string body = _request.serialize();
-		req.setContentLength(body.size());
-		session.sendRequest(req) << body;
-		stringstream ss;
-		receiveResp(session, ss);
 		Json respData;
-		if(!respData.parse(ss)){
-			_errorInfo << "Error parsing bridge response\n";
-			return false;
-		}
-		return isSuccess(respData, _errorInfo);
+		return sendRequest("DELETE", _url, _request, respData, _errorInfo);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -145,6 +114,7 @@ namespace dmc { namespace hue {
 	//------------------------------------------------------------------------------------------------------------------
 	HueDriver::HueDriver(const cjson::Json& _config) {
 		mBridgeIp = SocketAddress(string(_config["host"]), 80);
+		mPrefix = string("/api/") + _config["user"];
 	}
 
 }}	// namespace dmc::hue
