@@ -60,7 +60,7 @@ namespace dmc{
 			State mState;
 			HueDriver(const cjson::Json&);
 			Poco::Net::SocketAddress mBridgeIp;
-			string mPrefix;
+			std::string mPrefix;
 
 			static HueDriver* sHueDriver;
 		};

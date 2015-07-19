@@ -87,8 +87,8 @@ namespace dmc { namespace hue {
 
 	//------------------------------------------------------------------------------------------------------------------
 	void HueDriver::registerDeviceCreators() {
-		DeviceFactory *factory = DeviceFactory::get();
-		factory->subscribe("HueDevice", [](unsigned _id, const cjson::Json &_data) { return new HueDevice(_id, _data);});
+		//DeviceFactory *factory = DeviceFactory::get();
+		//factory->subscribe("HueDevice", [](unsigned _id, const cjson::Json &_data) { return new HueDevice(_id, _data);});
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ namespace dmc { namespace hue {
 	//------------------------------------------------------------------------------------------------------------------
 	HueDriver::HueDriver(const cjson::Json& _config) {
 		mBridgeIp = SocketAddress(string(_config["host"]), 80);
-		mPrefix = string("/api/") + _config["user"];
+		mPrefix = string("/api/") + string(_config["user"]);
 	}
 
 }}	// namespace dmc::hue
