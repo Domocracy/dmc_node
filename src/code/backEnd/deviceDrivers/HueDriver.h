@@ -32,6 +32,7 @@ namespace dmc{
 			/// worked fine.
 			static void			init(std::istream& _config);
 			static void			init(cjson::Json& _config);
+			static void			end();
 
 			State state() const	{ return mState; }
 

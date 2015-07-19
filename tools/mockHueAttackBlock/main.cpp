@@ -6,8 +6,6 @@
 #include <iostream>
 #include <fstream>
 #include <cjson/json.h>
-#include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPClientSession.h>
 #include <backEnd/deviceDrivers/HueDriver.h>
 
 using namespace Poco::Net;

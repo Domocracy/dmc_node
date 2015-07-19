@@ -44,14 +44,24 @@ namespace dmc { namespace hue {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	void HueDriver::end() {
+		delete sHueDriver;
+		sHueDriver = nullptr;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	bool HueDriver::sendRequest(const std::string& _method, const std::string& _uri, const cjson::Json& _body, cjson::Json& _dst, std::ostream& _errorInfo) {
 		HTTPClientSession session(mBridgeIp);
 		HTTPRequest req;
 		req.setMethod(_method);
 		req.setURI(mPrefix + _uri);
-		std::ostream& reqStrm = session.sendRequest(req);
 		if (!_body.isNull()) {
-			_body.serialize(reqStrm);
+			std::string body = _body.serialize();
+			req.setContentLength(body.size());
+			std::ostream& reqStrm = session.sendRequest(req) << body;
+		}
+		else {
+			std::ostream& reqStrm = session.sendRequest(req);
 		}
 		stringstream ss;
 		receiveResp(session, ss);
