@@ -3,9 +3,16 @@
 // DMC_NODE
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <backEnd/deviceDrivers/UpnpDriver.h>
 
+using namespace dmc;
+using namespace std;
 
 int main(int, const char**) {
-	
+	UpnpDriver::init();
+	UpnpDriver* driver = UpnpDriver::get();
+
+	vector<UpnpEntity> upnpEntities = driver->discoverAll();
+
 }
