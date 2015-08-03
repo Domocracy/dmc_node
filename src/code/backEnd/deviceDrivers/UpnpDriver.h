@@ -9,8 +9,10 @@
 #include <vector>
 
 namespace dmc {
-	class UpnpEntity {	// Service or Device
-
+	struct UpnpEntity {	// Service or Device
+		std::string lastDate;
+		std::string location;
+		std::string server;
 	};
 
 	class UpnpDriver {
@@ -27,16 +29,16 @@ namespace dmc {
 	public:
 		// Implementation of SSDP (Simple Service Discovery Protocol) for discovering devices on network.
 		/// Look for all devices and services availables on network.
-		std::vector<> discoverAll();
+		std::vector<UpnpEntity> discoverAll();
 
 		/// Look for an especific device.
 		/// \param _uuid: unique id of device.
-		std::vector<> discover(std::string _uuid);
+		std::vector<UpnpEntity> discover(std::string _uuid);
 
 		/// Look for devices of an especific type and version
 		/// \param _type: device type
 		/// \param _version: highest version supported
-		std::vector<> discover(std::string _type, std::string _version);
+		std::vector<UpnpEntity> discover(std::string _type, std::string _version);
 
 	private:
 		static UpnpDriver * mInstance;
