@@ -6,7 +6,6 @@
 
 #include "UpnpDriver.h"
 #include <cassert>
-#include <Poco/Net/MulticastSocket.h>
 
 using namespace cjson;
 using namespace std;
@@ -37,36 +36,48 @@ namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Non-static methods
-	vector<Json> UpnpDriver::discoverAll() {
+	void UpnpDriver::discoverAll() {
 		std::string searchAll = "M-SEARCH * HTTP/1.1\r\n" + 
 								string("HOST: 239.255.255.250:1900\r\n") +
 								"MAN: \"ssdp:discover\"\r\n" +
 								"MX: 1\r\n" +
 								"ST: ssdp:all\r\n\r\n";
-		
-		SocketAddress ownAddr(IPAddress(), 1900);
-		MulticastSocket socket;
+		Poco::Net::MulticastSocket	socket;
+		socket.sendTo(searchAll.c_str(), searchAll.length(), mMulticastGroup);
 
-		SocketAddress multicastGroupAddr(cMulticastAddr, cMulticastPort);
-		socket.sendTo(searchAll.c_str(), searchAll.length(), multicastGroupAddr);
-
-		vector<Json> entities;
 		char buffer[1024];
 		int len = 0;
-		while ((len = socket.receiveBytes(buffer, 1024)) != -1) {
-			entities.push_back(parseResponse(buffer));
+		socket.setReceiveTimeout(Poco::Timespan(5, 0));
+		try {
+			while ((len = socket.receiveBytes(buffer, 1024)) != -1) {
+				mMessages.push_back(parseResponse(buffer));
+			}
 		}
-		return entities;
+		catch (Poco::TimeoutException _err) {
+			std::cout << "Timout!" << std::endl;
+		}
+
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	vector<Json> UpnpDriver::discover(string _uuid) {
-		return vector<cjson::Json>();
+	void UpnpDriver::discover(string _uuid) {
+		
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	vector<Json> UpnpDriver::discover(string _type, string _version) {
-		return vector<cjson::Json>();
+	void UpnpDriver::discover(string _type, string _version) {
+		
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Private members
+	UpnpDriver::UpnpDriver(): mMulticastGroup("239.255.255.250", 1900) {
+
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	UpnpDriver::~UpnpDriver() {
+
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -113,7 +124,7 @@ namespace dmc {
 		Json search;
 		search["type"] = "M-SEARCH";
 		search["headers"] = decodeHeaders(_message);
-		search["body"] = _message;
+		search["body"] = decodeBody(_message);
 		return search;
 	}
 
@@ -122,7 +133,7 @@ namespace dmc {
 		Json notification;
 		notification["type"] = "NOTIFY";
 		notification["headers"] = decodeHeaders(_message);
-		notification["body"] = _message;
+		notification["body"] = decodeBody(_message);
 		return notification;
 	}
 
@@ -131,10 +142,11 @@ namespace dmc {
 		Json response;
 		response["type"] = "RESPONSE";
 		response["headers"] = decodeHeaders(_message);
-		response["body"] = _message;
+		response["body"] = decodeBody(_message);
 		return response;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::decodeHeaders(string & _message) {
 		Json headers;
 		string line;
@@ -162,12 +174,20 @@ namespace dmc {
 		return headers;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	cjson::Json UpnpParser::decodeBody(std::string & _message) {
+		int index = _message.find_first_not_of(char(-52)+char(-52)+char(-52)+char(-52));
+		return _message.substr(0,index);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	std::string UpnpParser::extractLine(std::string & _message) {
 		string line = _message.substr(0, _message.find_first_of("\r\n"));
 		_message	= _message.substr(_message.find_first_of("\r\n")+2, _message.size());
 		return line;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::cache_control(const string &_line){
 		Json cache("{}");
 		// Cache-control has only one element: max-age = SMTG. 666 improve
@@ -176,30 +196,37 @@ namespace dmc {
 		return cache;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::location(const string &_line){
 		return _line.substr(_line.find_first_of(":"), _line.size());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::date(const string &_line){
 		return _line.substr(_line.find_first_of(":"), _line.size());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::server(const string &_line){
 		return _line.substr(_line.find_first_of(":"), _line.size());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::st(const string &_line){
 		return _line.substr(_line.find_first_of(":"), _line.size());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::usn(const string &_line){
 		return _line.substr(_line.find_first_of(":"), _line.size());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::uuid(const string &_line){
 		return Json();	// 666 not implemented yet
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::searchPorts(const string &_line){
 		return Json(); // 666 not implemented yet
 	}

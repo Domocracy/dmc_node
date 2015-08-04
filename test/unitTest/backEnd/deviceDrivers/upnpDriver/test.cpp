@@ -14,6 +14,15 @@ int main(int, const char**) {
 	UpnpDriver::init();
 	UpnpDriver* driver = UpnpDriver::get();
 
-	vector<Json> upnpEntities = driver->discoverAll();
+	driver->discoverAll();
+	std::list<Json> messages = driver->messages();
+	std::cout << "Received " << messages.size() << std::endl;
+	
+	for (Json json : messages) {
+		std::cout << "----------------" << std::endl;
+		std::cout << json.serialize() << std::endl;
+	}
 
+
+	system("PAUSE");
 }

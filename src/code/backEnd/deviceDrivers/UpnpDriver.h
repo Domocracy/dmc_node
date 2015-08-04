@@ -6,8 +6,12 @@
 #ifndef _DMCNODE_CODE_BACKEND_UPNPDRIVER_H_
 #define _DMCNODE_CODE_BACKEND_UPNPDRIVER_H_
 
-#include <vector>
 #include <cjson/json.h>
+#include <list>
+#include <mutex>
+#include <Poco/Net/MulticastSocket.h>
+#include <thread>
+#include <vector>
 
 namespace dmc {
 	class UpnpDriver {
@@ -22,27 +26,46 @@ namespace dmc {
 		static void end();
 
 	public:
+		// Addressing interface (Opcional)
+		// 666 TODO
+
 		// Implementation of SSDP (Simple Service Discovery Protocol) for discovering devices on network.
 		/// Look for all devices and services availables on network.
-		std::vector<cjson::Json> discoverAll();
+		void discoverAll();
 
 		/// Look for an especific device.
 		/// \param _uuid: unique id of device.
-		std::vector<cjson::Json> discover(std::string _uuid);
+		void discover(std::string _uuid);
 
 		/// Look for devices of an especific type and version
 		/// \param _type: device type
 		/// \param _version: highest version supported
-		std::vector<cjson::Json> discover(std::string _type, std::string _version);
+		void discover(std::string _type, std::string _version);
+
+		/// Return current messages
+		std::list<cjson::Json> messages(){ return mMessages; };
+
+		// Control interface
+		// 666 TODO
+
+		// Description interface
+		// 666 TODO
+
+		// Eventing interface
+		// 666 TODO
 
 	private:	// Private methods
+		UpnpDriver();
+		~UpnpDriver();
+
 		cjson::Json parseResponse(std::string _response);
 
 	private:
-		static UpnpDriver * mInstance;
+		static UpnpDriver			*mInstance;
+		
+		Poco::Net::SocketAddress	mMulticastGroup;
 
-		const std::string	cMulticastAddr = "239.255.255.250";
-		const unsigned		cMulticastPort = 1900;
+		std::list<cjson::Json>	mMessages;		
 
 	};	//	 class UpnpDriver
 
@@ -60,6 +83,7 @@ namespace dmc {
 		cjson::Json decodeResponse	(std::string &_message);
 
 		cjson::Json decodeHeaders	(std::string &_message);
+		cjson::Json decodeBody		(std::string &_message);
 
 		std::string extractLine		(std::string &_message);
 
