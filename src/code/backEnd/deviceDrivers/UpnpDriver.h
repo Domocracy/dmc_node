@@ -7,14 +7,9 @@
 #define _DMCNODE_CODE_BACKEND_UPNPDRIVER_H_
 
 #include <vector>
+#include <cjson/json.h>
 
 namespace dmc {
-	struct UpnpEntity {	// Service or Device
-		std::string lastDate;
-		std::string location;
-		std::string server;
-	};
-
 	class UpnpDriver {
 	public:
 		/// Get instance of UpnpDriver.
@@ -29,16 +24,19 @@ namespace dmc {
 	public:
 		// Implementation of SSDP (Simple Service Discovery Protocol) for discovering devices on network.
 		/// Look for all devices and services availables on network.
-		std::vector<UpnpEntity> discoverAll();
+		std::vector<cjson::Json> discoverAll();
 
 		/// Look for an especific device.
 		/// \param _uuid: unique id of device.
-		std::vector<UpnpEntity> discover(std::string _uuid);
+		std::vector<cjson::Json> discover(std::string _uuid);
 
 		/// Look for devices of an especific type and version
 		/// \param _type: device type
 		/// \param _version: highest version supported
-		std::vector<UpnpEntity> discover(std::string _type, std::string _version);
+		std::vector<cjson::Json> discover(std::string _type, std::string _version);
+
+	private:	// Private methods
+		cjson::Json parseResponse(std::string _response);
 
 	private:
 		static UpnpDriver * mInstance;
@@ -47,6 +45,33 @@ namespace dmc {
 		const unsigned		cMulticastPort = 1900;
 
 	};	//	 class UpnpDriver
+
+	class UpnpParser {
+	public:
+		enum eMessageType {NOTIFY, M_SEARCH, RESPONSE, ERR_TYPE};
+
+		cjson::Json parse(std::string _message);
+
+	private:
+		eMessageType decodeType(const std::string &_line);
+
+		cjson::Json decodeMSearch	(std::string &_message);
+		cjson::Json decodeNotify	(std::string &_message);
+		cjson::Json decodeResponse	(std::string &_message);
+
+		cjson::Json decodeHeaders	(std::string &_message);
+
+		std::string extractLine		(std::string &_message);
+
+		cjson::Json cache_control	(const std::string &_line);
+		cjson::Json location		(const std::string &_line);
+		cjson::Json date			(const std::string &_line);
+		cjson::Json server			(const std::string &_line);
+		cjson::Json st				(const std::string &_line);
+		cjson::Json usn				(const std::string &_line);
+		cjson::Json uuid			(const std::string &_line);
+		cjson::Json searchPorts		(const std::string &_line);
+	};
 }	//	namespace dmc
 
 #endif	//	_DMCNODE_CODE_BACKEND_UPNPDRIVER_H_

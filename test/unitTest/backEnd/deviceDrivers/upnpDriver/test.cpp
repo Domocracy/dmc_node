@@ -8,11 +8,12 @@
 
 using namespace dmc;
 using namespace std;
+using namespace cjson;
 
 int main(int, const char**) {
 	UpnpDriver::init();
 	UpnpDriver* driver = UpnpDriver::get();
 
-	vector<UpnpEntity> upnpEntities = driver->discoverAll();
+	vector<Json> upnpEntities = driver->discoverAll();
 
 }
