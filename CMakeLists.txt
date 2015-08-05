@@ -45,11 +45,12 @@ set(FORCE_OPENSSL OFF)
 set(ENABLE_TESTS OFF)
 set(POCO_STATIC ON)
 set(POCO_UNBUNDLED OFF)
-add_subdirectory(lib/poco)
+
 
 add_definitions( -DPOCO_STATIC -DPOCO_NO_AUTOMATIC_LIBS)
 set( LIB_MODE STATIC )
 
+add_subdirectory(lib/poco)
 # Actual node project
 add_subdirectory(src)
 
