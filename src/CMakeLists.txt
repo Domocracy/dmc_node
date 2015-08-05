@@ -40,6 +40,7 @@ target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/code)
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/cjson/src)
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Net/include)
 target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/Util/include)
+target_include_directories(dmcNode PUBLIC ${PROJECT_SOURCE_DIR}/../lib/poco/XML/include)
 
 target_link_libraries(dmcNode LINK_PUBLIC cjson)
-target_link_libraries(dmcNode LINK_PUBLIC PocoNet PocoFoundation PocoUtil)
+target_link_libraries(dmcNode LINK_PUBLIC PocoNet PocoFoundation PocoUtil PocoXML)

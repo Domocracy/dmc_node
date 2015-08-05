@@ -10,6 +10,7 @@
 #include <list>
 #include <Poco/Net/MulticastSocket.h>
 #include <vector>
+#include <Poco/XML/XML.h>
 
 namespace dmc {
 	class UpnpDriver {
@@ -29,7 +30,7 @@ namespace dmc {
 
 		// Implementation of SSDP (Simple Service Discovery Protocol) for discovering devices on network.
 		/// Look for all devices and services availables on network.
-		void discoverAll();
+		void discover();
 
 		/// Look for an especific device.
 		/// \param _uuid: unique id of device.
@@ -41,17 +42,18 @@ namespace dmc {
 		/// \param _isDevice: true if looking for devices of type _type, false if looking for services.
 		void discover(std::string _type, std::string _version, bool _isDevice);
 
-		/// Return current messages
-		std::list<cjson::Json> messages(){ return mMessages; };
+		// Description interface
+		std::string description(const std::string &_uri);
 
 		// Control interface
 		// 666 TODO
 
-		// Description interface
-		// 666 TODO
 
 		// Eventing interface
 		// 666 TODO
+
+		/// Return current messages
+		std::list<cjson::Json> messages(){ return mMessages; };
 
 	private:	// Private methods
 		UpnpDriver();
