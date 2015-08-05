@@ -18,6 +18,7 @@ int main(int, const char**) {
 	std::list<Json> messages = driver->messages();
 	std::cout << "Received " << messages.size() << std::endl;
 	
+
 	for (Json json : messages) {
 		std::cout << "----------------" << std::endl;
 		std::cout << json.serialize() << std::endl;

@@ -61,12 +61,24 @@ namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	void UpnpDriver::discover(string _uuid) {
-		
+		std::string searchAll = "M-SEARCH * HTTP/1.1\r\n" + 
+								string("HOST: 239.255.255.250:1900\r\n") +
+								"MAN: \"ssdp:discover\"\r\n" +
+								"MX: 1\r\n" +
+								"ST: uuid:" + _uuid + "\r\n\r\n";
+		Poco::Net::MulticastSocket	socket;
+		socket.sendTo(searchAll.c_str(), searchAll.length(), mMulticastGroup);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	void UpnpDriver::discover(string _type, string _version) {
-		
+	void UpnpDriver::discover(string _type, string _version, bool _isDevice) {
+		std::string searchAll = "M-SEARCH * HTTP/1.1\r\n" + 
+								string("HOST: 239.255.255.250:1900\r\n") +
+								"MAN: \"ssdp:discover\"\r\n" +
+								"MX: 1\r\n" +
+								"ST: urn:schemas-upnp-org:" + (_isDevice? "device:":"service:") + _type + ":" + _version + "\r\n\r\n";
+		Poco::Net::MulticastSocket	socket;
+		socket.sendTo(searchAll.c_str(), searchAll.length(), mMulticastGroup);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

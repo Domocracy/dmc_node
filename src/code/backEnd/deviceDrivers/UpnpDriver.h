@@ -37,10 +37,11 @@ namespace dmc {
 		/// \param _uuid: unique id of device.
 		void discover(std::string _uuid);
 
-		/// Look for devices of an especific type and version
+		/// Look for devices or services of an especific type and version
 		/// \param _type: device type
 		/// \param _version: highest version supported
-		void discover(std::string _type, std::string _version);
+		/// \param _isDevice: true if looking for devices of type _type, false if looking for services.
+		void discover(std::string _type, std::string _version, bool _isDevice);
 
 		/// Return current messages
 		std::list<cjson::Json> messages(){ return mMessages; };
