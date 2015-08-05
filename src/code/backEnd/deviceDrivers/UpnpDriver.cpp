@@ -198,27 +198,27 @@ namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::location(const string &_line){
-		return _line.substr(_line.find_first_of(":"), _line.size());
+		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::date(const string &_line){
-		return _line.substr(_line.find_first_of(":"), _line.size());
+		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::server(const string &_line){
-		return _line.substr(_line.find_first_of(":"), _line.size());
+		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::st(const string &_line){
-		return _line.substr(_line.find_first_of(":"), _line.size());
+		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpParser::usn(const string &_line){
-		return _line.substr(_line.find_first_of(":"), _line.size());
+		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
