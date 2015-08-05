@@ -29,6 +29,8 @@ namespace dmc {
 			return error;
 			break;
 		}
+
+		return Json();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -101,7 +103,7 @@ namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	cjson::Json UpnpParser::decodeBody(std::string & _message) {
-		int index = _message.find_first_not_of(char(-52)+char(-52)+char(-52)+char(-52));
+		int index = _message.find_first_not_of("ออออ");
 		return _message.substr(0,index);
 	}
 
