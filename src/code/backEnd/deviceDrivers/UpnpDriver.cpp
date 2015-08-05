@@ -101,7 +101,9 @@ namespace dmc {
 			return decodeResponse(_message);
 			break;
 		case eMessageType::ERR_TYPE:
-			return Json();
+			Json error;
+			error["type"] = "Un-spected type of message";
+			return error;
 			break;
 		}
 	}
