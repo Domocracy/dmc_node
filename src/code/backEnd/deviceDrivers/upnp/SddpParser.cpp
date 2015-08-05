@@ -4,7 +4,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "UpnpParser.h"
+#include "SddpParser.h"
 #include <cjson/json.h>
 #include <string>
 
@@ -12,7 +12,7 @@ using namespace cjson;
 using namespace std;
 
 namespace dmc {
-	Json UpnpParser::parse(string _message) {
+	Json SddpParser::parse(string _message) {
 		switch (decodeType(extractLine(_message))){
 		case eMessageType::M_SEARCH:
 			return decodeMSearch(_message);
@@ -34,7 +34,7 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	UpnpParser::eMessageType UpnpParser::decodeType(const std::string & _line) {
+	SddpParser::eMessageType SddpParser::decodeType(const std::string & _line) {
 		if (_line.find("M-SEARCH") != string::npos) {
 			return eMessageType::M_SEARCH;
 		} else if (_line.find("NOTIFY") != string::npos) {
@@ -47,7 +47,7 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	cjson::Json UpnpParser::decodeMSearch(std::string & _message) {
+	cjson::Json SddpParser::decodeMSearch(std::string & _message) {
 		Json search;
 		search["type"] = "M-SEARCH";
 		search["headers"] = decodeHeaders(_message);
@@ -56,7 +56,7 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::decodeNotify(std::string & _message) {
+	Json SddpParser::decodeNotify(std::string & _message) {
 		Json notification;
 		notification["type"] = "NOTIFY";
 		notification["headers"] = decodeHeaders(_message);
@@ -65,7 +65,7 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::decodeResponse(std::string & _message) {
+	Json SddpParser::decodeResponse(std::string & _message) {
 		Json response;
 		response["type"] = "RESPONSE";
 		response["headers"] = decodeHeaders(_message);
@@ -74,7 +74,7 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::decodeHeaders(string & _message) {
+	Json SddpParser::decodeHeaders(string & _message) {
 		Json headers;
 		string line;
 		while ( (line = extractLine(_message)) != "") {
@@ -102,20 +102,20 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	cjson::Json UpnpParser::decodeBody(std::string & _message) {
+	cjson::Json SddpParser::decodeBody(std::string & _message) {
 		int index = _message.find_first_not_of("ออออ");
 		return _message.substr(0,index);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	std::string UpnpParser::extractLine(std::string & _message) {
+	std::string SddpParser::extractLine(std::string & _message) {
 		string line = _message.substr(0, _message.find_first_of("\r\n"));
 		_message	= _message.substr(_message.find_first_of("\r\n")+2, _message.size());
 		return line;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::cache_control(const string &_line){
+	Json SddpParser::cache_control(const string &_line){
 		Json cache("{}");
 		// Cache-control has only one element: max-age = SMTG. 666 improve
 		int max_age = atoi(_line.substr(_line.find("=")+1, _line.size()).c_str());
@@ -124,37 +124,37 @@ namespace dmc {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::location(const string &_line){
+	Json SddpParser::location(const string &_line){
 		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::date(const string &_line){
+	Json SddpParser::date(const string &_line){
 		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::server(const string &_line){
+	Json SddpParser::server(const string &_line){
 		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::st(const string &_line){
+	Json SddpParser::st(const string &_line){
 		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::usn(const string &_line){
+	Json SddpParser::usn(const string &_line){
 		return _line.substr(_line.find_first_of(":")+1, _line.size());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::uuid(const string &_line){
+	Json SddpParser::uuid(const string &_line){
 		return Json();	// 666 not implemented yet
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	Json UpnpParser::searchPorts(const string &_line){
+	Json SddpParser::searchPorts(const string &_line){
 		return Json(); // 666 not implemented yet
 	}
 

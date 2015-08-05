@@ -3,8 +3,8 @@
 //	Dmc Node
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef _DMCNODE_CODE_BACKEND_UPNPPARSER_H_
-#define _DMCNODE_CODE_BACKEND_UPNPDRIVER_H_
+#ifndef _DMCNODE_CODE_BACKEND_SDDPPARSER_H_
+#define _DMCNODE_CODE_BACKEND_SDDPPARSER_H_
 
 #include <cjson/json.h>
 #include <list>
@@ -13,7 +13,7 @@
 
 
 namespace dmc {
-	class UpnpParser {
+	class SddpParser {
 	public:
 		enum eMessageType {NOTIFY, M_SEARCH, RESPONSE, ERR_TYPE};
 
@@ -42,4 +42,4 @@ namespace dmc {
 	};
 }	// namespace dmc
 
-#endif	//	_DMCNODE_CODE_BACKEND_UPNPPARSER_H_
+#endif	//	_DMCNODE_CODE_BACKEND_SDDPPARSER_H_

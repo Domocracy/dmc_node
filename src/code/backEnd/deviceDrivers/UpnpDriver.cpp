@@ -5,7 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "UpnpDriver.h"
-#include "upnp/UpnpParser.h"
+#include "upnp/SddpParser.h"
 
 #include <cassert>
 
@@ -97,7 +97,7 @@ namespace dmc {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	Json UpnpDriver::parseResponse(string _response) {
-		UpnpParser parser;
+		SddpParser parser;
 		return parser.parse(_response);
 	}
 
